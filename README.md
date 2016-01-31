@@ -1,10 +1,10 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contains the file for the Fortran Modernisation Workshop
 
 ### What is this repository for? ###
 
-* Quick summary
+* Files containing source code for the workshop exercises
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
@@ -25,5 +25,4 @@ This README would normally document whatever steps are necessary to get your app
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* wadud.miah@nag.co.uk
