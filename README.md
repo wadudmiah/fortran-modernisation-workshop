@@ -25,4 +25,4 @@ This repository contains the file for the Fortran Modernisation Workshop
 
 ### Who do I talk to? ###
 
-* wadud.miah@nag.co.uk
+* wadud <<dot>> miah <<at>> nag <<dot>> co <<dot>> uk
