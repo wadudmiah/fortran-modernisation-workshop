@@ -35,7 +35,7 @@
  
 %\renewcommand{\qedsymbol}{\filledbox}
  
-\title{\bf Fortran Modernisation Workshop \\ Exercises}%replace X with the appropriate number
+\title{\bf Fortran Modernisation Workshop \\ Exercises}
 \author{F. Spiga, F. Chami and W. Miah}
  
 \maketitle
@@ -136,9 +136,11 @@ gfortran -c -I. fd1d_heat_explicit.f90
 gfortran fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit
 ./fd1d_heat_explicit
 \end{verbatim}
-\item To test whether your code runs correctly execute\newline 
-\texttt{diff h\_test01.txt h\_test01.txt\_bak} - if the command outputs difference, then the 
-refactoring introduced a bug
+\item To test whether your code runs correctly execute:
+\begin{verbatim}
+diff h_test01.txt h_test01.txt_bak
+\end{verbatim}
+If the command outputs difference, then the refactoring introduced a bug
 \item Type \texttt{git diff fd1d\_heat\_explicit} to see the refactored code. Stage and commit
 the changes by typing: 
 \begin{verbatim}
@@ -165,9 +167,11 @@ gfortran fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
          -o fd1d_heat_explicit
 ./fd1d_heat_explicit
 \end{verbatim}
-\item To test whether your code runs correctly execute\newline
-\texttt{diff h\_test01.txt h\_test01.txt\_bak} - if the command outputs difference, then the 
-refactoring introduced a bug
+\item To test whether your code runs correctly execute:
+\begin{verbatim}
+diff h_test01.txt h_test01.txt_bak
+\end{verbatim}
+If the command outputs difference, then the refactoring introduced a bug
 \item Add the newly created module files into Git and stage the changed main program for a
 another Git commit:
 \begin{verbatim}
