@@ -33,6 +33,8 @@
 *.aux
 *.dvi
 *.log
+*.ps
+*.pdf
 
 # emacs backup files
 *~

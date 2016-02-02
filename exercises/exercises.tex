@@ -62,9 +62,9 @@ Maths. \\
 The exercises are split into two parts: one set for the first day and a second
 set for the second day. To download the exercises, type the commands:
 \begin{verbatim}
-$ wget \
+wget \
 https://www.nag.co.uk/market/training/fortran-modernisation-workshop/ex.tar
-$ tar -xvf fmw-ex.tar
+tar -xvf ex.tar
 \end{verbatim}
 which will extract the exercises to the \texttt{ex/} directory. Change into the 
 \texttt{ex/} directory:
@@ -72,7 +72,7 @@ which will extract the exercises to the \texttt{ex/} directory. Change into the
 cd ex/
 git init
 git add .
-git commit -m "initial version"
+git commit -m `initial version'
 \end{verbatim}
 The Git commands will version control your code so you can see its revision history. Git will
 be covered in the second session. 
@@ -80,8 +80,8 @@ be covered in the second session.
 \subsection*{Day One Exercises}
 \setdefaultleftmargin{0pt}{}{}{}{}{}
 \begin{enumerate}
-\item Create a module \texttt{Types\_mod} which contains the following numeric data
-types:
+\item Create a module \texttt{Types\_mod} and put it in the file \texttt{Types\_mod.f90} which 
+contains the following numeric data types:
 \begin{verbatim}
 use, intrinsic :: iso_fortran_env
 integer, parameter :: SP = REAL32
@@ -128,7 +128,54 @@ character * ( 30 ) :: string             ! to
 character(len=:), allocatable :: string
 \end{verbatim}
 \item In the main program code, use symbolic relational operators \texttt{<, <=, /=, ==, >=, >}
-instead of \texttt{.gt., .ge., .ne., .eq., .ge., gt.}
+instead of \texttt{.lt., .le., .ne., .eq., .ge., gt.}
+\item Compile both the main program and the created Fortran module:
+\begin{verbatim}
+gfortran -c Types_mod.f90
+gfortran -c -I. fd1d_heat_explicit.f90
+gfortran fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit
+./fd1d_heat_explicit
+\end{verbatim}
+\item To test whether your code runs correctly execute\newline 
+\texttt{diff h\_test01.txt h\_test01.txt\_bak} - if the command outputs difference, then the 
+refactoring introduced a bug
+\item Type \texttt{git diff fd1d\_heat\_explicit} to see the refactored code. Stage and commit
+the changes by typing: 
+\begin{verbatim}
+git add fd1d_heat_explicit.f90
+git commit -m `refactored Fortran 77 into modern Fortran'
+\end{verbatim}
+\item[] The following exercises will further modularise the code. 
+\item Create a module \texttt{RHS\_mod} and put it in the file \texttt{RHS\_mod.f90} and put the 
+Fortran function \texttt{func()} into \texttt{RHS\_mod}. In the main program code, 
+insert the line \texttt{use RHS\_mod} 
+\item Create a module \texttt{CFL\_mod} and put it in the file \texttt{CFL\_mod.f90} and put the
+Fortran function \texttt{fd1d\_heat\_explicit\_cfl()} into \texttt{CFL\_mod}. In the main program
+code, insert the line \texttt{use CFL\_mod}
+\item Create a module \texttt{IO\_mod} and put it in the file \texttt{IO\_mod.f90} and put
+the Fortran functions \texttt{r8mat\_write} and \texttt{r8vec\_write}. In the main program code, 
+insert the line \texttt{use IO\_mod}
+\item Compile the recently created modules:
+\begin{verbatim}
+gfortran -c RHS_mod.f90
+gfortran -c CFL_mod.f90
+gfortran -c IO_mod.f90
+gfortran -c -I. fd1d_heat_explicit.f90
+gfortran fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
+         -o fd1d_heat_explicit
+./fd1d_heat_explicit
+\end{verbatim}
+\item To test whether your code runs correctly execute\newline
+\texttt{diff h\_test01.txt h\_test01.txt\_bak} - if the command outputs difference, then the 
+refactoring introduced a bug
+\item Add the newly created module files into Git and stage the changed main program for a
+another Git commit:
+\begin{verbatim}
+git add RHS_mod.f90 CFL_mod.f90 IO_mod.f90
+git add fd1d_heat_explicit.f90
+git commit -m `modularised RHS, CFL and IO'
+\end{verbatim}
+%
 \end{enumerate}
 \newpage
 \subsection*{Day Two Exercises}
