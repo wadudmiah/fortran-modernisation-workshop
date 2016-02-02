@@ -28,6 +28,12 @@
 *.app
 *.x
 
+# LaTeX related files
+
+*.aux
+*.dvi
+*.log
+
 # emacs backup files
 *~
 

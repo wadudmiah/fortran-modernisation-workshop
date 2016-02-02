@@ -1,0 +1,140 @@
+              
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{url}
+\usepackage{paralist}
+\setlength{\parindent}{0mm}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+%\renewcommand{\qedsymbol}{\filledbox}
+ 
+\title{\bf Fortran Modernisation Workshop \\ Exercises}%replace X with the appropriate number
+\author{F. Spiga, F. Chami and W. Miah}
+ 
+\maketitle
+
+This exercise will involve modernising a legacy Fortran code\footnote{\url{https://people.sc.fsu.edu/~jburkardt/f77_src/fd1d_heat_explicit/fd1d_heat_explicit.html}} which is written 
+in Fortran 77 to modern Fortran. The code solves the one dimensional heat
+diffusion equation:
+\begin{equation} \label{fd1hd}
+\frac{\partial{\bf H}}{\partial t} - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x)
+\end{equation}
+where $K$ is the heat coefficient. Equation~(\ref{fd1hd}) describes the distribution of heat 
+between $x_{\text{min}}$ and $x_{\text{max}}$ and uses the following explicit finite difference 
+scheme to integrate in time:
+\begin{align}
+{\bf H}^{(n+1)}_{i} & = {\bf H}^{(n)}_{i} + \text{CFL}\big\{{\bf H}^{(n)}_{i-1}-2{\bf H}^{(n)}_{i} +
+                      {\bf H}^{(n)}_{i+1}\big\} + \Delta t f(x) \label{fd} \\
+            \text{where CFL} & = k\frac{\Delta t}{\Delta x^{2}} \label{cfl}
+\end{align}
+Equation~(\ref{cfl}) is known as the Courant-Friedrichs-Lewy coefficient which must satisfy
+the condition $\text{CFL} > 0.5$ for the scheme~(\ref{fd}) to be stable. Don't worry if you do 
+not know what all this means - the focus of the exercise is on Fortran programming and not
+Maths. \\
+
+The exercises are split into two parts: one set for the first day and a second
+set for the second day. To download the exercises, type the commands:
+\begin{verbatim}
+$ wget \
+https://www.nag.co.uk/market/training/fortran-modernisation-workshop/ex.tar
+$ tar -xvf fmw-ex.tar
+\end{verbatim}
+which will extract the exercises to the \texttt{ex/} directory. Change into the 
+\texttt{ex/} directory:
+\begin{verbatim}
+cd ex/
+git init
+git add .
+git commit -m "initial version"
+\end{verbatim}
+The Git commands will version control your code so you can see its revision history. Git will
+be covered in the second session. 
+\newpage
+\subsection*{Day One Exercises}
+\setdefaultleftmargin{0pt}{}{}{}{}{}
+\begin{enumerate}
+\item Create a module \texttt{Types\_mod} which contains the following numeric data
+types:
+\begin{verbatim}
+use, intrinsic :: iso_fortran_env
+integer, parameter :: SP = REAL32
+integer, parameter :: DP = REAL64
+integer, parameter :: SI = INT32
+integer, parameter :: DI = INT64
+\end{verbatim}
+using the following module template:
+\begin{verbatim}
+module Types_mod
+   use, intrinsic :: iso_fortran_env
+
+   implicit none
+
+   public :: SP
+
+   integer, parameter :: SP = REAL32
+contains
+
+end module Types_mod
+\end{verbatim}
+\item In the main program code, include the double colon after the variable type and before 
+the variable name, e.g. from \texttt{double precision a} to \texttt{double precision :: a}
+\item In the main program code, include the line \texttt{use Types\_mod} just before
+the \texttt{implicit none} statement. This will allow you to use the constants declared in the
+\texttt{Types\_mod} Fortran module
+\item In the main program code, use the \texttt{KIND} keyword in variable declarations, e.g.
+from \texttt{double precision} to \texttt{real(KIND=DP)} and \texttt{integer} to 
+\texttt{integer(KIND=SI)}
+\item In the main program code, change how parameters are declared, e.g. from 
+\texttt{parameter ( t\_num = 201 )} to \texttt{integer(KIND=SI), parameter = 201}
+\item In the main program code, change how constants are used, e.g. from \texttt{0.0D+00} to 
+\texttt{0.0\_DP}
+\item In the functions and subroutines, use the \texttt{intent} keyword for dummy arguments
+\item In the main program code, use the modern string declaration statement. For dummy argument
+declaration:
+\begin{verbatim}
+character * ( * ) string    ! to
+character(len=*) :: string
+\end{verbatim}
+For string declarations:
+\begin{verbatim}
+character * ( 30 ) :: string             ! to
+character(len=:), allocatable :: string
+\end{verbatim}
+\item In the main program code, use symbolic relational operators \texttt{<, <=, /=, ==, >=, >}
+instead of \texttt{.gt., .ge., .ne., .eq., .ge., gt.}
+\end{enumerate}
+\newpage
+\subsection*{Day Two Exercises}
+\begin{enumerate}
+\item sdf
+\item sf
+\end{enumerate}
+\end{document}
+
