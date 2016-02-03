@@ -112,7 +112,7 @@ the \texttt{implicit none} statement. This will allow you to use the constants d
 from \texttt{double precision} to \texttt{real(KIND=DP)} and \texttt{integer} to 
 \texttt{integer(KIND=SI)}
 \item In the main program code, change how parameters are declared, e.g. from 
-\texttt{parameter ( t\_num = 201 )} to \texttt{integer(KIND=SI), parameter = 201}
+\texttt{parameter ( t\_num = 201 )} to \texttt{integer(KIND=SI), parameter :: t\_num = 201}
 \item In the main program code, change how constants are used, e.g. from \texttt{0.0D+00} to 
 \texttt{0.0\_DP}
 \item In the functions and subroutines, use the \texttt{intent} keyword for dummy arguments
