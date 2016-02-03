@@ -133,7 +133,7 @@ instead of \texttt{.lt., .le., .ne., .eq., .ge., gt.}
 \begin{verbatim}
 gfortran -c Types_mod.f90
 gfortran -c -I. fd1d_heat_explicit.f90
-gfortran fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit
+gfortran fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit.exe
 ./fd1d_heat_explicit
 \end{verbatim}
 \item To test whether your code runs correctly execute:
@@ -168,7 +168,7 @@ gfortran -c IO_mod.f90
 gfortran -c Solver_mod.f90
 gfortran -c -I. fd1d_heat_explicit.f90
 gfortran fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
-         Solver_mod.o -o fd1d_heat_explicit
+         Solver_mod.o -o fd1d_heat_explicit.exe
 ./fd1d_heat_explicit
 \end{verbatim}
 \item To test whether your code runs correctly execute:
