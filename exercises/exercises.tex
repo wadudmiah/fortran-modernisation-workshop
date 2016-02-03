@@ -125,7 +125,7 @@ character(len=*) :: string
 For string declarations:
 \begin{verbatim}
 character * ( 30 ) :: string             ! to
-character(len=:), allocatable :: string
+character(len=30)  :: string
 \end{verbatim}
 \item In the main program code, use symbolic relational operators \texttt{<, <=, /=, ==, >=, >}
 instead of \texttt{.lt., .le., .ne., .eq., .ge., gt.}
@@ -155,16 +155,20 @@ insert the line \texttt{use RHS\_mod}
 Fortran function \texttt{fd1d\_heat\_explicit\_cfl()} into \texttt{CFL\_mod}. In the main program
 code, insert the line \texttt{use CFL\_mod}
 \item Create a module \texttt{IO\_mod} and put it in the file \texttt{IO\_mod.f90} and put
-the Fortran functions \texttt{r8mat\_write} and \texttt{r8vec\_write}. In the main program code, 
-insert the line \texttt{use IO\_mod}
+the Fortran functions \texttt{r8mat\_write}, \texttt{r8vec\_linspace} and \texttt{r8vec\_write} into \texttt{IO\_mod}.
+In the main program code, insert the line \texttt{use IO\_mod}
+\item Create a module \texttt{Solver\_mod} and put it in the file \texttt{Solver\_mod.f90} and put the
+  Fortran function \texttt{fd1d\_heat\_explicit} into \texttt{Sover\_mod}. In the main program code,
+  insert the line \texttt{use Solver\_mod}
 \item Compile the recently created modules:
 \begin{verbatim}
 gfortran -c RHS_mod.f90
 gfortran -c CFL_mod.f90
 gfortran -c IO_mod.f90
+gfortran -c Solver_mod.f90
 gfortran -c -I. fd1d_heat_explicit.f90
 gfortran fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
-         -o fd1d_heat_explicit
+         Solver_mod.o -o fd1d_heat_explicit
 ./fd1d_heat_explicit
 \end{verbatim}
 \item To test whether your code runs correctly execute:
