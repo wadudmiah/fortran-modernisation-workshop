@@ -64,6 +64,14 @@ program fd1d_heat_explicit_prb
       ! get the CFL coefficient
       call fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
 
+     if ( 0.5D+00 .le. cfl ) then
+        write ( *, '(a)' ) ' '
+        write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_CFL - Fatal error!'
+        write ( *, '(a)' ) '  CFL condition failed.'
+        write ( *, '(a)' ) '  0.5 <= K * dT / dX / dX = CFL.'
+        stop
+      end if
+
       ! set the initial condition
       do j = 1, x_num
         h(j) = 50.0D+00
@@ -148,21 +156,14 @@ program fd1d_heat_explicit_prb
       double precision x_min
       integer x_num
 
-      dx = ( x_max - x_min ) / dble ( x_num - 1 )
-      dt = ( t_max - t_min ) / dble ( t_num - 1 )
+      dx = ( x_max - x_min ) / dble( x_num - 1 )
+      dt = ( t_max - t_min ) / dble( t_num - 1 )
 
       cfl = k * dt / dx / dx
 
       write ( *, '(a)' ) ' '
       write ( *, '(a,g14.6)' ) '  CFL stability criterion value = ', cfl
 
-      if ( 0.5D+00 .le. cfl ) then
-        write ( *, '(a)' ) ' '
-        write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_CFL - Fatal error!'
-        write ( *, '(a)' ) '  CFL condition failed.'
-        write ( *, '(a)' ) '  0.5 <= K * dT / dX / dX = CFL.'
-        stop
-      end if
     end subroutine fd1d_heat_explicit_cfl
 
     subroutine r8mat_write( output_filename, m, n, table )

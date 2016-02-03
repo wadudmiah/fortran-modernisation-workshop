@@ -1,5 +1,7 @@
 program fd1d_heat_explicit_prb
       use Types_mod
+      use RHS_mod
+      use CFL_mod
   
       implicit none
 
@@ -26,7 +28,7 @@ program fd1d_heat_explicit_prb
 
       write ( *, '(a)' ) ' '
       write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_PRB:'
-      write ( *, '(a)' ) '  FORTRAN77 version.'
+      write ( *, '(a)' ) '  FORTRAN90 version.'
       write ( *, '(a)' ) '  Test the FD1D_HEAT_EXPLICIT library.'
 
       write ( *, '(a)' ) ' '
@@ -63,6 +65,14 @@ program fd1d_heat_explicit_prb
       ! get the CFL coefficient
       call fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
 
+      if ( 0.5_DP <= cfl ) then
+        write ( *, '(a)' ) ' '
+        write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_CFL - Fatal error!'
+        write ( *, '(a)' ) '  CFL condition failed.'
+        write ( *, '(a)' ) '  0.5 <= K * dT / dX / dX = CFL.'
+        stop
+      end if
+  
       ! set the initial condition
       do j = 1, x_num
         h(j) = 50.0_DP
@@ -94,14 +104,6 @@ program fd1d_heat_explicit_prb
 
     contains
 
-    function func( j, x_num, x ) result ( d )
-      integer(KIND=SI), intent(in) :: j, x_num
-      real(KIND=DP) :: d
-      real(KIND=DP), intent(in) :: x(x_num)
-
-      d = 0.0_DP
-    end function func
-
     subroutine fd1d_heat_explicit( x_num, x, t, dt, cfl, h, h_new )
 
       implicit none
@@ -132,37 +134,30 @@ program fd1d_heat_explicit_prb
       h_new(x_num) = 70.0_DP
     end subroutine fd1d_heat_explicit
 
-    subroutine fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
+!    subroutine fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
 
-      implicit none
+!      implicit none
 
-      real(KIND=DP), intent(inout) :: cfl
-      real(KIND=DP) :: dx
-      real(KIND=DP) :: dt
-      real(KIND=DP), intent(in) :: k
-      real(KIND=DP), intent(in) :: t_max
-      real(KIND=DP), intent(in) :: t_min
-      integer(KIND=SI), intent(in) :: t_num
-      real(KIND=DP), intent(in) :: x_max
-      real(KIND=DP), intent(in) :: x_min
-      integer(KIND=SI), intent(in) :: x_num
+!      real(KIND=DP), intent(inout) :: cfl
+!      real(KIND=DP) :: dx
+!      real(KIND=DP) :: dt
+!      real(KIND=DP), intent(in) :: k
+!      real(KIND=DP), intent(in) :: t_max
+!      real(KIND=DP), intent(in) :: t_min
+!      integer(KIND=SI), intent(in) :: t_num
+!      real(KIND=DP), intent(in) :: x_max
+!      real(KIND=DP), intent(in) :: x_min
+!      integer(KIND=SI), intent(in) :: x_num
 
-      dx = ( x_max - x_min ) / dble ( x_num - 1 )
-      dt = ( t_max - t_min ) / dble ( t_num - 1 )
+!      dx = ( x_max - x_min ) / dble( x_num - 1 )
+!      dt = ( t_max - t_min ) / dble( t_num - 1 )
 
-      cfl = k * dt / dx / dx
+!      cfl = k * dt / dx / dx
+      
+!      write ( *, '(a)' ) ' '
+!      write ( *, '(a,g14.6)' ) '  CFL stability criterion value = ', cfl
 
-      write ( *, '(a)' ) ' '
-      write ( *, '(a,g14.6)' ) '  CFL stability criterion value = ', cfl
-
-      if ( 0.5_DP .le. cfl ) then
-        write ( *, '(a)' ) ' '
-        write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_CFL - Fatal error!'
-        write ( *, '(a)' ) '  CFL condition failed.'
-        write ( *, '(a)' ) '  0.5 <= K * dT / dX / dX = CFL.'
-        stop
-      end if
-    end subroutine fd1d_heat_explicit_cfl
+!    end subroutine fd1d_heat_explicit_cfl
 
     subroutine r8mat_write( output_filename, m, n, table )
 
@@ -172,9 +167,9 @@ program fd1d_heat_explicit_prb
       integer(KIND=SI), intent(in) :: n
 
       integer(KIND=SI) :: j
-      character * ( * ), intent(in) :: output_filename
+      character(len=*), intent(in) :: output_filename
       integer(KIND=SI) :: output_unit
-      character * ( 30 ) :: string 
+      character(len=30) :: string 
       real(KIND=DP), intent(in) :: table(m, n)
  
       output_unit = 10
@@ -213,7 +208,7 @@ program fd1d_heat_explicit_prb
       integer(KIND=SI) :: n
 
       integer(KIND=SI) :: j
-      character * ( * ) :: output_filename
+      character(len=*) :: output_filename
       integer(KIND=SI) :: output_unit
       real(KIND=DP) :: x(n)
 

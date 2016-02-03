@@ -4,6 +4,8 @@ module RHS_mod
   
   implicit none
 
+  public :: func
+  
 contains
   
   function func( j, x_num, x ) result ( d )
