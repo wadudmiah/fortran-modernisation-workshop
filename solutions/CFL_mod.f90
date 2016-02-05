@@ -1,3 +1,8 @@
+!> @author
+!> Wadud Miah, Numerical Algorithms Group
+!> @brief
+!> calculates the CFL number
+
 module CFL_mod
   use Types_mod
 
@@ -6,6 +11,18 @@ module CFL_mod
   public :: fd1d_heat_explicit_cfl
 contains
 
+!> @author
+!> Wadud Miah, Numerical Algorithms Group
+!> @brief
+!> calculates the CFL number
+!> @param[in] k heat constant
+!> @param[in] t_num number of intervals in t-axis
+!> @param[in] t_min lower bound of t-axis
+!> @param[in] t_max upper bound of t-axis
+!> @param[in] x_num number of intervals in x-axis
+!> @param[in] x_min lower bound of x-axis
+!> @param[in] x_max upper bound of x-axis
+!> @param[inout] cfl calculated CFL number
   subroutine fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
 
     implicit none

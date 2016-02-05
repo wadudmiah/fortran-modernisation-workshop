@@ -75,7 +75,18 @@ git add .
 git commit -m `initial version'
 \end{verbatim}
 The Git commands will version control your code so you can see its revision history. Git will
-be covered in the second session. 
+be covered in the second session. \\
+
+Day one exercises will include modernising an existing Fortran 77 code. Day two exercises will involve the 
+following topics:
+\begin{enumerate}
+\item Makefiles for Fortran codes;
+\item Git source code version control system;
+\item Doxygen code documentation tool for Fortran codes;
+\item NetCDF file format for arrays;
+\item In-memory visualisation using PLplot
+\item Unit testing with pFUnit.
+\end{enumerate}
 \newpage
 \subsection*{Day One Exercises}
 \setdefaultleftmargin{0pt}{}{}{}{}{}
@@ -181,15 +192,102 @@ another Git commit:
 \begin{verbatim}
 git add RHS_mod.f90 CFL_mod.f90 IO_mod.f90
 git add fd1d_heat_explicit.f90
-git commit -m `modularised RHS, CFL and IO'
+git commit -m `modularised RHS, CFL, IO and Solver'
 \end{verbatim}
 %
 \end{enumerate}
 \newpage
 \subsection*{Day Two Exercises}
 \begin{enumerate}
+\item Write a Makefile for the Fortran code produced on Day 1 in the same directory as the source
+code. After creating the Makefile, add it to git using \texttt{git add Makefile} 
+\item This task will cover Git in a bit more detail.
+\begin{enumerate}
+\item Type \texttt{git status} which will list the status of all the files. Notice that the object 
+files (\texttt{*.o}), Fortran module files (\texttt{*.mod}) and executable files (\texttt{*.exe}) are listed as 
+untracked files. These files need not be version controlled as they can be recreated
+\item Create the file \texttt{.gitignore} in the source code directory. This configuration file will 
+specify which files not not version control, e.g. object files, executable files or any file that can
+be recreated. Add the following extensions in the ignore file:
+\begin{verbatim}
+*.o
+*.mod
+*.exe
+doxygen
+\end{verbatim}
+\item Browse the commit history of all the Fortran files created using \texttt{git commit code.f90}
+\end{enumerate}
+\item To create a Doxygen template configuration, type \texttt{doxygen -g fortran.dxg} in the same
+directory where the code resides. Then open the file \texttt{fortran.dxg} in any editor and set the 
+following variables:
+\begin{center}
+\begin{tabular}{| c | c |} \hline
+Description & Variable and value \\ \hline
+Free text for project name & \texttt{PROJECT\_NAME = "Fortran Workshop"} \\ \hline
+Free text for project description & \texttt{PROJECT\_BRIEF = "Fortran Workshop"} \\ \hline
+Output directory for doxygen files & \texttt{OUTPUT\_DIRECTORY = doxygen} \\ \hline
+Configuring Doxygen for Fortran & \texttt{OPTIMIZE\_FOR\_FORTRAN = YES} \\ \hline
+Input directory where code resides & \texttt{INPUT = .} \\ \hline
+Fortran code file extension & \texttt{FILE\_PATTERNS = *.f90} \\ \hline
+Generate HTML reports & \texttt{GENERATE\_HTML = YES} \\ \hline
+Using Graphvis for generating call graphs & \texttt{HAVE\_DOT = YES} \\ \hline
+Generate call graph & \texttt{CALL\_GRAPH = YES} \\ \hline
+Generate caller graph & \texttt{CALLER\_GRAPH = NO} \\ \hline
+Extract all documentation & \texttt{EXTRACT\_ALL = YES} \\ \hline
+Extract private members of class & \texttt{EXTRACT\_PRIVATE = YES} \\ \hline
+Extract static members of file & \texttt{EXTRACT\_STATIC = YES} \\ \hline
+List source code of file & \texttt{SOURCE\_BROWSER = YES} \\ \hline
+\end{tabular}
+\end{center}
+Then load the file \texttt{doxygen/html/index.html} in any browser to browse the source code documentation.
+\begin{enumerate}
+\item Click on \texttt{Files} $\rightarrow$ \texttt{fd1d\_heat\_explicit.f90} which should display a call graph;
+\item Click on \texttt{Got to the source code of this file} to see the source code of the main program code;
+\item Click on \texttt{Files} $\rightarrow$ \texttt{Types\_mod.f90} $\rightarrow$ \texttt{types\_mod} to see
+the public constants in the module
+\item Have a browse around the other links to familiarise yourself with Doxygen;
+\item Then add the Doxygen configuration file to Git by typing \texttt{git add fortran.dxg}
+\item On line 1 of the file \texttt{fd1d\_heat\_explicit.f90} add the following Doxygen tags:
+\begin{verbatim}
+!> @author
+!> <Your name>, <your affiliation>
+!> @brief 
+!> Solves the one dimensional heat diffusion equation
+!> \f$ \frac{\partial{\bf H}}{\partial t} 
+!>       - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x) \f$
+\end{verbatim}
+\item On line 1 of the module file \texttt{CFL\_mod.f90} add the following Doxygen tags:
+\begin{verbatim}
+!> @author
+!> <Your name>, <your affiliation>
+!> @brief
+!> calculates the CFL number
+\end{verbatim}
+In the same module file and before the subroutine \texttt{fd1d\_heat\_explicit\_cfl} is defined add
+the following Doxygen content:
+\begin{verbatim}
+!> @author
+!> <Your name>, <your affiliation>
+!> @brief
+!> calculates the CFL number
+!> @param[in] k heat constant
+!> @param[in] t_num number of intervals in t-axis
+!> @param[in] t_min lower bound of t-axis
+!> @param[in] t_max upper bound of t-axis
+!> @param[in] x_num number of intervals in x-axis
+!> @param[in] x_min lower bound of x-axis
+!> @param[in] x_max upper bound of x-axis
+!> @param[inout] cfl calculated CFL number
+\end{verbatim}
+\item Refresh your browser and click on \texttt{Files} $\rightarrow$ \texttt{fd1d\_heat\_explicit.f90} and you
+should now see the LaTeX heat diffusion equation with the description and author
+\item Click on \texttt{Files} $\rightarrow$ \texttt{CFL\_mod.f90} $\rightarrow$ \texttt{More...} and you 
+should now see the module author, subroutine author and description. In addition, you should see the subroutine
+dummy arguments with their description
+\item In your own time and after the workshop has ended do the same for the remaining module files 
+(\texttt{IO\_mod.f90}, \texttt{RHS\_mod.f90}, \texttt{Solver\_mod.f90}, \texttt{Types\_mod.f90})
+\end{enumerate}
 \item sdf
-\item sf
 \end{enumerate}
 \end{document}
 
