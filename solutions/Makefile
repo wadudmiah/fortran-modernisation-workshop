@@ -1,27 +1,29 @@
 FC = gfortran
 
+LDFLAGS = -L.
 LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
+FFLAGS = -I.
 
 fd1d_heat_explicit.exe: fd1d_heat_explicit.o $(LIBS)
-	$(FC) $^ -o $@
+	$(FC) $(LDFLAGS) $^ -o $@
 
 fd1d_heat_explicit.o: fd1d_heat_explicit.f90 $(LIBS)
-	$(FC) -c -I. $<
+	$(FC) -c $(FFLAGS) $<
 
 Types_mod.o: Types_mod.f90
-	$(FC) -c -I. $<
+	$(FC) -c $(FFLAGS) $<
 
 RHS_mod.o: RHS_mod.f90 Types_mod.o
-	$(FC) -c -I. $<
+	$(FC) -c $(FFLAGS) $<
 
 CFL_mod.o: CFL_mod.f90 Types_mod.o
-	$(FC) -c -I. $<
+	$(FC) -c $(FFLAGS) $<
 
 IO_mod.o: IO_mod.f90 Types_mod.o
-	$(FC) -c -I. $<
+	$(FC) -c $(FFLAGS) $<
 
 Solver_mod.o: Solver_mod.f90 Types_mod.o
-	$(FC) -c -I. $<
+	$(FC) -c $(FFLAGS) $<
 
 diff: fd1d_heat_explicit.exe
 	./fd1d_heat_explicit.exe
