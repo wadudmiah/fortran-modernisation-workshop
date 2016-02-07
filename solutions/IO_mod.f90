@@ -1,37 +1,66 @@
 module IO_mod
   use Types_mod
-
+  use netcdf
+  
   implicit none
 
   public :: r8mat_write, r8vec_write, r8vec_linspace
 contains
-  subroutine r8mat_write( output_filename, m, n, table )
+  subroutine r8mat_write( output_filename, m, n, table, x, t )
 
     implicit none
 
-    integer(KIND=SI), intent(in) :: m
-    integer(KIND=SI), intent(in) :: n
+    integer(KIND=SI), intent(in) :: m ! x_num
+    integer(KIND=SI), intent(in) :: n ! t_num
 
-    integer(KIND=SI) :: j
+    real(KIND=DP), intent(in)    :: x(m)
+    real(kind=DP), intent(in)    :: t(n)
+    
+    integer(KIND=SI)             :: j
     character(len=*), intent(in) :: output_filename
-    integer(KIND=SI) :: output_unit
-    character(len=30) :: string 
-    real(KIND=DP), intent(in) :: table(m, n)
- 
-    output_unit = 10
-    open( unit = output_unit, file = output_filename, status = 'replace' )
+    real(KIND=DP), intent(in)    :: table(m, n)
 
-    write ( string, '(a1,i8,a1,i8,a1,i8,a1)' ) '(', m, 'g', 24, '.', 16, ')'
+    ! netcdf parameters
+    integer(KIND=SI), parameter :: NDIMS = 2
+    integer(KIND=SI)            :: ncid, x_id, t_id, sol_id, dimids(1:NDIMS)
+    integer(KIND=SI)            :: x_dimid, t_dimid, ierr
 
-    do j = 1, n
-      write ( output_unit, string ) table(1:m, j)
-    end do
+    ierr = NF90_CREATE( output_filename, NF90_NOCLOBBER, ncid )
 
-    close( unit = output_unit )
+    ! define the dimensions
+    ierr = NF90_DEF_DIM( ncid, "x", m, x_dimid )
+    ierr = NF90_DEF_DIM( ncid, "t", n, t_dimid ) 
+
+    ! define the x- and t-range variables
+    ierr = NF90_DEF_VAR( ncid, "x-range", NF90_DOUBLE, x_dimid, x_id )
+    ierr = NF90_DEF_VAR( ncid, "t-range", NF90_DOUBLE, t_dimid, t_id )
+
+    ! define global attributes
+    ierr = NF90_PUT_ATT( ncid, NF90_GLOBAL, "purpose", "Fortran workshop" )
+    ierr = NF90_PUT_ATT( ncid, NF90_GLOBAL, "name", "Wadud Miah" )
+    ierr = NF90_PUT_ATT( ncid, NF90_GLOBAL, "institution", "NAG" )
+    
+    ! define dimension attributes
+    ierr = NF90_PUT_ATT( ncid, x_id, "units", "metres" )
+    ierr = NF90_PUT_ATT( ncid, t_id, "units", "seconds" )
+
+    ! define the solution matrix
+    dimids = [ x_dimid, t_dimid ]
+    ierr = NF90_DEF_VAR( ncid, "solution", NF90_DOUBLE, dimids, sol_id )
+
+    ! end define mode
+    ierr = NF90_ENDDEF( ncid )
+
+    ! enter data mode    
+    ierr = NF90_PUT_VAR( ncid, x_id, x(:) )
+    ierr = NF90_PUT_VAR( ncid, t_id, t(:) )
+    ierr = NF90_PUT_VAR( ncid, sol_id, table(:,:) )
+
+    ! close the file
+    ierr = NF90_CLOSE( ncid )
   end subroutine r8mat_write
 
-  subroutine r8vec_write ( output_filename, n, x )
-
+  subroutine r8vec_write( output_filename, n, x )
     implicit none
 
     integer(KIND=SI)             :: m

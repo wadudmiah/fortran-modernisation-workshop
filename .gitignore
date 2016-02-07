@@ -29,12 +29,14 @@
 *.x
 
 # LaTeX related files
-
 *.aux
 *.dvi
 *.log
 *.ps
 *.pdf
+
+# netcdf files
+*.nc
 
 # emacs backup files
 *~

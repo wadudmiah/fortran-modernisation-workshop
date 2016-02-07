@@ -1,11 +1,11 @@
 FC = gfortran
 
-LDFLAGS = -L.
+LDFLAGS = -L. -L/usr/lib64 -lnetcdff -lnetcdf
 LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
-FFLAGS = -I.
+FFLAGS = -I. -I/usr/lib64/gfortran/modules
 
 fd1d_heat_explicit.exe: fd1d_heat_explicit.o $(LIBS)
-	$(FC) $(LDFLAGS) $^ -o $@
+	$(FC) $^ $(LDFLAGS) -o $@
 
 fd1d_heat_explicit.o: fd1d_heat_explicit.f90 $(LIBS)
 	$(FC) -c $(FFLAGS) $<

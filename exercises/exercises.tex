@@ -295,7 +295,31 @@ dummy arguments with their description
 \item Type \texttt{git add fd1d\_heat\_explicit.f90 CFL\_mod.f90} to stage the changes and then 
 \texttt{git commit -m "added Doxygen tokens in source code"}
 \end{enumerate}
-\item sdf
+\item[] The following exercises will involve using the NetCDF API by putting the
+  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:,:)} in one file including meta-data.
+\item Open the file \texttt{IO\_mod.f90} and add the line \texttt{use netcdf} 
+\item Open the main program code \texttt{fd1d\_heat\_explicit.f90} and pass the arguments \texttt{x(:)} and
+  \texttt{t(:)} into the subroutine call \texttt{r8mat\_write()} and change the file name from \texttt{h\_test01.txt}
+  to \texttt{h\_test01.nc}
+\item Comment out the two \texttt{r8vec\_write()} subroutine calls
+\item Edit the subroutine \texttt{r8mat\_write} and add the dummy arguments:
+\begin{verbatim}
+real(kind=DP), intent(in) :: x(m)
+real(kind=DP), intent(in) :: t(n)
+\end{verbatim}
+\item When in data mode, add the following meta data using \texttt{NF90\_GLOBAL} for \texttt{varid} argument:
+  \begin{enumerate}
+  \item\texttt{purpose = "Fortran workshop"}
+  \item\texttt{name = "Your name"}
+  \item\texttt{institution = "Your university"} 
+  \end{enumerate}
+\item In the subroutine \texttt{r8mat\_write()} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the two-dimensional array \texttt{table(:,:)} into a NetCDF file
+\item To compile the remember to add the line \texttt{-I/usr/lib64/gfortran/modules} in your
+  Makefile which is the NetCDF Fortran module file directory on Fedora Linux. This might be
+  different for your system
+\item To do the final link, remember to add the link line \texttt{-L/usr/lib64 -lnetcdff -lnetcdf}
+  which is where the Fortran NetCDF wrapper resides on Fedora Linux. This might be different
+  for your system
 \end{enumerate}
 \end{document}
 
