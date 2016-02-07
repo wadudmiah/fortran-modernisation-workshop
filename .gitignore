@@ -41,5 +41,8 @@
 # emacs backup files
 *~
 
+# from plplot
+*.png
+
 # doxygen documentation
 doxygen

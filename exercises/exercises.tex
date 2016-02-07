@@ -219,6 +219,8 @@ be recreated. Add the following extensions in the ignore file:
 *.o
 *.mod
 *.exe
+*.nc
+*.dat
 doxygen
 \end{verbatim}
 \item Browse the commit history of all the Fortran files created using \texttt{git commit code.f90}
@@ -295,9 +297,21 @@ dummy arguments with their description
 \item Type \texttt{git add fd1d\_heat\_explicit.f90 CFL\_mod.f90} to stage the changes and then 
 \texttt{git commit -m "added Doxygen tokens in source code"}
 \end{enumerate}
-\item[] The following exercises will involve using the NetCDF API by putting the
-  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:,:)} in one file including meta-data.
-\item Open the file \texttt{IO\_mod.f90} and add the line \texttt{use netcdf} 
+\item The following exercises will involve using the NetCDF API by writing the
+  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:,:)} in one file including meta-data. Use
+  the following process when creating NetCDF files for writing:
+\begin{itemize}
+\item\texttt{NF90\_CREATE()} to create the file and enter define mode
+\item\texttt{NF90\_DEF\_DIM()} to create the $x$ and $y$ dimensions
+\item\texttt{NF90\_DEF\_VAR()} to create the \texttt{x(:)}, \texttt{t(:)} and
+\texttt{table(:,:)} variables
+\item\texttt{NF90\_PUT\_ATT()} to put global and dimension attributes
+\item\texttt{NF90\_ENDDEF()} to end define mode and to enter data mode
+\item\texttt{NF90\_PUT\_VAR()} to write the data to the file
+\item\texttt{NF90\_CLOSE()} to close the file
+\end{itemize}
+\begin{enumerate}
+\item Open the file \texttt{IO\_mod.f90} and add the line \texttt{use netcdf}
 \item Open the main program code \texttt{fd1d\_heat\_explicit.f90} and pass the arguments \texttt{x(:)} and
   \texttt{t(:)} into the subroutine call \texttt{r8mat\_write()} and change the file name from \texttt{h\_test01.txt}
   to \texttt{h\_test01.nc}
@@ -320,6 +334,39 @@ real(kind=DP), intent(in) :: t(n)
 \item To do the final link, remember to add the link line \texttt{-L/usr/lib64 -lnetcdff -lnetcdf}
   which is where the Fortran NetCDF wrapper resides on Fedora Linux. This might be different
   for your system
+\end{enumerate}
+\item The following exercises will allow you to visualise the solution at every 10 time steps. The
+visualistion will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
+following sequence of subroutine calls:
+\begin{itemize}
+\item\texttt{PLPARSEOPTS()} to parse command line options to control PLplot. This subroutine
+call should be done outside the main time loop
+\item\texttt{PLSFNAM()} to set the output file name - all subroutines from now on should be
+called within the main time loop
+\item\texttt{PLSDEV()} to set the output device to use. Set this to \texttt{"pngcairo"} which
+will save the images in the portable network graphics format
+\item\texttt{PLINIT()} to initialise PLplot
+\item\texttt{PLENV()} to set the $x$- and $y$-range
+\item\texttt{PLLAB()} to set the $x$ and $y$ labels, and the title of the graph
+\item\texttt{PLLINE()} to set the $x$ and $y$ values
+\item\texttt{PLEND()} to finalise PLplot
+\end{itemize}  
+\begin{enumerate}
+\item In the main time loop create an IF branch which is executed at every 10 time steps
+using the Fortran intrinsic function \texttt{mod()}
+\item Create a string for the filename which includes the time step, e.g. 
+\texttt{image001.png}
+\item From the above list of PLplot subroutine calls, create the PNG file of the
+current time step
+\item To compile the code, add the line \texttt{-I/usr/lib64/gfortran/modules}
+\item To link the code to the PLplot libraries including the Fortran wrappers, use
+\texttt{-L/usr/lib64 -lplplotf95cd -lplplotf95d}
+\end{enumerate}
+\item The the final exercise will involve creating pFUnit test codes.
+\begin{enumerate}
+\item one
+\item two
+\end{enumerate}
 \end{enumerate}
 \end{document}
 

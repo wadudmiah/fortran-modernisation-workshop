@@ -11,6 +11,7 @@ program fd1d_heat_explicit
       use CFL_mod
       use IO_mod
       use Solver_mod
+      use plplot
       
       implicit none
 
@@ -24,8 +25,9 @@ program fd1d_heat_explicit
       ! the "matrix" stores all x-values for all t-values
       ! remember Fortran is column major, meaning that rows are contiguous
       real(KIND=DP) :: hmat(x_num, t_num)
-      integer(KIND=SI) :: i
-      integer(KIND=SI) :: j
+      integer(KIND=SI) :: i, j
+      character(len=10) :: vis_filename_num
+      character(len=30) :: vis_filename
       real(KIND=DP) :: k
 
       real(KIND=DP) :: t(t_num)
@@ -35,6 +37,8 @@ program fd1d_heat_explicit
       real(KIND=DP) :: x_max
       real(KIND=DP) :: x_min
 
+      call PLPARSEOPTS( PL_PARSE_FULL )
+      
       write ( *, '(a)' ) ' '
       write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_PRB:'
       write ( *, '(a)' ) '  FORTRAN90 version.'
@@ -97,14 +101,31 @@ program fd1d_heat_explicit
       end do
 
       ! the main time integration loop 
-      do j = 2, t_num
+      time_loop: do j = 2, t_num
         call fd1d_heat_explicit_solver( x_num, x, t(j-1), dt, cfl, h, h_new )
 
+        ! visualise solution at every 10 time steps
+        if ( mod( j, 10 ) == 0 ) then
+          write ( vis_filename_num, '(I5.5)' ) j
+          vis_filename = 'fd1d_heat_explicit_' // trim( vis_filename_num ) &
+                                               // '.png'
+
+          call PLSFNAM( vis_filename )
+          call PLSDEV( "pngcairo" )
+          call PLINIT( )
+          call PLENV( minval( x(:) ), maxval( x(:) ), &
+                      minval( h_new(:) ),  maxval( h_new(:) ), 0, 0 )
+          call PLLAB( 'x (m)', 'temp (c)', &
+                      'heat diffusion at n = ' // vis_filename_num )
+          call PLLINE( x(:), h_new(:) )
+          call PLEND( )
+        end if 
+        
         do i = 1, x_num
           hmat(i, j) = h_new(i)
           h(i) = h_new(i)
         end do
-      end do
+      end do time_loop
 
       ! write data to files
       call r8mat_write( 'h_test01.nc', x_num, t_num, hmat, x, t )
