@@ -33,4 +33,4 @@ diff: fd1d_heat_explicit.exe
 .PHONY: clean
 
 clean:
-	rm -f *.mod *.o fd1d_heat_explicit
+	rm -f *.mod *.o *.png fd1d_heat_explicit.exe
