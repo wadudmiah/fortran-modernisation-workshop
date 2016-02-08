@@ -245,9 +245,11 @@ Extract all documentation & \texttt{EXTRACT\_ALL = YES} \\ \hline
 Extract private members of class & \texttt{EXTRACT\_PRIVATE = YES} \\ \hline
 Extract static members of file & \texttt{EXTRACT\_STATIC = YES} \\ \hline
 List source code of file & \texttt{SOURCE\_BROWSER = YES} \\ \hline
+Use free form Fortran & \texttt{EXTENSION\_MAPPING = f90=FortranFree} \\ \hline
 \end{tabular}
 \end{center}
-Then load the file \texttt{doxygen/html/index.html} in any Web browser to browse the source code documentation.
+Run the Doxygen command \texttt{doxygen fortran.dxg} and then load the file \texttt{doxygen/html/index.html} 
+in any Web browser to browse the source code documentation.
 \begin{enumerate}
 \item Click on \texttt{Files} $\rightarrow$ \texttt{fd1d\_heat\_explicit.f90} which should display a call graph;
 \item Click on \texttt{Got to the source code of this file} to see the source code of the main program code;
@@ -287,6 +289,7 @@ the following Doxygen content:
 !> @param[in] x_max upper bound of x-axis
 !> @param[inout] cfl calculated CFL number
 \end{verbatim}
+\item Rerun the Doxygen command \texttt{doxygen fortran.dxg}
 \item Refresh your browser and click on \texttt{Files} $\rightarrow$ \texttt{fd1d\_heat\_explicit.f90} and you
 should now see the LaTeX heat diffusion equation with the description and author
 \item Click on \texttt{Files} $\rightarrow$ \texttt{CFL\_mod.f90} $\rightarrow$ \texttt{More...} and you 
@@ -314,7 +317,7 @@ dummy arguments with their description
 \item Open the file \texttt{IO\_mod.f90} and add the line \texttt{use netcdf}
 \item Open the main program code \texttt{fd1d\_heat\_explicit.f90} and pass the arguments \texttt{x(:)} and
   \texttt{t(:)} into the subroutine call \texttt{r8mat\_write()} and change the file name from \texttt{h\_test01.txt}
-  to \texttt{h\_test01.nc}
+  to \texttt{h\_test01.nc} - the file extension \texttt{.nc} is used to denote NetCDF files
 \item Comment out the two \texttt{r8vec\_write()} subroutine calls
 \item Edit the subroutine \texttt{r8mat\_write} and add the dummy arguments:
 \begin{verbatim}
@@ -323,9 +326,9 @@ real(kind=DP), intent(in) :: t(n)
 \end{verbatim}
 \item When in data mode, add the following meta data using \texttt{NF90\_GLOBAL} for \texttt{varid} argument:
   \begin{enumerate}
-  \item\texttt{purpose = "Fortran workshop"}
-  \item\texttt{name = "Your name"}
-  \item\texttt{institution = "Your university"} 
+  \item\texttt{"purpose" = "Fortran workshop"}
+  \item\texttt{"name" = "Your name"}
+  \item\texttt{"institution" = "Your university"} 
   \end{enumerate}
 \item In the subroutine \texttt{r8mat\_write()} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the two-dimensional array \texttt{table(:,:)} into a NetCDF file
 \item To compile the remember to add the line \texttt{-I/usr/lib64/gfortran/modules} in your
@@ -334,6 +337,7 @@ real(kind=DP), intent(in) :: t(n)
 \item To do the final link, remember to add the link line \texttt{-L/usr/lib64 -lnetcdff -lnetcdf}
   which is where the Fortran NetCDF wrapper resides on Fedora Linux. This might be different
   for your system
+\item Once your code completes, you can view the contents of the NetCDF file using \texttt{ncdump h\_test01.nc | less}
 \end{enumerate}
 \item The following exercises will allow you to visualise the solution at every 10 time steps. The
 visualistion will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
