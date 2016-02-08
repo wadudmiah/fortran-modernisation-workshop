@@ -248,8 +248,8 @@ List source code of file & \texttt{SOURCE\_BROWSER = YES} \\ \hline
 Use free form Fortran & \texttt{EXTENSION\_MAPPING = f90=FortranFree} \\ \hline
 \end{tabular}
 \end{center}
-Run the Doxygen command \texttt{doxygen fortran.dxg} and then load the file \texttt{doxygen/html/index.html} 
-in any Web browser to browse the source code documentation.
+Run the Doxygen command \texttt{doxygen fortran.dxg} and then load the file \newline
+\texttt{doxygen/html/index.html} in any Web browser to browse the source code documentation.
 \begin{enumerate}
 \item Click on \texttt{Files} $\rightarrow$ \texttt{fd1d\_heat\_explicit.f90} which should display a call graph;
 \item Click on \texttt{Got to the source code of this file} to see the source code of the main program code;
@@ -363,13 +363,67 @@ using the Fortran intrinsic function \texttt{mod()}
 \item From the above list of PLplot subroutine calls, create the PNG file of the
 current time step
 \item To compile the code, add the line \texttt{-I/usr/lib64/gfortran/modules}
-\item To link the code to the PLplot libraries including the Fortran wrappers, use
+\item To link the code to the PLplot libraries including the Fortran wrappers, use \newline
 \texttt{-L/usr/lib64 -lplplotf95cd -lplplotf95d}
 \end{enumerate}
-\item The the final exercise will involve creating pFUnit test codes.
+\item The the final exercise will involve creating pFUnit test codes. This exercise will only
+test the CFL subroutine. 
 \begin{enumerate}
-\item one
-\item two
+\item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testCFL.pf} 
+which will test the \texttt{fd1d\_heat\_explicit\_cfl()} subroutine:
+\begin{verbatim}
+@test
+subroutine testCFL( )
+  use pFUnit_mod
+  use CFL_mod
+  use Types_mod
+
+  integer(KIND=SI), parameter :: t_num = 201
+  integer(KIND=SI), parameter :: x_num = 21
+  real(KIND=DP) :: k, x_min, x_max, t_min, t_max 
+  real(KIND=DP) :: cfl, cfl_exact, tol
+
+  tol = 0.0000001_DP
+  cfl_exact = 0.32_DP
+  k = 0.002_DP
+
+  x_min = 0.0_DP
+  x_max = 1.0_DP
+
+  t_min = 0.0_DP
+  t_max = 80.0_DP
+  
+  call fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, &
+                               x_num, x_min, x_max, cfl )
+
+  @assertEqual( cfl, cfl_exact, tol )
+end subroutine testCFL
+\end{verbatim}
+Place it in the same directory as the Fortran source code.
+\item Create the test configuration file \texttt{testSuites.inc} which will tell pFUnit which tests to execute:
+\begin{verbatim}
+ADD_TEST_SUITE(testCFL_suite)
+\end{verbatim}
+\item To preprocess the pseudo Fortran test driver code to produce Fortran code:
+\begin{verbatim}
+pFUnitParser.py testCFL.pf testCFL.F90 -I.
+\end{verbatim}
+Note that the Fortran code must have the \texttt{.F90} extension as it still needs to be preprocessed
+\item Then compile the created Fortran test driver code:
+\begin{verbatim}
+gfortran -I$PFUNIT/mod -c testCFL.F90
+\end{verbatim}
+where \texttt{\$PFUNIT} is the environment variable which points to the installation directory of pFUnit
+\item Then create the final test driver executable:
+\begin{verbatim}
+gfortran -o tests.x -I$PFUNIT/mod $PFUNIT/include/driver.F90 \
+         CFL_mod.o testCFL.o  -L$PFUNIT/lib -lpfunit -I.
+\end{verbatim}
+Note that \texttt{CFL\_mod.f90} must be compiled before the above command is executed
+\item This command will create the \texttt{tests.x} binary executable which needs to be executed
+and will print the result of the test which is a pass
+\item Change the value \texttt{cfl\_exact} to \texttt{0.34\_DP} in the pseudo Fortran code and repeat
+steps (b), (c) and (d). Execute the \texttt{tests.x} which should fail the test
 \end{enumerate}
 \end{enumerate}
 \end{document}
