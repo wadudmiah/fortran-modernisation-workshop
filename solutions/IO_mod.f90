@@ -6,19 +6,19 @@ module IO_mod
 
   public :: r8mat_write, r8vec_write, r8vec_linspace
 contains
-  subroutine r8mat_write( output_filename, m, n, table, x, t )
+  subroutine r8mat_write( output_filename, table, x, t )
 
     implicit none
 
-    integer(KIND=SI), intent(in) :: m ! x_num
-    integer(KIND=SI), intent(in) :: n ! t_num
+    integer(KIND=SI) :: m ! x_num
+    integer(KIND=SI) :: n ! t_num
 
-    real(KIND=DP), intent(in)    :: x(m)
-    real(kind=DP), intent(in)    :: t(n)
+    real(KIND=DP), intent(in)    :: x(:)
+    real(kind=DP), intent(in)    :: t(:)
     
     integer(KIND=SI)             :: j
     character(len=*), intent(in) :: output_filename
-    real(KIND=DP), intent(in)    :: table(m, n)
+    real(KIND=DP), intent(in)    :: table(:, :)
 
     ! netcdf parameters
     integer(KIND=SI), parameter :: NDIMS = 2
@@ -27,6 +27,8 @@ contains
 
     ierr = NF90_CREATE( output_filename, NF90_NOCLOBBER, ncid )
 
+    m = size( x )
+    n = size( t )
     ! define the dimensions
     ierr = NF90_DEF_DIM( ncid, "x", m, x_dimid )
     ierr = NF90_DEF_DIM( ncid, "t", n, t_dimid ) 
@@ -81,16 +83,17 @@ contains
     close ( unit = output_unit )
   end subroutine r8vec_write
 
-  subroutine r8vec_linspace( n, a_first, a_last, a )
+  subroutine r8vec_linspace( a_first, a_last, a )
 
     implicit none
 
-    integer(KIND=SI), intent(in) :: n
-    real(KIND=DP), intent(inout) :: a(n)
+    real(KIND=DP), intent(inout) :: a(:)
     real(KIND=DP), intent(in) :: a_first
     real(KIND=DP), intent(in) :: a_last
-    integer(KIND=SI) :: i
+    integer(KIND=SI) :: i, n
 
+    n = size( a(:) )
+    
     do i = 1, n
       a(i) = ( dble( n - i ) * a_first + dble( i - 1 ) * a_last ) / dble( n - 1 )
     end do

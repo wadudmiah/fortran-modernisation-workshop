@@ -127,6 +127,8 @@ from \texttt{double precision} to \texttt{real(KIND=DP)} and \texttt{integer} to
 \item In the main program code, change how constants are used, e.g. from \texttt{0.0D+00} to 
 \texttt{0.0\_DP}
 \item In the functions and subroutines, use the \texttt{intent} keyword for dummy arguments
+\item In the functions and subroutines, remove the size of the array and use assumed shaped
+  arrays as dummy arguments
 \item In the main program code, use the modern string declaration statement. For dummy argument
 declaration:
 \begin{verbatim}
