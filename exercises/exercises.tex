@@ -223,7 +223,7 @@ be recreated. Add the following extensions in the ignore file:
 *.dat
 doxygen
 \end{verbatim}
-\item Browse the commit history of all the Fortran files created using \texttt{git commit code.f90}
+\item Browse the commit history of all the Fortran files created using \texttt{git log}
 \end{enumerate}
 \item To create a Doxygen template configuration, type \texttt{doxygen -g fortran.dxg} in the same
 directory where the code resides. Then open the file \texttt{fortran.dxg} in any editor and set the 
@@ -273,7 +273,7 @@ the public constants in the module
 !> @brief
 !> calculates the CFL number
 \end{verbatim}
-In the same module file and before the subroutine \texttt{fd1d\_heat\_explicit\_cfl} is defined add
+In the same module file and before the subroutine \texttt{fd1d\_heat\_explicit\_cfl()} is defined add
 the following Doxygen content:
 \begin{verbatim}
 !> @author
