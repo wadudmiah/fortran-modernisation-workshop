@@ -128,7 +128,9 @@ from \texttt{double precision} to \texttt{real(KIND=DP)} and \texttt{integer} to
 \texttt{0.0\_DP}
 \item In the functions and subroutines, use the \texttt{intent} keyword for dummy arguments
 \item In the functions and subroutines, remove the size of the array and use assumed shaped
-  arrays as dummy arguments
+  arrays as dummy arguments. Use the \texttt{size()} intrinsic function to get array 
+dimensions. For example, to get the number of rows of a two-dimension array, use \texttt{size( mat(:,:), 1 )}
+and for the number of columns, use \texttt{size( mat(:,:), 2 )}
 \item In the main program code, use the modern string declaration statement. For dummy argument
 declaration:
 \begin{verbatim}
