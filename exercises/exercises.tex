@@ -369,6 +369,11 @@ current time step
 \item To compile the code, add the line \texttt{-I/usr/lib64/gfortran/modules}
 \item To link the code to the PLplot libraries including the Fortran wrappers, use \newline
 \texttt{-L/usr/lib64 -lplplotf95cd -lplplotf95d}
+\item Create a movie file with the list of images created using:
+\begin{verbatim}
+ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
+\end{verbatim}
+and view it using any video player. 
 \end{enumerate}
 \item The the final exercise will involve creating pFUnit test codes. This exercise will only
 test the CFL subroutine. 

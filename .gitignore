@@ -43,6 +43,8 @@
 
 # from plplot
 *.png
+*.mov
+*.mp4
 
 # doxygen documentation
 doxygen
