@@ -51,7 +51,7 @@ between $x_{\text{min}}$ and $x_{\text{max}}$ and uses the following explicit fi
 scheme to integrate in time:
 \begin{align}
 {\bf H}^{(n+1)}_{i} & = {\bf H}^{(n)}_{i} + \text{CFL}\big\{{\bf H}^{(n)}_{i-1}-2{\bf H}^{(n)}_{i} +
-                      {\bf H}^{(n)}_{i+1}\big\} + \Delta t f(x) \label{fd} \\
+                      {\bf H}^{(n)}_{i+1}\big\} + \Delta t f(x_{i}) \label{fd} \\
             \text{where CFL} & = k\frac{\Delta t}{\Delta x^{2}} \label{cfl}
 \end{align}
 Equation~(\ref{cfl}) is known as the Courant-Friedrichs-Lewy coefficient which must satisfy
@@ -63,12 +63,14 @@ The exercises are split into two parts: one set for the first day and a second
 set for the second day. To download the exercises, type the commands:
 \begin{verbatim}
 wget \
-https://www.nag.co.uk/market/training/fortran-modernisation-workshop/ex.tar
+http://www.nag.co.uk/market/training/fortran-modernisation-workshop/ex.tar
 tar -xvf ex.tar
 \end{verbatim}
 which will extract the exercises to the \texttt{ex/} directory. Change into the 
 \texttt{ex/} directory:
 \begin{verbatim}
+git config --global user.name "firstname lastname"
+git config --global user.email firstname.lastname@address.com
 cd ex/
 git init
 git add .
