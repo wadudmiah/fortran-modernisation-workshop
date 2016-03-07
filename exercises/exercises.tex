@@ -316,7 +316,7 @@ dummy arguments with their description
 \texttt{git commit -m "added Doxygen tokens in source code"}
 \end{enumerate}
 \item The following exercises will involve using the NetCDF API by writing the
-  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:,:)} varaibles in one file including meta-data. Use
+  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:, :)} varaibles in one file including meta-data. Use
   the following process when creating NetCDF files for writing:
 \begin{itemize}
 \item\texttt{NF90\_CREATE( )} to create the file and enter define mode
@@ -331,9 +331,9 @@ dummy arguments with their description
 \begin{enumerate}
 \item Open the file \texttt{IO\_mod.f90} and add the line \texttt{use netcdf}
 \item Open the main program code \texttt{fd1d\_heat\_explicit.f90} and pass the arguments \texttt{x(:)} and
-  \texttt{t(:)} into the subroutine call \texttt{r8mat\_write()} and change the file name from \texttt{h\_test01.txt}
+  \texttt{t(:)} into the subroutine call \texttt{r8mat\_write( )} and change the file name from \texttt{h\_test01.txt}
   to \texttt{h\_test01.nc} - the file extension \texttt{.nc} is used to denote NetCDF files
-\item Comment out the two \texttt{r8vec\_write()} subroutine calls
+\item Comment out the two \texttt{r8vec\_write( )} subroutine calls
 \item Edit the subroutine \texttt{r8mat\_write} and add the dummy arguments:
 \begin{verbatim}
 real(kind=DP), intent(in) :: x(:)
@@ -377,7 +377,8 @@ using the Fortran intrinsic function \texttt{mod( )}
 \texttt{image001.png}
 \item From the above list of PLplot subroutine calls, create the PNG file of the
 current time step
-\item To compile the code, add the line \texttt{-I/usr/lib64/gfortran/modules}
+\item To compile the code, add the line \texttt{-I/usr/lib64/gfortran/modules} - this
+  path might be different on your system
 \item To link the code to the PLplot libraries including the Fortran wrappers, use \newline
 \texttt{-L/usr/lib64 -lplplotf95cd -lplplotf95d}
 \item Create a movie file with the list of images created using:
