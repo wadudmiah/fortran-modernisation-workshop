@@ -130,7 +130,7 @@ from \texttt{double precision} to \texttt{real(KIND=DP)} and \texttt{integer} to
 \texttt{0.0\_DP}
 \item In the functions and subroutines, use the \texttt{intent} keyword for dummy arguments
 \item In the functions and subroutines, remove the size of the array and use assumed shaped
-  arrays as dummy arguments. Use the \texttt{size()} intrinsic function to get array 
+  arrays as dummy arguments. Use the \texttt{size( )} intrinsic function to get array 
 dimensions. For example, to get the number of rows of a two-dimension array, use \texttt{size( mat(:,:), 1 )}
 and for the number of columns, use \texttt{size( mat(:,:), 2 )}
 \item In the main program code, use the modern string declaration statement. For dummy argument
@@ -157,7 +157,7 @@ gfortran fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit.exe
 \begin{verbatim}
 diff h_test01.txt h_test01.txt_bak
 \end{verbatim}
-If the command outputs difference, then the refactoring introduced a bug
+If the command outputs difference, then the refactoring introduced a bug.
 \item Type \texttt{git diff fd1d\_heat\_explicit} to see the refactored code. Stage and commit
 the changes by typing: 
 \begin{verbatim}
@@ -169,7 +169,7 @@ git commit -m "refactored Fortran 77 into modern Fortran"
 Fortran function \texttt{func()} into \texttt{RHS\_mod}. In the main program code, 
 insert the line \texttt{use RHS\_mod} 
 \item Create a module \texttt{CFL\_mod} and put it in the file \texttt{CFL\_mod.f90} and put the
-Fortran function \texttt{fd1d\_heat\_explicit\_cfl()} into \texttt{CFL\_mod}. In the main program
+Fortran function \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{CFL\_mod}. In the main program
 code, insert the line \texttt{use CFL\_mod}
 \item Create a module \texttt{IO\_mod} and put it in the file \texttt{IO\_mod.f90} and put
 the Fortran functions \texttt{r8mat\_write}, \texttt{r8vec\_linspace} and \texttt{r8vec\_write} into \texttt{IO\_mod}.
@@ -192,11 +192,11 @@ gfortran fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
 \begin{verbatim}
 diff h_test01.txt h_test01.txt_bak
 \end{verbatim}
-If the command outputs difference, then the refactoring introduced a bug
+If the command outputs difference, then the refactoring introduced a bug.
 \item Add the newly created module files into Git and stage the changed main program for a
 another Git commit:
 \begin{verbatim}
-git add RHS_mod.f90 CFL_mod.f90 IO_mod.f90
+git add RHS_mod.f90 CFL_mod.f90 IO_mod.f90 Solver_mod.f90
 git add fd1d_heat_explicit.f90
 git commit -m "modularised RHS, CFL, IO and Solver"
 \end{verbatim}
@@ -205,12 +205,20 @@ git commit -m "modularised RHS, CFL, IO and Solver"
 \newpage
 \subsection*{Day Two Exercises}
 \begin{enumerate}
-\item Write a Makefile for the Fortran code produced on Day one in the same directory as the source
-code. 
+\item Write a Makefile for the Fortran code produced on day one in the same directory as the source
+code
+\item Add a \texttt{clean} target which cleans the build:
+\begin{verbatim}
+.PHONY: clean
+
+clean:
+        rm -f *.mod *.o *.png fd1d_heat_explicit.exe
+\end{verbatim}
+Remember to precede the commands with the tab
 \begin{enumerate}
 \item After creating your Makefile, type \texttt{make -n} to see what commands will be executed without executing
 your commands which is useful for debugging
-\item Then type \texttt{make} to build your code. 
+\item Then type \texttt{make} to build your code 
 \item After creating the Makefile, add it to git using \texttt{git add Makefile}
 \end{enumerate}
 \item This task will cover Git in a bit more detail.
@@ -229,6 +237,7 @@ be recreated. Add the following extensions in the ignore file:
 *.dat
 doxygen
 \end{verbatim}
+\item The \texttt{.gitignore} file also needs to be version controlled using \texttt{git add .gitignore}
 \item Browse the commit history of all the Fortran files created using \texttt{git log}
 \end{enumerate}
 \item To create a Doxygen template configuration, type \texttt{doxygen -g fortran.dxg} in the same
@@ -236,7 +245,7 @@ directory where the code resides. Then open the file \texttt{fortran.dxg} in any
 following variables:
 \begin{center}
 \begin{tabular}{| c | c |} \hline
-Description & Variable and value \\ \hline
+{\bf Description} & {\bf Variable and value} \\ \hline
 Free text for project name & \texttt{PROJECT\_NAME = "Fortran Workshop"} \\ \hline
 Free text for project description & \texttt{PROJECT\_BRIEF = "Fortran Workshop"} \\ \hline
 Output directory for doxygen files & \texttt{OUTPUT\_DIRECTORY = doxygen} \\ \hline
@@ -279,7 +288,7 @@ the public constants in the module
 !> @brief
 !> calculates the CFL number
 \end{verbatim}
-In the same module file and before the subroutine \texttt{fd1d\_heat\_explicit\_cfl()} is defined add
+In the same module file and before the subroutine \texttt{fd1d\_heat\_explicit\_cfl( )} is defined add
 the following Doxygen content:
 \begin{verbatim}
 !> @author
@@ -307,17 +316,17 @@ dummy arguments with their description
 \texttt{git commit -m "added Doxygen tokens in source code"}
 \end{enumerate}
 \item The following exercises will involve using the NetCDF API by writing the
-  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:,:)} in one file including meta-data. Use
+  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:,:)} varaibles in one file including meta-data. Use
   the following process when creating NetCDF files for writing:
 \begin{itemize}
-\item\texttt{NF90\_CREATE()} to create the file and enter define mode
-\item\texttt{NF90\_DEF\_DIM()} to create the $x$ and $y$ dimensions
-\item\texttt{NF90\_DEF\_VAR()} to create the \texttt{x(:)}, \texttt{t(:)} and
-\texttt{table(:,:)} variables
-\item\texttt{NF90\_PUT\_ATT()} to put global and dimension attributes
-\item\texttt{NF90\_ENDDEF()} to end define mode and to enter data mode
-\item\texttt{NF90\_PUT\_VAR()} to write the data to the file
-\item\texttt{NF90\_CLOSE()} to close the file
+\item\texttt{NF90\_CREATE( )} to create the file and enter define mode
+\item\texttt{NF90\_DEF\_DIM( )} to create the $x$ and $t$ dimensions
+\item\texttt{NF90\_DEF\_VAR( )} to create the \texttt{x(:)}, \texttt{t(:)} and
+\texttt{table(:, :)} variables
+\item\texttt{NF90\_PUT\_ATT( )} to put global and dimension attributes
+\item\texttt{NF90\_ENDDEF( )} to end define mode and to enter data mode
+\item\texttt{NF90\_PUT\_VAR( )} to write the data to the file
+\item\texttt{NF90\_CLOSE( )} to close the file
 \end{itemize}
 \begin{enumerate}
 \item Open the file \texttt{IO\_mod.f90} and add the line \texttt{use netcdf}
@@ -327,8 +336,8 @@ dummy arguments with their description
 \item Comment out the two \texttt{r8vec\_write()} subroutine calls
 \item Edit the subroutine \texttt{r8mat\_write} and add the dummy arguments:
 \begin{verbatim}
-real(kind=DP), intent(in) :: x(m)
-real(kind=DP), intent(in) :: t(n)
+real(kind=DP), intent(in) :: x(:)
+real(kind=DP), intent(in) :: t(:)
 \end{verbatim}
 \item When in data mode, add the following meta data using \texttt{NF90\_GLOBAL} for \texttt{varid} argument:
   \begin{enumerate}
@@ -336,7 +345,7 @@ real(kind=DP), intent(in) :: t(n)
   \item\texttt{"name" = "Your name"}
   \item\texttt{"institution" = "Your university"} 
   \end{enumerate}
-\item In the subroutine \texttt{r8mat\_write()} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the two-dimensional array \texttt{table(:,:)} into a NetCDF file
+\item In the subroutine \texttt{r8mat\_write( )} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the two-dimensional array \texttt{table(:, :)} into a NetCDF file
 \item To compile the remember to add the line \texttt{-I/usr/lib64/gfortran/modules} in your
   Makefile which is the NetCDF Fortran module file directory on Fedora Linux. This might be
   different for your system
@@ -349,21 +358,21 @@ real(kind=DP), intent(in) :: t(n)
 visualistion will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
 following sequence of subroutine calls:
 \begin{itemize}
-\item\texttt{PLPARSEOPTS()} to parse command line options to control PLplot. This subroutine
+\item\texttt{PLPARSEOPTS( )} to parse command line options to control PLplot. This subroutine
 call should be done outside the main time loop
-\item\texttt{PLSFNAM()} to set the output file name - all subroutines from now on should be
+\item\texttt{PLSFNAM( )} to set the output file name - all subroutines from now on should be
 called within the main time loop
-\item\texttt{PLSDEV()} to set the output device to use. Set this to \texttt{"pngcairo"} which
+\item\texttt{PLSDEV( )} to set the output device to use. Set this to \texttt{"pngcairo"} which
 will save the images in the portable network graphics format
-\item\texttt{PLINIT()} to initialise PLplot
-\item\texttt{PLENV()} to set the $x$- and $y$-range
-\item\texttt{PLLAB()} to set the $x$ and $y$ labels, and the title of the graph
-\item\texttt{PLLINE()} to set the $x$ and $y$ values
-\item\texttt{PLEND()} to finalise PLplot
+\item\texttt{PLINIT( )} to initialise PLplot
+\item\texttt{PLENV( )} to set the $x$- and $y$-range
+\item\texttt{PLLAB( )} to set the $x$ and $y$ labels, and the title of the graph
+\item\texttt{PLLINE( )} to set the $x$ and $y$ values
+\item\texttt{PLEND( )} to finalise PLplot
 \end{itemize}  
 \begin{enumerate}
 \item In the main time loop create an IF branch which is executed at every 10 time steps
-using the Fortran intrinsic function \texttt{mod()}
+using the Fortran intrinsic function \texttt{mod( )}
 \item Create a string for the filename which includes the time step, e.g. 
 \texttt{image001.png}
 \item From the above list of PLplot subroutine calls, create the PNG file of the
@@ -381,7 +390,7 @@ and view it using any video player.
 test the CFL subroutine. 
 \begin{enumerate}
 \item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testCFL.pf} 
-which will test the \texttt{fd1d\_heat\_explicit\_cfl()} subroutine:
+which will test the \texttt{fd1d\_heat\_explicit\_cfl( )} subroutine:
 \begin{verbatim}
 @test
 subroutine testCFL( )
