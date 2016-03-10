@@ -63,7 +63,7 @@ The exercises are split into two parts: one set for the first day and a second
 set for the second day. To download the exercises, type the commands:
 \begin{verbatim}
 wget \
-http://www.nag.co.uk/market/training/fortran-modernisation-workshop/ex.tar
+http://www.nag.co.uk/market/training/fortran-workshop/ex.tar
 tar -xvf ex.tar
 \end{verbatim}
 which will extract the exercises to the \texttt{ex/} directory. Change into the 
@@ -158,10 +158,11 @@ gfortran fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit.exe
 diff h_test01.txt h_test01.txt_bak
 \end{verbatim}
 If the command outputs difference, then the refactoring introduced a bug.
-\item Type \texttt{git diff fd1d\_heat\_explicit} to see the refactored code. Stage and commit
+\item Type \texttt{git diff fd1d\_heat\_explicit.f90} to see the refactored code. Stage and commit
 the changes by typing: 
 \begin{verbatim}
 git add fd1d_heat_explicit.f90
+git add Types_mod.f90
 git commit -m "refactored Fortran 77 into modern Fortran"
 \end{verbatim}
 \item[] The following exercises will further modularise the code. 
