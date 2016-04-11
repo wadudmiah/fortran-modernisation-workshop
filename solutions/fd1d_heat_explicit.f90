@@ -15,27 +15,27 @@ program fd1d_heat_explicit
       
       implicit none
 
-      integer(KIND=SI), parameter :: T_NUM = 201
-      integer(KIND=SI), parameter :: X_NUM = 21 
+      integer(kind=SI), parameter :: T_NUM = 201
+      integer(kind=SI), parameter :: X_NUM = 21 
       
-      real(KIND=DP) :: cfl
-      real(KIND=DP) :: dt
-      real(KIND=DP), dimension(:), allocatable :: h(x_num)
-      real(KIND=DP), dimension(:), allocatable :: h_new(x_num)
+      real(kind=DP) :: cfl
+      real(kind=DP) :: dt
+      real(kind=DP), dimension(:), allocatable :: h
+      real(kind=DP), dimension(:), allocatable :: h_new
       ! the "matrix" stores all x-values for all t-values
       ! remember Fortran is column major, meaning that rows are contiguous
-      real(KIND=DP), dimension(:,:), allocatable :: hmat(x_num, t_num)
-      integer(KIND=SI) :: i, j, ierr
+      real(kind=DP), dimension(:,:), allocatable :: hmat
+      integer(kind=SI) :: i, j, ierr
       character(len=10) :: vis_filename_num
       character(len=30) :: vis_filename
-      real(KIND=DP) :: k
+      real(kind=DP) :: k
 
-      real(KIND=DP), dimension(:), allocatable :: t(t_num)
-      real(KIND=DP) :: t_max
-      real(KIND=DP) :: t_min
-      real(KIND=DP), dimension(:), allocatable :: x(x_num)
-      real(KIND=DP) :: x_max
-      real(KIND=DP) :: x_min
+      real(kind=DP), dimension(:), allocatable :: t
+      real(kind=DP) :: t_max
+      real(kind=DP) :: t_min
+      real(kind=DP), dimension(:), allocatable :: x
+      real(kind=DP) :: x_max
+      real(kind=DP) :: x_min
 
       allocate( h(1:X_NUM), stat = ierr )
       allocate( h_new(1:X_NUM), stat = ierr )
@@ -108,7 +108,7 @@ program fd1d_heat_explicit
 
       ! the main time integration loop 
       time_loop: do j = 2, t_num
-        call fd1d_heat_explicit_solver( x_num, x, t(j-1), dt, cfl, h, h_new )
+        call fd1d_heat_explicit_solver( x, t(j-1), dt, cfl, h, h_new )
 
         ! visualise solution at every 10 time steps
         if ( mod( j, 10 ) == 0 ) then

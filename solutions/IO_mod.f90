@@ -65,17 +65,17 @@ contains
   subroutine r8vec_write( output_filename, n, x )
     implicit none
 
-    integer(KIND=SI)             :: m
-    integer(KIND=SI), intent(in) :: n
+    integer(KIND=SI)             :: n
 
     integer(KIND=SI)             :: j
     character(len=*), intent(in) :: output_filename
     integer(KIND=SI)             :: output_unit
-    real(KIND=DP), intent(in)    :: x(n)
+    real(KIND=DP), dimension(:), intent(in)    :: x
 
     output_unit = 11
     open( unit = output_unit, file = output_filename, status = 'replace' )
 
+    n = size( x )
     do j = 1, n
       write ( output_unit, '(2x,g24.16)' ) x(j)
     end do

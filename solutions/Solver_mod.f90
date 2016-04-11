@@ -7,20 +7,22 @@ module Solver_mod
   public :: fd1d_heat_explicit_solver
 
 contains
-  subroutine fd1d_heat_explicit_solver( x_num, x, t, dt, cfl, h, h_new )
+  subroutine fd1d_heat_explicit_solver( x, t, dt, cfl, h, h_new )
 
     implicit none
 
-    integer(KIND=SI), intent(in) :: x_num
-    real(KIND=DP), intent(in)    :: cfl
-    real(KIND=DP)                :: f(x_num)
-    real(KIND=DP), intent(in)    :: dt
-    real(KIND=DP), intent(in)    :: h(x_num)
-    real(KIND=DP), intent(inout) :: h_new(x_num)
-    integer(KIND=SI)             :: j
-    real(KIND=DP), intent(in)    :: t
-    real(KIND=DP), intent(in)    :: x(x_num)
+    integer(kind=SI)                           :: x_num
+    real(kind=DP), intent(in)                  :: cfl
+    real(kind=DP), intent(in)                  :: dt
+    real(kind=DP), dimension(:), intent(in)    :: h
+    real(kind=DP), dimension(:), intent(inout) :: h_new
+    integer(kind=SI)                           :: j
+    real(kind=DP), intent(in)                  :: t
+    real(kind=DP), dimension(:), intent(in)    :: x
+    real(kind=DP)                              :: f(size( x ))
 
+    x_num = size( x )
+    
     do j = 1, x_num
       f(j) = func( j, x_num, x )
     end do
