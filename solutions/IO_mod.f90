@@ -25,7 +25,7 @@ contains
     integer(KIND=SI)            :: ncid, x_id, t_id, sol_id, dimids(1:NDIMS)
     integer(KIND=SI)            :: x_dimid, t_dimid, ierr
 
-    ierr = NF90_CREATE( output_filename, NF90_NOCLOBBER, ncid )
+    ierr = NF90_CREATE( output_filename, NF90_CLOBBER, ncid )
 
     m = size( x )
     n = size( t )

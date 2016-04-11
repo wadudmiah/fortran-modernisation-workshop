@@ -118,13 +118,13 @@ program fd1d_heat_explicit_prb
       integer x_num
 
       double precision cfl
-      double precision f(x_num)
       double precision dt
       double precision h(x_num)
       double precision h_new(x_num)
       integer j
       double precision t
       double precision x(x_num)
+      double precision f(x_num)
 
       do j = 1, x_num
         f(j) = func( j, x_num, x )

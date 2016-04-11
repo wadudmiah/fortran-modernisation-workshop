@@ -62,8 +62,7 @@ Maths. \\
 The exercises are split into two parts: one set for the first day and a second
 set for the second day. To download the exercises, type the commands:
 \begin{verbatim}
-wget \
-http://www.nag.co.uk/market/training/fortran-workshop/ex.tar
+wget http://www.nag.co.uk/market/training/fortran-workshop/ex.tar
 tar -xvf ex.tar
 \end{verbatim}
 which will extract the exercises to the \texttt{ex/} directory. Change into the 
@@ -121,18 +120,37 @@ the variable name, e.g. from \texttt{double precision a} to \texttt{double preci
 \item In the main program code, include the line \texttt{use Types\_mod} just before
 the \texttt{implicit none} statement. This will allow you to use the constants declared in the
 \texttt{Types\_mod} Fortran module
-\item In the main program code, use the \texttt{KIND} keyword in variable declarations, e.g.
-from \texttt{double precision} to \texttt{real(KIND=DP)} and \texttt{integer} to 
-\texttt{integer(KIND=SI)}
+\item In the main program code, use the \texttt{kind} keyword in variable declarations, e.g.
+from \texttt{double precision} to \texttt{real(kind=DP)} and \texttt{integer} to 
+\texttt{integer(kind=SI)}
 \item In the main program code, change how parameters are declared, e.g. from 
-\texttt{parameter ( t\_num = 201 )} to \texttt{integer(KIND=SI), parameter :: t\_num = 201}
+\texttt{parameter ( T\_NUM = 201 )} to \texttt{integer(kind=SI), parameter :: T\_NUM = 201} and the
+same for the variable \texttt{X\_NUM}
 \item In the main program code, change how constants are used, e.g. from \texttt{0.0D+00} to 
 \texttt{0.0\_DP}
 \item In the functions and subroutines, use the \texttt{intent} keyword for dummy arguments
+\item In the main program code, use dynamic memory allocation for the arrays \texttt{h(1:X\_NUM)}, 
+\texttt{h\_new(1:X\_NUM)}, \texttt{hmat(1:X\_NUM,1:T\_NUM)}, \texttt{t(1:T\_NUM)}, \texttt{x(1:X\_NUM)}. Check
+the status of the dynamic memory allocation\label{dyn:memory}
+\item At the end of the main program code, deallocate the arrays declared in step~\ref{dyn:memory}
 \item In the functions and subroutines, remove the size of the array and use assumed shaped
-  arrays as dummy arguments. Use the \texttt{size( )} intrinsic function to get array 
-dimensions. For example, to get the number of rows of a two-dimension array, use \texttt{size( mat(:,:), 1 )}
-and for the number of columns, use \texttt{size( mat(:,:), 2 )}
+arrays as dummy arguments:
+\begin{itemize}
+\item For the function \texttt{func( j, x\_num, x )} remove the \texttt{x\_num} argument and
+replace the argument declaration to \texttt{real(kind=DP), dimension(:) :: x}. Make sure
+invocations of \texttt{func( )} reflect this change
+\item For the function \texttt{fd1d\_heat\_explicit( )} remove the \texttt{x\_num} argument
+and ensure all arrays are declared as assumed shaped arrays. Use the automatic arrays feature in Fortran
+to declare the array \texttt{f(:)} as \texttt{real(kind=DP) :: f(size(x))}
+\item For the function \texttt{r8mat\_write( )} remove the arguments \texttt{m} and \texttt{n} and assign them
+to \texttt{size( mat(:,:), 1 )} and \texttt{size( mat(:,:), 2 )}, respectively. Declare the argument \texttt{table(:,:)}
+as an assumed shaped array
+\item For the function \texttt{r8vec\_linspace( )} remove the argument \texttt{n} and declare the argument \texttt{a(:)} as
+an assumed shaped array
+\item For the function \texttt{r8vec\_write( )} remove the argument \texttt{n} and declared the argument \texttt{x(:)} as
+an assumed shaped array
+\end{itemize}
+Use the \texttt{size( )} intrinsic function to get array dimensions. 
 \item In the main program code, use the modern string declaration statement. For dummy argument
 declaration:
 \begin{verbatim}
@@ -372,6 +390,8 @@ will save the images in the portable network graphics format
 \item\texttt{PLEND( )} to finalise PLplot
 \end{itemize}  
 \begin{enumerate}
+\item In the main program code, add the line \texttt{use plplot} so that PLplot features can be
+used;
 \item In the main time loop create an IF branch which is executed at every 10 time steps
 using the Fortran intrinsic function \texttt{mod( )}
 \item Create a string for the filename which includes the time step, e.g. 
