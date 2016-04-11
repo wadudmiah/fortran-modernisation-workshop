@@ -15,27 +15,33 @@ program fd1d_heat_explicit
       
       implicit none
 
-      integer(KIND=SI), parameter :: t_num = 201
-      integer(KIND=SI), parameter :: x_num = 21 
+      integer(KIND=SI), parameter :: T_NUM = 201
+      integer(KIND=SI), parameter :: X_NUM = 21 
       
       real(KIND=DP) :: cfl
       real(KIND=DP) :: dt
-      real(KIND=DP) :: h(x_num)
-      real(KIND=DP) :: h_new(x_num)
+      real(KIND=DP), dimension(:), allocatable :: h(x_num)
+      real(KIND=DP), dimension(:), allocatable :: h_new(x_num)
       ! the "matrix" stores all x-values for all t-values
       ! remember Fortran is column major, meaning that rows are contiguous
-      real(KIND=DP) :: hmat(x_num, t_num)
-      integer(KIND=SI) :: i, j
+      real(KIND=DP), dimension(:,:), allocatable :: hmat(x_num, t_num)
+      integer(KIND=SI) :: i, j, ierr
       character(len=10) :: vis_filename_num
       character(len=30) :: vis_filename
       real(KIND=DP) :: k
 
-      real(KIND=DP) :: t(t_num)
+      real(KIND=DP), dimension(:), allocatable :: t(t_num)
       real(KIND=DP) :: t_max
       real(KIND=DP) :: t_min
-      real(KIND=DP) :: x(x_num)
+      real(KIND=DP), dimension(:), allocatable :: x(x_num)
       real(KIND=DP) :: x_max
       real(KIND=DP) :: x_min
+
+      allocate( h(1:X_NUM), stat = ierr )
+      allocate( h_new(1:X_NUM), stat = ierr )
+      allocate( hmat(1:X_NUM,1:T_NUM), stat = ierr )
+      allocate( t(1:T_NUM), stat = ierr )
+      allocate( x(1:X_NUM), stat = ierr )
 
       call PLPARSEOPTS( PL_PARSE_FULL )
       
@@ -129,5 +135,11 @@ program fd1d_heat_explicit
 
       ! write data to files
       call r8mat_write( 'h_test01.nc', hmat, x, t )
+
+      deallocate( h, stat = ierr )
+      deallocate( h_new, stat = ierr )
+      deallocate( hmat, stat = ierr )
+      deallocate( t, stat = ierr )
+      deallocate( x, stat = ierr )
 end program fd1d_heat_explicit
 
