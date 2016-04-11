@@ -1,11 +1,14 @@
 FC = gfortran
 
-LDFLAGS = -L. -L/usr/lib64 -lnetcdff -lnetcdf -lplplotf95cd -lplplotf95d
+LDFLAGS = -L. -lfmw -L/usr/lib64 -lnetcdff -lnetcdf -lplplotf95cd -lplplotf95d
 LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
 FFLAGS = -I. -I/usr/include -I/usr/lib64/gfortran/modules -I/usr/lib/fortran/modules/plplot
 
-fd1d_heat_explicit.exe: fd1d_heat_explicit.o $(LIBS)
-	$(FC) $^ $(LDFLAGS) -o $@
+fd1d_heat_explicit.exe: fd1d_heat_explicit.o libfmw.a
+	$(FC) $< $(LDFLAGS) -o $@
+
+libfmw.a: $(LIBS)
+	ar rcs $@ $^
 
 fd1d_heat_explicit.o: fd1d_heat_explicit.f90 $(LIBS)
 	$(FC) -c $(FFLAGS) $<

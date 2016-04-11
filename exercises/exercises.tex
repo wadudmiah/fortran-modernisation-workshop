@@ -101,7 +101,7 @@ integer, parameter :: DP = REAL64
 integer, parameter :: SI = INT32
 integer, parameter :: DI = INT64
 \end{verbatim}
-using the following module template:
+using the following module template: 
 \begin{verbatim}
 module Types_mod
    use, intrinsic :: iso_fortran_env
@@ -115,6 +115,7 @@ contains
 
 end module Types_mod
 \end{verbatim}
+The above\label{mod:temp}
 \item In the main program code, include the double colon after the variable type and before 
 the variable name, e.g. from \texttt{double precision a} to \texttt{double precision :: a}
 \item In the main program code, include the line \texttt{use Types\_mod} just before
@@ -183,19 +184,21 @@ git add fd1d_heat_explicit.f90
 git add Types_mod.f90
 git commit -m "refactored Fortran 77 into modern Fortran"
 \end{verbatim}
-\item[] The following exercises will further modularise the code. 
+\item[] The following exercises will further modularise the code and use the module template in
+  question~\ref{mod:temp} for creating additional modules.
 \item Create a module \texttt{RHS\_mod} and put it in the file \texttt{RHS\_mod.f90} and put the 
-Fortran function \texttt{func()} into \texttt{RHS\_mod}. In the main program code, 
+Fortran function \texttt{func()} into \texttt{RHS\_mod} and declare it public. In the main program code, 
 insert the line \texttt{use RHS\_mod} 
 \item Create a module \texttt{CFL\_mod} and put it in the file \texttt{CFL\_mod.f90} and put the
-Fortran function \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{CFL\_mod}. In the main program
+  Fortran function \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{CFL\_mod} and declare it
+  public. In the main program
 code, insert the line \texttt{use CFL\_mod}
 \item Create a module \texttt{IO\_mod} and put it in the file \texttt{IO\_mod.f90} and put
-the Fortran functions \texttt{r8mat\_write}, \texttt{r8vec\_linspace} and \texttt{r8vec\_write} into \texttt{IO\_mod}.
-In the main program code, insert the line \texttt{use IO\_mod}
+  the Fortran functions \texttt{r8mat\_write( )}, \texttt{r8vec\_linspace( )} and \texttt{r8vec\_write( )}
+  into \texttt{IO\_mod} and declare them public. In the main program code, insert the line \texttt{use IO\_mod}
 \item Create a module \texttt{Solver\_mod} and put it in the file \texttt{Solver\_mod.f90} and put the
-  Fortran function \texttt{fd1d\_heat\_explicit} into \texttt{Sover\_mod}. In the main program code,
-  insert the line \texttt{use Solver\_mod}
+  Fortran function \texttt{fd1d\_heat\_explicit( )} into \texttt{Sover\_mod} and declare it public. In the main
+  program code, insert the line \texttt{use Solver\_mod}
 \item Compile the recently created modules:
 \begin{verbatim}
 gfortran -c RHS_mod.f90
@@ -234,11 +237,18 @@ clean:
         rm -f *.mod *.o *.png fd1d_heat_explicit.exe
 \end{verbatim}
 Remember to precede the commands with the tab
+\item Create a static library containing all the module object files:
+\begin{verbatim}
+ar rcs libfmw.a CFL_mod.o IO_mod.o RHS_mod.o Solver_mod.o Types_mod.o
+\end{verbatim}
+In the Makefile, use the static library \texttt{libfmw.a} in the link stage to create the final executable
 \begin{enumerate}
 \item After creating your Makefile, type \texttt{make -n} to see what commands will be executed without executing
 your commands which is useful for debugging
 \item Then type \texttt{make} to build your code 
 \item After creating the Makefile, add it to git using \texttt{git add Makefile}
+\item Use the Linux \texttt{nm} to view the symbols in \texttt{libfmw.a} which shows the symbols
+  listed in the library. The symbol type field shows 
 \end{enumerate}
 \item This task will cover Git in a bit more detail.
 \begin{enumerate}
@@ -355,8 +365,8 @@ dummy arguments with their description
 \item Comment out the two \texttt{r8vec\_write( )} subroutine calls
 \item Edit the subroutine \texttt{r8mat\_write} and add the dummy arguments:
 \begin{verbatim}
-real(kind=DP), intent(in) :: x(:)
-real(kind=DP), intent(in) :: t(:)
+real(kind=DP), dimension(:), intent(in) :: x
+real(kind=DP), dimension(:), intent(in) :: t
 \end{verbatim}
 \item When in define mode, add the following meta data using \texttt{NF90\_GLOBAL} for \texttt{varid} argument:
   \begin{enumerate}
@@ -386,12 +396,13 @@ will save the images in the portable network graphics format
 \item\texttt{PLINIT( )} to initialise PLplot
 \item\texttt{PLENV( )} to set the $x$- and $y$-range
 \item\texttt{PLLAB( )} to set the $x$ and $y$ labels, and the title of the graph
-\item\texttt{PLLINE( )} to set the $x$ and $y$ values
+\item\texttt{PLLINE( )} to set the $x$ and $y$ values which will be represented by the
+  arrays \texttt{x(:)} and \texttt{h\_new(:)}, respectively
 \item\texttt{PLEND( )} to finalise PLplot
 \end{itemize}  
 \begin{enumerate}
 \item In the main program code, add the line \texttt{use plplot} so that PLplot features can be
-used;
+used
 \item In the main time loop create an IF branch which is executed at every 10 time steps
 using the Fortran intrinsic function \texttt{mod( )}
 \item Create a string for the filename which includes the time step, e.g. 
