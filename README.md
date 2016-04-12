@@ -2,27 +2,28 @@
 
 This repository contains the file for the Fortran Modernisation Workshop
 
+Supplementary material can be downloaded from:
+
+https://www.nag.co.uk/market/training/fortran-modernisation-workshop
+
 ### What is this repository for? ###
 
 * Files containing source code for the workshop exercises
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Packages and RPMs that are required for this workshop:
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
+* netcdf, netcdf-devel, netcdf-fortran, netcdf-fortran-devel, hdf5, hdf5-devel, nco
+* plplot, plplot-devel, plplot-libs, plplot-fortran-devel
+* doxygen, doxygen-latex
+* pFUnit - serial only. No OpenMP or MPI configuration required
+* GNU Fortran version 4.8.5 or later
+* make (should be already installed)
+* git
 
 ### Who do I talk to? ###
 
 * wadud <<dot>> miah <<at>> nag <<dot>> co <<dot>> uk
+* fs395 <<at>> cam <<dot>> ac <<dot>> uk
+* fatima <<dot>> chami <<at>> durham <<dot>> ac <<dot>> uk
