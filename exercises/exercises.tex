@@ -247,8 +247,12 @@ In the Makefile, use the static library \texttt{libfmw.a} in the link stage to c
 your commands which is useful for debugging
 \item Then type \texttt{make} to build your code 
 \item After creating the Makefile, add it to git using \texttt{git add Makefile}
-\item Use the Linux \texttt{nm} to view the symbols in \texttt{libfmw.a} which shows the symbols
-  listed in the library. The symbol type field shows 
+\item Use the Linux command: 
+\begin{verbatim}
+nm libfmw.a
+\end{verbatim}
+which shows the symbols listed in the library just created. The symbol type field shows \texttt{T} for the symbol being 
+defined in the library and \texttt{U} being undefined but being called by the library. 
 \end{enumerate}
 \item This task will cover Git in a bit more detail.
 \begin{enumerate}
@@ -345,8 +349,9 @@ dummy arguments with their description
 \texttt{git commit -m "added Doxygen tokens in source code"}
 \end{enumerate}
 \item The following exercises will involve using the NetCDF API by writing the
-  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:, :)} varaibles in one file including meta-data. Use
-  the following process when creating NetCDF files for writing:
+  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:, :)} varaibles in one file including meta-data. 
+Please refer to the NetCDF documentation at~\url{http://www.nag.co.uk/market/training/fortran-workshop/netcdf-f90.pdf} 
+for the details of the API. Use the following process when creating NetCDF files for writing:
 \begin{itemize}
 \item\texttt{NF90\_CREATE( )} to create the file and enter define mode
 \item\texttt{NF90\_DEF\_DIM( )} to create the $x$ and $t$ dimensions
@@ -382,9 +387,22 @@ real(kind=DP), dimension(:), intent(in) :: t
   which is where the Fortran NetCDF wrapper resides on Fedora Linux. This might be different
   for your system
 \item Once your code completes, you can view the contents of the NetCDF file using \texttt{ncdump h\_test01.nc | less}
+\item To verify whether your code works correctly, compare the created NetCDF file with the correct NetCDF file:
+\begin{verbatim}
+ncdiff -O h_test01.nc h_test01.nc.valid diff.nc
+ncdump diff.nc | less
+\end{verbatim}
+The second command should show all zero values for the \texttt{x-range}, \texttt{t-range} and \texttt{solution} NetCDF
+variables, namely that~(\ref{test:eqn}) holds:
+\begin{equation} \label{test:eqn}
+||{\bf u}_{\texttt{numerical}} - {\bf u}_{\texttt{exact}}||_{\infty} < \epsilon
+\end{equation}
 \end{enumerate}
-\item The following exercises will allow you to visualise the solution at every 10 time steps. The
-visualistion will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
+\item The following exercises will allow you to visualise the solution at every 10 time steps using the PLplot
+visualisation library. Please refer to Section 2 of the PLplot documentation 
+at~\url{http://www.nag.co.uk/market/training/fortran-workshop/plplot-5.11.1.pdf} for further information. \\
+
+The visualistion will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
 following sequence of subroutine calls:
 \begin{itemize}
 \item\texttt{PLPARSEOPTS( )} to parse command line options to control PLplot. This subroutine
@@ -417,7 +435,8 @@ current time step
 \begin{verbatim}
 ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
 \end{verbatim}
-and view it using any video player. 
+and view it using any video player. The \texttt{\%} wildcard is similar to \texttt{*} wildcard used 
+in the Linux shell. 
 \end{enumerate}
 \item The the final exercise will involve creating pFUnit test codes. This exercise will only
 test the CFL subroutine. 
