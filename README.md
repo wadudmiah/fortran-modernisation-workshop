@@ -21,6 +21,7 @@ Packages and RPMs that are required for this workshop:
 * gcc-gfortran - GNU Fortran version 4.8.5 or later
 * make (should be already installed)
 * git
+* ffmpeg
 
 ### Who do I talk to? ###
 
