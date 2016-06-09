@@ -12,7 +12,7 @@ https://www.nag.co.uk/market/training/fortran-modernisation-workshop
 
 ### How do I get set up? ###
 
-Packages and RPMs that are required for this workshop:
+Packages and RPMs (for RedHat based Linux) that are required for this workshop:
 
 * netcdf, netcdf-devel, netcdf-fortran, netcdf-fortran-devel, hdf5, hdf5-devel, nco
 * plplot, plplot-devel, plplot-libs, plplot-fortran-devel
@@ -20,6 +20,16 @@ Packages and RPMs that are required for this workshop:
 * pFUnit (http://pfunit.sourceforge.net/) - serial only. No OpenMP or MPI configuration required
 * gcc-gfortran - GNU Fortran version 4.8.5 or later
 * make (should be already installed)
+* git
+* ffmpeg
+
+For Ubuntu based Linux:
+
+* libnetcdf-dev, libnetcdff5, netcdf-bin, nco, netcdf-doc, libhdf5-dev
+* libplplot-dev, libplplot-fortran11, plplot12-driver-xwin, plplot-doc, plplot12-driver-cairo
+* doxygen, doxygen-latex, graphviz
+* gfortran
+* make
 * git
 * ffmpeg
 
