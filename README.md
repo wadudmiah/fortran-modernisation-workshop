@@ -28,7 +28,7 @@ For Ubuntu based Linux:
 * libnetcdf-dev, libnetcdff5, netcdf-bin, nco, netcdf-doc, libhdf5-dev
 * libplplot-dev, libplplot-fortran11, plplot12-driver-xwin, plplot-doc, plplot12-driver-cairo
 * doxygen, doxygen-latex, graphviz
-* gfortran
+* gfortran - GNU Fortran version 4.8.5 or later
 * make
 * git
 * ffmpeg
