@@ -16,7 +16,7 @@ Packages and RPMs (for RedHat based Linux) that are required for this workshop:
 
 * netcdf, netcdf-devel, netcdf-fortran, netcdf-fortran-devel, hdf5, hdf5-devel, nco
 * plplot, plplot-devel, plplot-libs, plplot-fortran-devel
-* doxygen, doxygen-latex, graphvis
+* doxygen, doxygen-latex, graphviz
 * pFUnit (http://pfunit.sourceforge.net/) - serial only. No OpenMP or MPI configuration required
 * gcc-gfortran - GNU Fortran version 4.8.5 or later
 * make (should be already installed)
