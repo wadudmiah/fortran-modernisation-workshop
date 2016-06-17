@@ -4,7 +4,7 @@ This repository contains the file for the Fortran Modernisation Workshop
 
 Supplementary material can be downloaded from:
 
-https://www.nag.co.uk/market/training/fortran-modernisation-workshop
+https://www.nag.co.uk/content/fortran-modernization-workshop
 
 ### What is this repository for? ###
 
