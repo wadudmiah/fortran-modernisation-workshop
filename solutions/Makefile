@@ -48,4 +48,4 @@ diff: fd1d_heat_explicit.exe
 .PHONY: clean
 
 clean:
-	rm -f *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 *.F90
+	rm -f *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 test*.F90
