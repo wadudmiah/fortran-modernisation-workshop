@@ -28,6 +28,18 @@ IO_mod.o: IO_mod.f90 Types_mod.o
 Solver_mod.o: Solver_mod.f90 Types_mod.o
 	$(FC) -c $(FFLAGS) $<
 
+pfunit: tests.exe
+	./$<
+
+tests.exe: $(PFUNIT)/include/driver.F90 CFL_mod.o testCFL.o 
+	$(FC) -I$(PFUNIT)/mod $^ -L$(PFUNIT)/lib -lpfunit -I. -o $@
+
+testCFL.F90: testCFL.pf
+	$(PFUNIT)/bin/pFUnitParser.py $< $@ -I.
+
+testCFL.o: testCFL.F90
+	$(FC) -I$(PFUNIT)/mod -c $<
+
 diff: fd1d_heat_explicit.exe
 	./fd1d_heat_explicit.exe
 	diff h_test01.txt h_test01.txt_bak
@@ -36,4 +48,4 @@ diff: fd1d_heat_explicit.exe
 .PHONY: clean
 
 clean:
-	rm -f *.mod *.o *.png fd1d_heat_explicit.exe
+	rm -f *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 *.F90
