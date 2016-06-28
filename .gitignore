@@ -28,6 +28,15 @@
 *.app
 *.x
 
+# tar files
+*.tar
+*.tar.gz
+*.xz
+*.tar.xz
+
+# pFUnit files
+test*.F90
+
 # LaTeX related files
 *.aux
 *.dvi
@@ -37,6 +46,12 @@
 
 # netcdf files
 *.nc
+
+# gnu coverage files (gcov)
+
+*.gcda
+*.gcno
+*.f90.gcov
 
 # emacs backup files
 *~
