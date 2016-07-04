@@ -41,6 +41,8 @@ test*.F90
 *.aux
 *.dvi
 *.log
+*.bbl
+*.blg
 *.ps
 *.pdf
 

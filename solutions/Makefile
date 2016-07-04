@@ -28,7 +28,7 @@ IO_mod.o: IO_mod.f90 Types_mod.o
 Solver_mod.o: Solver_mod.f90 Types_mod.o
 	$(FC) -c $(FFLAGS) $<
 
-pfunit: tests.exe
+pfunit: tests.exe testSuites.inc
 	./$<
 
 tests.exe: $(PFUNIT)/include/driver.F90 CFL_mod.o testCFL.o 
