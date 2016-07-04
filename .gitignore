@@ -45,6 +45,7 @@ test*.F90
 *.blg
 *.ps
 *.pdf
+!fortran_usage/*pdf
 
 # netcdf files
 *.nc
@@ -60,6 +61,7 @@ test*.F90
 
 # from plplot
 *.png
+!fortran_usage/*.png
 *.mov
 *.mp4
 

@@ -34,7 +34,7 @@ def make_autopct(values):
 #         colors = [ 'blue', 'red'] )
 
 plt.pie( usage, labels = used, autopct = make_autopct( usage ), shadow = True, explode = ( 0.1, 0.0 ), \
-         colors = [ 'blue', 'red'], startangle = 90 )
+         colors = [ 'blue', 'red'], startangle = -90 )
 
 plt.axis( 'equal' )
 plt.title( options.title + ' (' + str( np.sum( usage ) ) + ' respondents)')
