@@ -45,7 +45,13 @@ diff: fd1d_heat_explicit.exe
 	diff h_test01.txt h_test01.txt_bak
 	if [ $$? -eq 0 ]; then echo "fine"; else echo "not fine"; fi
 
-.PHONY: clean
+.PHONY: clean doxygen ffmpeg
 
 clean:
-	rm -f *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 test*.F90
+	rm -rf *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 test*.F90 doxygen/*
+
+doxygen:
+	doxygen fortran.dxg
+
+ffmpeg:
+	ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
