@@ -9,6 +9,8 @@
 \usepackage[margin=1in]{geometry} 
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{url}
+\usepackage{graphicx}
+\usepackage{float}
 \usepackage{paralist}
 \setlength{\parindent}{0mm}
 \newcommand{\N}{\mathbb{N}}
@@ -208,7 +210,7 @@ gfortran -c Solver_mod.f90
 gfortran -c -I. fd1d_heat_explicit.f90
 gfortran fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
          Solver_mod.o -o fd1d_heat_explicit.exe
-./fd1d_heat_explicit
+./fd1d_heat_explicit.exe
 \end{verbatim}
 \item To test whether your code runs correctly execute:
 \begin{verbatim}
@@ -228,7 +230,13 @@ git commit -m "modularised RHS, CFL, IO and Solver"
 \subsection*{Day Two Exercises}
 \begin{enumerate}
 \item Write a Makefile for the Fortran code produced on day one in the same directory as the source
-code
+  code using the dependency graph in Figure~\ref{make_depend:eps}
+
+\begin{figure}[H]
+\includegraphics[width=\linewidth]{make_depend.eps}
+\caption{Dependency graph for Makefile}
+\label{make_depend:eps}
+\end{figure}
 \item Add a \texttt{clean} target which cleans the build:
 \begin{verbatim}
 .PHONY: clean
