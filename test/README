@@ -1,0 +1,10 @@
+Instructions to test for Fortran Modernisation Workshop test script.
+
+1. Type 'make' which should build without any problems. If there are any
+problems, please contact wadud.miah@nag.co.uk
+2. Then type 'make execute' which should create the files fmw_test.png 
+which is a PNG image file of sin(x) where 0<= x <= 360
+3. Then type 'make ncdump' which should list the values of x and t
+
+If all the above tests worked, then you have the required prerequisite 
+software for the Fortran Modernisation Workshop. 
