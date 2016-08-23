@@ -118,7 +118,7 @@ contains
 end module Types_mod
 \end{verbatim}
 The above\label{mod:temp}
-\item In the main program code, include the double colon after the variable type and before 
+\item In the main program code (file \texttt{fd1d\_heat\_explicit.f90} including all functions and subroutines), include the double colon after the variable type and before 
 the variable name, e.g. from \texttt{double precision a} to \texttt{double precision :: a}
 \item In the main program code, include the line \texttt{use Types\_mod} just before
 the \texttt{implicit none} statement. This will allow you to use the constants declared in the
@@ -146,7 +146,7 @@ invocations of \texttt{func( )} reflect this change
 and ensure all arrays are declared as assumed shaped arrays. Use the automatic arrays feature in Fortran
 to declare the array \texttt{f(:)} as \texttt{real(kind=DP) :: f(size(x))}
 \item For the function \texttt{r8mat\_write( )} remove the arguments \texttt{m} and \texttt{n} and assign them
-to \texttt{size( mat(:,:), 1 )} and \texttt{size( mat(:,:), 2 )}, respectively. Declare the argument \texttt{table(:,:)}
+to \texttt{size( table(:,:), 1 )} and \texttt{size( table(:,:), 2 )}, respectively. Declare the argument \texttt{table(:,:)}
 as an assumed shaped array
 \item For the function \texttt{r8vec\_linspace( )} remove the argument \texttt{n} and declare the argument \texttt{a(:)} as
 an assumed shaped array
@@ -233,7 +233,7 @@ git commit -m "modularised RHS, CFL, IO and Solver"
   code using the dependency graph in Figure~\ref{make_depend:eps}
 
 \begin{figure}[H]
-\includegraphics[width=\linewidth]{make_depend.png}
+\includegraphics[width=\linewidth]{make_depend.eps}
 \caption{Dependency graph for Makefile}
 \label{make_depend:eps}
 \end{figure}
