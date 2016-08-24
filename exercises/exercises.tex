@@ -62,16 +62,17 @@ not know what all this means - the focus of the exercise is on Fortran programmi
 Maths. \\
 
 The exercises are split into two parts: one set for the first day and a second
-set for the second day. To download the exercises, type the commands:
+set for the second day. Obtain the exercises by using the commands:
 \begin{verbatim}
-wget http://www.nag.co.uk/market/training/fortran-workshop/ex.tar
-tar -xvf ex.tar
+cp /usr/local/src/fmw_exercise.tar.gz $HOME
+cd $HOME
+tar -zxvf fmw_exercise.tar.gz
 \end{verbatim}
-which will extract the exercises to the \texttt{ex/} directory. Change into the 
-\texttt{ex/} directory:
+which will extract the exercises to the \texttt{fmw\_exercise/} directory. Change into the 
+\texttt{fmw\_exercise/} directory:
 \begin{verbatim}
-git config --global user.name "firstname lastname"
-git config --global user.email firstname.lastname@address.com
+git config --global user.name "<firstname lastname>"
+git config --global user.email <firstname.lastname@address.com>
 cd ex/
 git init
 git add .
