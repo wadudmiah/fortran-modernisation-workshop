@@ -447,7 +447,7 @@ ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
 and view it using any video player. The \texttt{\%} wildcard is similar to \texttt{*} wildcard used 
 in the Linux shell. 
 \end{enumerate}
-\item The the final exercise will involve creating pFUnit test codes. This exercise will only
+\item This exercise will involve creating pFUnit test codes. This exercise will only
 test the CFL subroutine. 
 \begin{enumerate}
 \item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testCFL.pf} 
@@ -505,6 +505,21 @@ Note that \texttt{CFL\_mod.f90} must be compiled before the above command is exe
 and will print the result of the test which is a pass
 \item Change the value \texttt{cfl\_exact} to \texttt{0.34\_DP} in the pseudo Fortran code and repeat
 steps (b), (c) and (d). Execute the \texttt{tests.x} which should fail the test
+\end{enumerate}
+\item This exercise will involve using CamFort.
+\begin{enumerate}
+\item Use the CamFort command to obtain the stencil specification:
+\begin{verbatim}
+camfort stencils-infer Solver_mod.f90
+\end{verbatim}
+\item From the stencil specification obtained in the previous step, annotate
+  your code accordingly. Remember to prefix every specification with
+  \texttt{!= <specification>} 
+\item Then use the CamFort command to verify the stencil specification:
+\begin{verbatim}
+camfort stencils-check Solver_mod.f90
+\end{verbatim}
+which should print \texttt{Correct} for every specification. 
 \end{enumerate}
 \end{enumerate}
 \end{document}
