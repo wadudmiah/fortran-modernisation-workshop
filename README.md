@@ -25,7 +25,7 @@ Packages and RPMs (for RedHat based Linux) that are required for this workshop:
 
 For Ubuntu based Linux:
 
-* libnetcdf-dev, libnetcdff5, netcdf-bin, nco, netcdf-doc, libhdf5-dev
+* libnetcdf-dev, libnetcdff-dev, libnetcdff5, netcdf-bin, nco, netcdf-doc, libhdf5-dev
 * libplplot-dev, libplplot-fortran11, plplot12-driver-xwin, plplot-doc, plplot12-driver-cairo
 * doxygen, doxygen-latex, graphviz
 * gfortran - GNU Fortran version 4.8.5 or later
