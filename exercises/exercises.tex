@@ -57,7 +57,7 @@ scheme to integrate in time:
             \text{where CFL} & = k\frac{\Delta t}{\Delta x^{2}} \label{cfl}
 \end{align}
 Equation~(\ref{cfl}) is known as the Courant-Friedrichs-Lewy coefficient which must satisfy
-the condition $\text{CFL} > 0.5$ for the scheme~(\ref{fd}) to be stable. Don't worry if you do 
+the condition $\text{CFL} \le 0.5$ for the scheme~(\ref{fd}) to be stable. Don't worry if you do 
 not know what all this means - the focus of the exercise is on Fortran programming and not
 Maths. \\
 
@@ -71,9 +71,9 @@ tar -zxvf fmw_exercise.tar.gz
 which will extract the exercises to the \texttt{fmw\_exercise/} directory. Change into the 
 \texttt{fmw\_exercise/} directory:
 \begin{verbatim}
-git config --global user.name "<firstname lastname>"
-git config --global user.email <firstname.lastname@address.com>
-cd ex/
+git config --global user.name "firstname lastname"
+git config --global user.email firstname.lastname@address.com
+cd fmw_exercise
 git init
 git add .
 git commit -m "initial version"
