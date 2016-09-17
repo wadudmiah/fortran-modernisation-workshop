@@ -31,7 +31,7 @@ fig, plt1 = plt.subplots( )
 
 l1 = plt1.bar( xrange, fortran_usage, label = 'off', color = 'blue' )
 plt1.set_ylabel( 'Usage' )
-plt1.set_xlabel( 'Fortran standard' )
+#plt1.set_xlabel( 'Topic' )
 plt1.grid( True )
 
 # plt2 = plt1.twinx( )
@@ -45,7 +45,11 @@ plt1.grid( True )
 
 # plt.legend( ( l1, l2, l3 ), ( 'off', 'on', 'diff' ), loc = 'upper right' )
 plt.axis( xmin = -0.4, xmax = fortran_usage.size )
-plt.xticks( xrange + 0.4, fortran_standard )
+plt.xticks( xrange + 0.4, fortran_standard, rotation = 60, size = 'small' )
 plt.title( options.title )
+#plt.tick_params( length = 6 )
+#plt.subplots_adjust(bottom=0.15)
+#plt.gca().tight_layout()
+# plt.margins(0.2)
 plt.savefig( options.output_file )
  
