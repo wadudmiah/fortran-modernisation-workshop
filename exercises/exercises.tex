@@ -364,8 +364,8 @@ for the details of the API. Use the following process when creating NetCDF files
 \begin{itemize}
 \item\texttt{NF90\_CREATE( )} to create the file and enter define mode
 \item\texttt{NF90\_DEF\_DIM( )} to create the $x$ and $t$ dimensions
-\item\texttt{NF90\_DEF\_VAR( )} to create the \texttt{x(:)}, \texttt{t(:)} and
-\texttt{table(:, :)} variables
+\item\texttt{NF90\_DEF\_VAR( )} to create the \texttt{x(:)} (variable name {\em x-range}), \texttt{t(:)} (variable name
+  {\em t-range}) and \texttt{table(:, :)} (variable name {\em solution}) variables
 \item\texttt{NF90\_PUT\_ATT( )} to put global and dimension attributes
 \item\texttt{NF90\_ENDDEF( )} to end define mode and to enter data mode
 \item\texttt{NF90\_PUT\_VAR( )} to write the data to the file
@@ -388,7 +388,8 @@ real(kind=DP), dimension(:), intent(in) :: t
   \item\texttt{"name" = "Your name"}
   \item\texttt{"institution" = "Your university"} 
   \end{enumerate}
-\item In the subroutine \texttt{r8mat\_write( )} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the two-dimensional array \texttt{table(:, :)} into a NetCDF file
+\item In the subroutine \texttt{r8mat\_write( )} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the
+  two-dimensional array \texttt{table(:, :)} into a NetCDF file
 \item To compile the remember to add the line \texttt{-I/usr/lib64/gfortran/modules} in your
   Makefile which is the NetCDF Fortran module file directory on Fedora Linux. This might be
   different for your system
