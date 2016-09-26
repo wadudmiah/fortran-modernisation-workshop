@@ -15,7 +15,7 @@ parser.add_option( '--title', dest = 'title', default = 'Fortran usage' )
 
 options, remainder = parser.parse_args( )
 
-data = np.genfromtxt( options.input_file, dtype = [ ( 'fortran_standard', 'a8' ), \
+data = np.genfromtxt( options.input_file, dtype = [ ( 'fortran_standard', 'a12' ), \
                                                     ( 'fortran_usage', 'i8' ), ], \
                                           comments = '#' )
 
@@ -45,7 +45,7 @@ plt1.grid( True )
 
 # plt.legend( ( l1, l2, l3 ), ( 'off', 'on', 'diff' ), loc = 'upper right' )
 plt.axis( xmin = -0.4, xmax = fortran_usage.size )
-plt.xticks( xrange + 0.4, fortran_standard, rotation = 60, size = 'small' )
+plt.xticks( xrange + 0.4, fortran_standard, rotation = 45, size = 'small' )
 plt.title( options.title )
 plt.subplots_adjust(bottom=0.15)
 plt.savefig( options.output_file )
