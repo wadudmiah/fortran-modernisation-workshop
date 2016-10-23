@@ -18,12 +18,12 @@ program fd1d_heat_explicit_prb
       integer j
       double precision k
 
-      double precision t(t_num)
-      double precision t_max
-      double precision t_min
-      double precision x(x_num)
-      double precision x_max
-      double precision x_min
+      double precision :: t(t_num)
+      double precision :: t_max
+      double precision :: t_min
+      double precision :: x(x_num)
+      double precision :: x_max
+      double precision :: x_min
 
       write ( *, '(a)' ) ' '
       write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_PRB:'
@@ -104,27 +104,28 @@ program fd1d_heat_explicit_prb
     contains
 
     function func( j, x_num, x ) result ( d )
-      integer j, x_num
-      double precision d
-      double precision x(x_num)
+      implicit none
+      
+      integer :: j, x_num
+      double precision :: d
+      double precision :: x(x_num)
 
       d = 0.0D+00
     end function func
 
     subroutine fd1d_heat_explicit( x_num, x, t, dt, cfl, h, h_new )
-
       implicit none
 
-      integer x_num
+      integer :: x_num
 
-      double precision cfl
-      double precision dt
-      double precision h(x_num)
-      double precision h_new(x_num)
-      integer j
-      double precision t
-      double precision x(x_num)
-      double precision f(x_num)
+      double precision :: cfl
+      double precision :: dt
+      double precision :: h(x_num)
+      double precision :: h_new(x_num)
+      integer :: j
+      double precision :: t
+      double precision :: x(x_num)
+      double precision :: f(x_num)
 
       do j = 1, x_num
         f(j) = func( j, x_num, x )
@@ -145,16 +146,16 @@ program fd1d_heat_explicit_prb
 
       implicit none
 
-      double precision cfl
-      double precision dx
-      double precision dt
-      double precision k
-      double precision t_max
-      double precision t_min
-      integer t_num
-      double precision x_max
-      double precision x_min
-      integer x_num
+      double precision :: cfl
+      double precision :: dx
+      double precision :: dt
+      double precision :: k
+      double precision :: t_max
+      double precision :: t_min
+      integer :: t_num
+      double precision :: x_max
+      double precision :: x_min
+      integer :: x_num
 
       dx = ( x_max - x_min ) / dble( x_num - 1 )
       dt = ( t_max - t_min ) / dble( t_num - 1 )
@@ -167,17 +168,16 @@ program fd1d_heat_explicit_prb
     end subroutine fd1d_heat_explicit_cfl
 
     subroutine r8mat_write( output_filename, m, n, table )
-
       implicit none
 
-      integer m
-      integer n
+      integer :: m
+      integer :: n
 
-      integer j
-      character * ( * ) output_filename
-      integer output_unit
-      character * ( 30 ) string 
-      double precision table(m,n)
+      integer :: j
+      character * ( * ) :: output_filename
+      integer :: output_unit
+      character * ( 30 ) :: string 
+      double precision :: table(m,n)
  
       output_unit = 10
       open( unit = output_unit, file = output_filename, status = 'replace' )
@@ -195,11 +195,11 @@ program fd1d_heat_explicit_prb
 
       implicit none
 
-      integer n
-      double precision a(n)
-      double precision a_first
-      double precision a_last
-      integer i
+      integer :: n
+      double precision :: a(n)
+      double precision :: a_first
+      double precision :: a_last
+      integer :: i
 
       do i = 1, n
         a(i) = ( dble( n - i ) * a_first + dble( i - 1 ) * a_last ) / dble( n - 1 )
@@ -211,13 +211,13 @@ program fd1d_heat_explicit_prb
 
       implicit none
 
-      integer m
-      integer n
+      integer :: m
+      integer :: n
 
-      integer j
-      character * ( * ) output_filename
-      integer output_unit
-      double precision x(n)
+      integer :: j
+      character * ( * ) :: output_filename
+      integer :: output_unit
+      double precision :: x(n)
 
       output_unit = 11
       open( unit = output_unit, file = output_filename, status = 'replace' )
