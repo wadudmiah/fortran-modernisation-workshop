@@ -488,7 +488,7 @@ ADD_TEST_SUITE(testCFL_suite)
 \end{verbatim}
 \item To preprocess the pseudo Fortran test driver code to produce Fortran code:
 \begin{verbatim}
-pFUnitParser.py testCFL.pf testCFL.F90 -I.
+${PFUNIT}/bin/pFUnitParser.py testCFL.pf testCFL.F90 -I.
 \end{verbatim}
 Note that the Fortran code must have the \texttt{.F90} extension as it still needs to be preprocessed
 \item Then compile the created Fortran test driver code:

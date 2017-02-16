@@ -175,20 +175,20 @@ program fd1d_heat_explicit_prb
 
       integer :: j
       character * ( * ) :: output_filename
-      integer :: output_unit
+      integer :: output_unit_id
       character * ( 30 ) :: string 
       double precision :: table(m,n)
  
-      output_unit = 10
-      open( unit = output_unit, file = output_filename, status = 'replace' )
+      output_unit_id = 10
+      open( unit = output_unit_id, file = output_filename, status = 'replace' )
 
       write ( string, '(a1,i8,a1,i8,a1,i8,a1)' ) '(', m, 'g', 24, '.', 16, ')'
 
       do j = 1, n
-        write ( output_unit, string ) table(1:m, j)
+        write ( output_unit_id, string ) table(1:m, j)
       end do
 
-      close( unit = output_unit )
+      close( unit = output_unit_id )
     end subroutine r8mat_write
 
     subroutine r8vec_linspace ( n, a_first, a_last, a )
@@ -216,17 +216,17 @@ program fd1d_heat_explicit_prb
 
       integer :: j
       character * ( * ) :: output_filename
-      integer :: output_unit
+      integer :: output_unit_id
       double precision :: x(n)
 
-      output_unit = 11
-      open( unit = output_unit, file = output_filename, status = 'replace' )
+      output_unit_id = 11
+      open( unit = output_unit_id, file = output_filename, status = 'replace' )
 
       do j = 1, n
-        write ( output_unit, '(2x,g24.16)' ) x(j)
+        write ( output_unit_id, '(2x,g24.16)' ) x(j)
       end do
 
-      close ( unit = output_unit )
+      close ( unit = output_unit_id )
   end subroutine r8vec_write
 
 end program fd1d_heat_explicit_prb
