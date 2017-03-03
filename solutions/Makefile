@@ -55,3 +55,6 @@ doxygen:
 
 ffmpeg:
 	ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
+
+man:
+	man ./fd1d_heat_explicit.1

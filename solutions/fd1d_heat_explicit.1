@@ -1,0 +1,43 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH FD1D_HEAT_EXPLICIT.EXE 1 "March 2017" Linux "Solves 1D heat equation"
+.SH NAME
+fd1d_heat_explicit.exe \- solves the 1D heat diffusion equation
+.SH SYNOPSIS
+.B fd1d_heat_explicit.exe 
+.B
+.SH DESCRIPTION
+.B fd1d_heat_explicit.exe 
+solves the one-dimensional heat diffusion equation dH/dt - kd^2H/dx^2 = f(x).
+The parameter 
+.I X_NUM
+controls the number of cells in the x-direction and
+.I T_NUM 
+controls the number of time steps. 
+.SH OUTPUT
+The 
+.B fd1d_heat_explicit.exe
+code outputs the following files:
+
+.I h_test01.nc 
+.RS
+This is the NetCDF output file which contains the x- and t-values as
+well as the solution. 
+.RE
+.I fd1d_heat_explicit_n.png
+.RS
+Visualisation files where 
+.I n
+is the time step. 
+.SH OPTIONS
+There are no command line options.
+.SH FILES
+There are no configuration files.
+.SH ENVIRONMENT
+There are no environment variables that control
+.B fd1d_heat_explicit.exe
+.SH BUGS
+There are no known bugs.
+.SH AUTHOR
+Wadud Miah <wadud.miah@nag.co.uk>
