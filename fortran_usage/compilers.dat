@@ -1,7 +1,7 @@
 # Compiler | TOTAL
-GNU	169
-PGI	17
-INT	132
-Cray	20
+GNU	225
+PGI	21
+Intel	165
+Cray	25
 PASC	2
-NAG	7
+NAG	12
