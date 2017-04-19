@@ -1,6 +1,6 @@
 FC = gfortran
 
-LDFLAGS = -L. -lfmw -L/usr/lib64 -L/lib64 -lnetcdff -lnetcdf -lplplotf95c -lplplotf95
+LDFLAGS = -L. -lfmw -L/usr/lib64 -L/lib64 -lnetcdff -lnetcdf -lplplotf95cd -lplplotf95d
 LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
 FFLAGS = -I. -I/usr/include -I/usr/lib64/gfortran/modules -I/usr/lib/fortran/modules/plplot
 
