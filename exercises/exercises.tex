@@ -392,7 +392,7 @@ real(kind=DP), dimension(:), intent(in) :: t
 \item Once your code completes, you can view the contents of the NetCDF file using \texttt{ncdump h\_test01.nc | less}
 \item To verify whether your code works correctly, compare the created NetCDF file with the correct NetCDF file:
 \begin{verbatim}
-ncdiff -O h_test01.nc h_test01.nc.valid diff.nc
+ncdiff --overwrite h_test01.nc h_test01.nc.valid -o diff.nc
 ncdump diff.nc | less
 \end{verbatim}
 The second command should show all zero values for the \texttt{x-range}, \texttt{t-range} and \texttt{solution} NetCDF
