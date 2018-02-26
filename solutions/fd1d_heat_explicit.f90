@@ -43,8 +43,6 @@ program fd1d_heat_explicit
       allocate( t(1:T_NUM), stat = ierr )
       allocate( x(1:X_NUM), stat = ierr )
 
-      call PLPARSEOPTS( PL_PARSE_FULL )
-      
       write ( *, '(a)' ) ' '
       write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_PRB:'
       write ( *, '(a)' ) '  FORTRAN90 version.'
@@ -65,7 +63,7 @@ program fd1d_heat_explicit
       write ( *, '(a)' ) '  Run a simple test case.'
 
       ! heat coefficient
-      k = 0.002_DP
+      k = 0.0002_DP
 
       ! the x-range values
       x_min = 0.0_DP
