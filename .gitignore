@@ -64,6 +64,7 @@ test*.F90
 !fortran_usage/*.png
 *.mov
 *.mp4
+!exercises/*.png
 
 # doxygen documentation
 doxygen
