@@ -15,7 +15,7 @@ contains
     real(KIND=DP), intent(inout) :: cfl
     real(KIND=DP) :: dx
     real(KIND=DP) :: dt
-    !> the heat constant
+    !> the heat constant \( \kappa \)
     real(KIND=DP), intent(in) :: k
     !> t_max upper bound of t-axis
     real(KIND=DP), intent(in) :: t_max
