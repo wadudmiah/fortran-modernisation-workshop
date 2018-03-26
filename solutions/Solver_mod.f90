@@ -9,17 +9,24 @@ module Solver_mod
   public :: fd1d_heat_explicit_solver
 
 contains
+  !> solves the 1D heat equation
   subroutine fd1d_heat_explicit_solver( x, t, dt, cfl, h, h_new )
 
     implicit none
 
     integer(kind=SI)                           :: x_num
+    !> the CFL number
     real(kind=DP), intent(in)                  :: cfl
+    !> the time step
     real(kind=DP), intent(in)                  :: dt
+    !> solution at time step n
     real(kind=DP), dimension(:), intent(in)    :: h
+    !> the calculated solution at time step n + 1
     real(kind=DP), dimension(:), intent(inout) :: h_new
     integer(kind=SI)                           :: j
+    !> time step
     real(kind=DP), intent(in)                  :: t
+    !> spatial values
     real(kind=DP), dimension(:), intent(in)    :: x
     real(kind=DP)                              :: f(size( x ))
 

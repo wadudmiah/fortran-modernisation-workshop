@@ -68,3 +68,6 @@ test*.F90
 
 # doxygen documentation
 doxygen
+
+# ford documentation
+doc

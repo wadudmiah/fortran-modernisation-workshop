@@ -1,10 +1,12 @@
 project: Fortran Modernisation Workshop
 src_dir: ./
 output_dir: ./doc
+exclude_dir: ./doc/src
 summary: Fortran Modernisation Workshop
 author: Wadud Miah
 author_description: Computational Scientist
 email: wadud.miah@nag.co.uk
+linkedin: https://www.linkedin.com/in/wadud-miah-9b7b3723/
 docmark: !
 predocmark: >
 media_dir: ./media
@@ -16,11 +18,15 @@ display: public
 source: true
 graph: true
 search: true
-macro: TEST
-       LOGIC=.true.
+warn: false
 license: by-nc
+version: 1.1.1
 
-This is the solution for the Fortran Modernisation Workshop
+This is the solution for the [Fortran Modernisation Workshop](https://www.nag.co.uk/content/fortran-modernization-workshop).
+The workshop exercise solves.
+\begin{equation}
+\frac{\partial{\bf H}}{\partial t} - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x)
+\end{equation}
 
 @Note
 This is a series of Fortran workshops to help computational scientists write
@@ -28,7 +34,4 @@ efficient and portable code, and to encourage best practices in software
 engineering.
 
 @Bug
-If you find any bugs, please email me at wadud.miah@nag.co.uk
-\begin{equation}
-\frac{\partial{\bf H}}{\partial t} - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x)
-\end{equation}
+If you find any bugs, please email [me](mailto:wadud.miah@nag.co.uk)
