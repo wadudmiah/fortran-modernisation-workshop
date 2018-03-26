@@ -1,8 +1,8 @@
 FC = gfortran
 
-LDFLAGS = -L. -lfmw -L/usr/lib64 -L/lib64 -lnetcdff -lnetcdf -lplplotf95 -lplplot
+LDFLAGS = -L. -lfmw -L/usr/lib64 -L/lib64 -L/home/wadudm/netcdf-4.6.0/lib -lnetcdff -lnetcdf -lplplotf95 -lplplot
 LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
-FFLAGS = -I. -I/usr/include -I/usr/lib64/gfortran/modules -I/usr/lib/fortran/modules/plplot
+FFLAGS = -I. -I/usr/include -I/usr/lib64/gfortran/modules -I/usr/lib/fortran/modules/plplot -I/home/wadudm/netcdf-4.6.0/include
 
 fd1d_heat_explicit.exe: fd1d_heat_explicit.o libfmw.a
 	$(FC) $< $(LDFLAGS) -o $@
@@ -45,13 +45,13 @@ diff: fd1d_heat_explicit.exe
 	diff h_test01.txt h_test01.txt_bak
 	if [ $$? -eq 0 ]; then echo "fine"; else echo "not fine"; fi
 
-.PHONY: clean doxygen ffmpeg
+.PHONY: clean ford ffmpeg man
 
 clean:
 	rm -rf *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 test*.F90 doxygen/*
 
-doxygen:
-	doxygen fortran.dxg
+ford:
+	ford fmw.md
 
 ffmpeg:
 	ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4

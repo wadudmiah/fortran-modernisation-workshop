@@ -1,6 +1,4 @@
-!> @author
 !> Wadud Miah, Numerical Algorithms Group
-!> @brief 
 !> Solves the one dimensional heat diffusion equation
 !> \f$ \frac{\partial{\bf H}}{\partial t} 
 !>     - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x) \f$

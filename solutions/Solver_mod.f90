@@ -1,3 +1,5 @@
+!> this module solver the PDE
+!>  \( \frac{\partial{\bf H}}{\partial t} - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x) \)
 module Solver_mod
   use Types_mod
   use RHS_mod
@@ -33,7 +35,7 @@ contains
       != stencil readOnce, (reflexive(dim=1)) :: func
       != stencil readOnce, (reflexive(dim=1)) :: f
       != stencil (centered(depth=1, dim=1)) :: h
-      h_new(j) = h(j) + dt * f(j) + cfl * ( h(j-1) - 2.0D+00 * h(j) + h(j+1) )
+      h_new(j) = h(j) + dt * f(j) + cfl * ( h(j-1) - 2.0_DP * h(j) + h(j+1) )
     end do
 
     ! set the boundary conditions again

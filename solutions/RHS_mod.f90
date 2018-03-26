@@ -1,3 +1,4 @@
+!> this module contains the right-hand side of the PDE
 module RHS_mod
 
   use Types_mod
@@ -7,7 +8,7 @@ module RHS_mod
   public :: func
   
 contains
-  
+  !> right hand side of PDE
   function func( j, x_num, x ) result ( d )
     integer(KIND=SI), intent(in) :: j, x_num
     real(KIND=DP) :: d

@@ -1,8 +1,4 @@
-!> @author
-!> Wadud Miah, Numerical Algorithms Group
-!> @brief
-!> calculates the CFL number
-
+!> this module calculates the CFL number
 module CFL_mod
   use Types_mod
 
@@ -11,31 +7,27 @@ module CFL_mod
   public :: fd1d_heat_explicit_cfl
 contains
 
-!> @author
-!> Wadud Miah, Numerical Algorithms Group
-!> @brief
-!> calculates the CFL number
-!> @param[in] k heat constant
-!> @param[in] t_num number of intervals in t-axis
-!> @param[in] t_min lower bound of t-axis
-!> @param[in] t_max upper bound of t-axis
-!> @param[in] x_num number of intervals in x-axis
-!> @param[in] x_min lower bound of x-axis
-!> @param[in] x_max upper bound of x-axis
-!> @param[inout] cfl calculated CFL number
+  !> calculates the CFL number
+  !> \( \text{CFL} = \frac{\Delta t}{\Delta x^2} \)
   subroutine fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
-
     implicit none
-
+    !> calculated CFL number
     real(KIND=DP), intent(inout) :: cfl
     real(KIND=DP) :: dx
     real(KIND=DP) :: dt
+    !> the heat constant
     real(KIND=DP), intent(in) :: k
+    !> t_max upper bound of t-axis
     real(KIND=DP), intent(in) :: t_max
+    !> lower bound of t-axis
     real(KIND=DP), intent(in) :: t_min
+    !> number of intervals in t-axis
     integer(KIND=SI), intent(in) :: t_num
+    !> upper bound of x-axis
     real(KIND=DP), intent(in) :: x_max
+    !> x_min lower bound of x-axis
     real(KIND=DP), intent(in) :: x_min
+    !> number of intervals in x-axis
     integer(KIND=SI), intent(in) :: x_num
 
     dx = ( x_max - x_min ) / dble( x_num - 1 )

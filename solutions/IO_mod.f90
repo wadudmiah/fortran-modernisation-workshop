@@ -1,3 +1,5 @@
+!> this module deals with netcdf I/O
+
 module IO_mod
   use Types_mod
   use netcdf
@@ -13,11 +15,15 @@ contains
     integer(KIND=SI) :: m ! x_num
     integer(KIND=SI) :: n ! t_num
 
+    !> x-values (spatial direction)
     real(KIND=DP), intent(in)    :: x(:)
+    !> t-values (time direction)
     real(kind=DP), intent(in)    :: t(:)
     
     integer(KIND=SI)             :: j
+    !> the output file name 
     character(len=*), intent(in) :: output_filename
+    !> the 2D array with the solution
     real(KIND=DP), intent(in)    :: table(:, :)
 
     ! netcdf parameters
