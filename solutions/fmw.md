@@ -1,7 +1,6 @@
 project: Fortran Modernisation Workshop
 src_dir: ./src
 output_dir: ./doc
-exclude_dir: ./doc/src
 summary: Fortran Modernisation Workshop
 author: Wadud Miah
 author_description: Computational Scientist
