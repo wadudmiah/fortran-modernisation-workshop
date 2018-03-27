@@ -48,10 +48,7 @@ diff: fd1d_heat_explicit.exe
 .PHONY: clean ford ffmpeg man
 
 clean:
-	rm -rf *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 test*.F90 doc/*
-
-ford:
-	ford fmw.md
+	rm -rf *.mod *.o *.png *.a *.x *.exe *.mov *.mp4 test*.F90 
 
 ffmpeg:
 	ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
