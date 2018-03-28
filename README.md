@@ -43,5 +43,4 @@ For Ubuntu based Linux:
 ### Who do I talk to? ###
 
 * wadud <<dot>> miah <<at>> nag <<dot>> co <<dot>> uk
-* fs395 <<at>> cam <<dot>> ac <<dot>> uk
-* fatima <<dot>> chami <<at>> durham <<dot>> ac <<dot>> uk
+
