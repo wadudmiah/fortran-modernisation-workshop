@@ -13,8 +13,7 @@ https://www.nag.co.uk/content/fortran-modernization-workshop
 ### NAG Compiler Update ###
 
 * NAG compiler 6.2 is able to build netcdf and plplot with no problem. 
-* NAG compiler version 6.1 and 6.2 produces an internal compiler error when I try to build pfunit. 
-* Will try to build netcdf and plplot with 6.1 compiler.
+* NAG compiler version 6.2 produces an internal compiler error when I try to build pfunit. 
 * **NetCDF, PLplot and pFUnit all work with NAG compiler 6.1**
 * Have reported the internal compiler error for 6.2.
 
