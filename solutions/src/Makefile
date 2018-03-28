@@ -1,8 +1,14 @@
-FC = gfortran
+FC = nagfor
 
-LDFLAGS = -L. -lfmw -L/usr/lib64 -L/lib64 -L/home/wadudm/netcdf-4.6.0/lib -lnetcdff -lnetcdf -lplplotf95 -lplplot
+NETCDF_INC = /home/wadudm/netcdf-4.6.0/include
+NETCDF_LIB = /home/wadudm/netcdf-4.6.0/lib
+
+PLPLOT_INC = /home/wadudm/plplot-5.13.0/lib/fortran/modules/plplot
+PLPLOT_LIB = /home/wadudm/plplot-5.13.0/lib
+
+LDFLAGS = -L. -lfmw -L$(PLPLOT_LIB) -L$(NETCDF_LIB) -lnetcdff -lnetcdf -lplplotfortran -lplplot 
 LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
-FFLAGS = -I. -I/usr/include -I/usr/lib64/gfortran/modules -I/usr/lib/fortran/modules/plplot -I/home/wadudm/netcdf-4.6.0/include
+FFLAGS = -I. -I$(PLPLOT_INC) -I$(NETCDF_INC)
 
 fd1d_heat_explicit.exe: fd1d_heat_explicit.o libfmw.a
 	$(FC) $< $(LDFLAGS) -o $@
