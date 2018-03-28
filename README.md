@@ -10,6 +10,12 @@ https://www.nag.co.uk/content/fortran-modernization-workshop
 
 * Files containing source code for the workshop exercises
 
+### NAG Compiler Update ###
+
+* NAG compiler 6.2 is able to build netcdf and plplot with no problem. 
+* NAG compiler version 6.1 and 6.2 produces an internal compiler error when I try to build pfunit. 
+* Will try to build netcdf and plplot with 6.1 compiler.
+
 ### How do I get set up? ###
 
 Packages and RPMs (for RedHat based Linux) that are required for this workshop:
