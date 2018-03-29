@@ -64,15 +64,17 @@ Maths. \\
 The exercises are split into two parts: one set for the first day and a second
 set for the second day. Change into the \texttt{fmw\_exercises/} directory:
 \begin{verbatim}
-git config --global user.name "firstname lastname"
-git config --global user.email firstname.lastname@address.com
+git config --global user.name "<firstname> <lastname>"
+git config --global user.email <firstname.lastname>@address.com
 cd fmw_exercises
 git init
 git add .
 git commit -m "initial version"
 \end{verbatim}
-The Git commands will version control your code so you can see its revision history. Git will
-be covered in the second session. \\
+Replace the \texttt{<firstname>} and \texttt{<lastname>} with your name :-) The Git commands
+will version control your code so you can see its revision history. Git will
+be covered in the second session. Please put all your source code in the \texttt{src/}
+directory. \\
 
 Day one exercises will include modernising an existing Fortran 77 code. Day two exercises will involve the 
 following topics:
@@ -81,7 +83,7 @@ following topics:
 \item Git source code version control system;
 \item Doxygen code documentation tool for Fortran codes;
 \item NetCDF file format for arrays;
-\item In-memory visualisation using PLplot
+\item In-memory visualisation using PLplot;
 \item Unit testing with pFUnit.
 \end{enumerate}
 \newpage
@@ -103,7 +105,8 @@ module Types_mod
    use, intrinsic :: iso_fortran_env
 
    implicit none
-
+   ! everything is private unless otherwise stated
+   private 
    public :: SP
 
    integer, parameter :: SP = REAL32
@@ -111,17 +114,29 @@ contains
 
 end module Types_mod
 \end{verbatim}
-The above\label{mod:temp}
-\item In the main program code (file \texttt{fd1d\_heat\_explicit.f90} including all functions and subroutines), include the double colon after the variable type and before 
-the variable name, e.g. from \texttt{double precision a} to \texttt{double precision :: a}
-\item In the main program code, include the line \texttt{use Types\_mod} just before
-the \texttt{implicit none} statement. This will allow you to use the constants declared in the
-\texttt{Types\_mod} Fortran module
-\item In the main program code, use the \texttt{kind} keyword in variable declarations, e.g.
-from \texttt{double precision} to \texttt{real(kind=DP)} and \texttt{integer} to 
-\texttt{integer(kind=SI)}
+\item Use the NAG compiler unifying precision feature to change \texttt{double precision} to \texttt{real(kind=DP)}
+using the command:
+\begin{verbatim}
+nagfor =unifyprecision -pp_module=Types_mod -pp_name=DP fd1d_heat_explicit.f90 \
+  -o fd1d_heat_explicit.f90_prs
+mv fd1d_heat_explicit.f90_prs fd1d_heat_explicit.f90
+\end{verbatim}
+\item In the main program code, use the NAG compiler polishing feature to:
+\begin{enumerate}
+\item change relational operators (\texttt{.LE.} to \texttt{<=})
+\item capitalise keywords (e.g. \texttt{program} to \texttt{Program})
+\item set the leftmost margin to zero
+\item indentation to two spaces
+\item add double colons for variable declarations (e.g. \texttt{integer i} to \texttt{integer :: i})
+\end{enumerate}
+by using the command:
+\begin{verbatim}
+nagfor =polish -relational=F90+ -kwcase=C -margin=0 -indent=2 \
+  -dcolon_in_decls=Insert fd1d_heat_explicit.f90 -o fd1d_heat_explicit.f90_pol
+mv fd1d_heat_explicit.f90_pol fd1d_heat_explicit.f90
+\end{verbatim}
 \item In the main program code, change how parameters are declared, e.g. from 
-\texttt{parameter ( T\_NUM = 201 )} to \texttt{integer(kind=SI), parameter :: T\_NUM = 201} and the
+\texttt{parameter ( T\_NUM = 201 )} to \texttt{integer, parameter :: T\_NUM = 201} and the
 same for the variable \texttt{X\_NUM}
 \item In the main program code, change how constants are used, e.g. from \texttt{0.0D+00} to 
 \texttt{0.0\_DP}
@@ -159,13 +174,11 @@ For string declarations:
 character * ( 30 ) :: string             ! to
 character(len=30)  :: string
 \end{verbatim}
-\item In the main program code, use symbolic relational operators \texttt{<, <=, /=, ==, >=, >}
-instead of \texttt{.lt., .le., .ne., .eq., .ge., gt.}
 \item Compile both the main program and the created Fortran module:
 \begin{verbatim}
-gfortran -c Types_mod.f90
-gfortran -c -I. fd1d_heat_explicit.f90
-gfortran fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit.exe
+nagfor -c Types_mod.f90
+nagfor -c -I. fd1d_heat_explicit.f90
+nagfor fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit.exe
 ./fd1d_heat_explicit.exe
 \end{verbatim}
 \item To test whether your code runs correctly execute:
@@ -197,12 +210,12 @@ code, insert the line \texttt{use CFL\_mod}
   program code, insert the line \texttt{use Solver\_mod}
 \item Compile the recently created modules:
 \begin{verbatim}
-gfortran -c RHS_mod.f90
-gfortran -c CFL_mod.f90
-gfortran -c IO_mod.f90
-gfortran -c Solver_mod.f90
-gfortran -c -I. fd1d_heat_explicit.f90
-gfortran fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
+nagfor -c RHS_mod.f90
+nagfor -c CFL_mod.f90
+nagfor -c IO_mod.f90
+nagfor -c Solver_mod.f90
+nagfor -c -I. fd1d_heat_explicit.f90
+nagfor fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
          Solver_mod.o -o fd1d_heat_explicit.exe
 ./fd1d_heat_explicit.exe
 \end{verbatim}
@@ -383,7 +396,7 @@ real(kind=DP), dimension(:), intent(in) :: t
   \end{enumerate}
 \item In the subroutine \texttt{r8mat\_write( )} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the
   two-dimensional array \texttt{table(:, :)} into a NetCDF file
-\item To compile the remember to add the line \texttt{-I/usr/lib64/gfortran/modules} in your
+\item To compile the remember to add the line \texttt{-I/usr/lib64/nagfor/modules} in your
   Makefile which is the NetCDF Fortran module file directory on Fedora Linux. This might be
   different for your system
 \item To do the final link, remember to add the link line \texttt{-L/usr/lib64 -lnetcdff -lnetcdf}
@@ -430,7 +443,7 @@ using the Fortran intrinsic function \texttt{mod( )}
 \texttt{image001.png}
 \item From the above list of PLplot subroutine calls, create the PNG file of the
 current time step
-\item To compile the code, add the line \texttt{-I/usr/lib64/gfortran/modules} - this
+\item To compile the code, add the line \texttt{-I/usr/lib64/nagfor/modules} - this
   path might be different on your system
 \item To link the code to the PLplot libraries including the Fortran wrappers, use \newline
 \texttt{-L/usr/lib64 -lplplotf95cd -lplplotf95d}
@@ -453,8 +466,8 @@ subroutine testCFL( )
   use CFL_mod
   use Types_mod
 
-  integer(KIND=SI), parameter :: t_num = 201
-  integer(KIND=SI), parameter :: x_num = 21
+  integer, parameter :: t_num = 201
+  integer, parameter :: x_num = 21
   real(KIND=DP) :: k, x_min, x_max, t_min, t_max 
   real(KIND=DP) :: cfl, cfl_exact, tol
 
@@ -486,12 +499,12 @@ ${PFUNIT}/bin/pFUnitParser.py testCFL.pf testCFL.F90 -I.
 Note that the Fortran code must have the \texttt{.F90} extension as it still needs to be preprocessed
 \item Then compile the created Fortran test driver code:
 \begin{verbatim}
-gfortran -I$PFUNIT/mod -c testCFL.F90
+nagfor -I$PFUNIT/mod -c testCFL.F90
 \end{verbatim}
 where \texttt{\$PFUNIT} is the environment variable which points to the installation directory of pFUnit
 \item Then create the final test driver executable:
 \begin{verbatim}
-gfortran -o tests.x -I$PFUNIT/mod $PFUNIT/include/driver.F90 \
+nagfor -o tests.x -I$PFUNIT/mod $PFUNIT/include/driver.F90 \
          CFL_mod.o testCFL.o  -L$PFUNIT/lib -lpfunit -I.
 \end{verbatim}
 Note that \texttt{CFL\_mod.f90} must be compiled before the above command is executed

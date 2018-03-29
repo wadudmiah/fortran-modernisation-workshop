@@ -1,10 +1,10 @@
 FC = nagfor
 
-NETCDF_INC = /home/wadudm/netcdf-4.6.0/include
-NETCDF_LIB = /home/wadudm/netcdf-4.6.0/lib
+NETCDF_INC = /usr/local/netcdf-4.6.0/include
+NETCDF_LIB = /usr/local/netcdf-4.6.0/lib
 
-PLPLOT_INC = /home/wadudm/plplot-5.13.0/lib/fortran/modules/plplot
-PLPLOT_LIB = /home/wadudm/plplot-5.13.0/lib
+PLPLOT_INC = /usr/local/plplot-5.13.0/lib/fortran/modules/plplot
+PLPLOT_LIB = /usr/local/plplot-5.13.0/lib
 
 LDFLAGS = -L. -lfmw -L$(PLPLOT_LIB) -L$(NETCDF_LIB) -lnetcdff -lnetcdf -lplplotfortran -lplplot 
 LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
