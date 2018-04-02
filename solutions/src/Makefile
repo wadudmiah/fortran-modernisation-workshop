@@ -1,7 +1,7 @@
 FC = nagfor
 
-NETCDF_INC = /usr/local/netcdf-4.6.0/include
-NETCDF_LIB = /usr/local/netcdf-4.6.0/lib
+NETCDF_INC = /usr/local/netcdf-4.6.1/include
+NETCDF_LIB = /usr/local/netcdf-4.6.1/lib
 
 PLPLOT_INC = /usr/local/plplot-5.13.0/lib/fortran/modules/plplot
 PLPLOT_LIB = /usr/local/plplot-5.13.0/lib
