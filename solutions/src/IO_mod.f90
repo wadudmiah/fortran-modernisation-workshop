@@ -55,7 +55,8 @@ contains
     ! define the solution matrix
     dimids = [ x_dimid, t_dimid ]
     ierr = NF90_DEF_VAR( ncid, "solution", NF90_DOUBLE, dimids, sol_id )
-
+    ierr = NF90_PUT_ATT( ncid, sol_id, "units", "Celsius" )
+    
     ! end define mode
     ierr = NF90_ENDDEF( ncid )
 
