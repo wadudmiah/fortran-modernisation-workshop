@@ -3,7 +3,7 @@ module Types_mod
   use, intrinsic :: iso_fortran_env
 
   implicit none
-
+  private
   public :: SP, DP, SI, DI
   !> 32-bit real
   integer, parameter :: SP = REAL32

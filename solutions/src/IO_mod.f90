@@ -5,7 +5,7 @@ module IO_mod
   use netcdf
   
   implicit none
-
+  private
   public :: r8mat_write, r8vec_write, r8vec_linspace
 contains
   subroutine r8mat_write( output_filename, table, x, t )

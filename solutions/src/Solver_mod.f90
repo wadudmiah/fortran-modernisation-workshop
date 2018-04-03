@@ -5,7 +5,7 @@ module Solver_mod
   use RHS_mod
   
   implicit none
-
+  private
   public :: fd1d_heat_explicit_solver
 
 contains
@@ -39,9 +39,8 @@ contains
     h_new(1) = 0.0_DP
 
     do j = 2, x_num - 1
-      != stencil readOnce, (reflexive(dim=1)) :: func
-      != stencil readOnce, (reflexive(dim=1)) :: f
-      != stencil (centered(depth=1, dim=1)) :: h
+      != stencil readOnce, pointed(dim=1) :: f
+      != stencil centered(depth=1, dim=1) :: h
       h_new(j) = h(j) + dt * f(j) + cfl * ( h(j-1) - 2.0_DP * h(j) + h(j+1) )
     end do
 

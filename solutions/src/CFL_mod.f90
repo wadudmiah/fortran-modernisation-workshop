@@ -3,7 +3,7 @@ module CFL_mod
   use Types_mod
 
   implicit none
-
+  private
   public :: fd1d_heat_explicit_cfl
 contains
 
@@ -17,7 +17,7 @@ contains
     real(KIND=DP) :: dt
     !> the heat constant \( \kappa \)
     real(KIND=DP), intent(in) :: k
-    !> t_max upper bound of t-axis
+    !> upper bound of t-axis
     real(KIND=DP), intent(in) :: t_max
     !> lower bound of t-axis
     real(KIND=DP), intent(in) :: t_min
@@ -25,7 +25,7 @@ contains
     integer(KIND=SI), intent(in) :: t_num
     !> upper bound of x-axis
     real(KIND=DP), intent(in) :: x_max
-    !> x_min lower bound of x-axis
+    !> lower bound of x-axis
     real(KIND=DP), intent(in) :: x_min
     !> number of intervals in x-axis
     integer(KIND=SI), intent(in) :: x_num

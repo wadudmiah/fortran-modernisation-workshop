@@ -5,7 +5,10 @@
 % --------------------------------------------------------------
  
 \documentclass[12pt]{article}
- 
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{bera}
+
 \usepackage[margin=1in]{geometry} 
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{url}
@@ -62,19 +65,24 @@ not know what all this means - the focus of the exercise is on Fortran programmi
 
 The exercises are split into two parts: one set for the first day and a second
 set for the second day. Change into the \texttt{fmw\_exercises/} directory:
-\begin{verbatim}
-git config --global user.name "<firstname> <lastname>"
-git config --global user.email <firstname.lastname>@address.com
+\begin{Verbatim}[commandchars=\\\{\}]
+git config --global user.name "\textit{firstname lastname}"
+git config --global user.email \textit{firstname.lastname}@address.com
 cd fmw_exercises
 git init
 git add .
 git commit -m "initial version"
-\end{verbatim}
-Replace the \texttt{<firstname>} and \texttt{<lastname>} with your name :-) The Git commands
+\end{Verbatim}
+Replace the \textit{firstname} and \textit{lastname} with your name :-) The Git commands
 will version control your code so you can see its revision history. Git will
 be covered in the second session. Please put all your source code in the \texttt{src/}
-directory. \\
-
+directory. You can add a remote repository to your local Git repository using (replace \textit{username} and \textit{repo}
+with your upstream username and repository name, respectively):
+\begin{Verbatim}[commandchars=\\\{\}]
+git remote add origin git@bitbucket.org:\textit{username}/\textit{repo}.git
+git push origin master # after making changes to local repo
+\end{Verbatim}
+which you should do at the end of the workshop as the Linux machines will be cleaned 5 days after the workshop.
 Day one exercises will include modernising an existing Fortran 77 code. Day two exercises will involve the 
 following topics:
 \begin{enumerate}
@@ -115,11 +123,11 @@ end module Types_mod
 \end{verbatim} \label{mod:temp}
 \item Use the NAG compiler unifying precision feature to change \texttt{double precision} to \texttt{real(kind=DP)}
 using the command:
-\begin{verbatim}
-nagfor =unifyprecision -pp_module=Types_mod -pp_name=DP fd1d_heat_explicit.f90 \
-  -o fd1d_heat_explicit.f90_prs
+\begin{Verbatim}[commandchars=\\\{\}]
+nagfor \textbf{=unifyprecision -pp_module=Types_mod -pp_name=DP} \ \\
+  fd1d_heat_explicit.f90 -o fd1d_heat_explicit.f90_prs
 mv fd1d_heat_explicit.f90_prs fd1d_heat_explicit.f90
-\end{verbatim}
+\end{Verbatim}
 \item In the main program code, use the NAG compiler polishing feature to:
 \begin{enumerate}
 \item change relational operators (e.g. \texttt{.LE.} to \texttt{<=})
@@ -129,11 +137,12 @@ mv fd1d_heat_explicit.f90_prs fd1d_heat_explicit.f90
 \item add double colons for variable declarations (e.g. \texttt{integer i} to \texttt{integer :: i})
 \end{enumerate}
 by using the command:
-\begin{verbatim}
-nagfor =polish -relational=F90+ -kwcase=C -margin=0 -indent=2 \
-  -dcolon_in_decls=Insert fd1d_heat_explicit.f90 -o fd1d_heat_explicit.f90_pol
+\begin{Verbatim} [commandchars=\\\{\}]
+nagfor \textbf{=polish -relational=F90+ -kwcase=C -margin=0 -indent=2} \ \\
+  \textbf{-dcolon_in_decls=Insert} fd1d_heat_explicit.f90 \ \\
+  -o fd1d_heat_explicit.f90_pol
 mv fd1d_heat_explicit.f90_pol fd1d_heat_explicit.f90
-\end{verbatim}
+\end{Verbatim}
 \item In the main program code, change how parameters are declared, e.g. from 
 \texttt{parameter ( T\_NUM = 201 )} to \texttt{integer, parameter :: T\_NUM = 201} and the
 same for the variable \texttt{X\_NUM}
@@ -154,7 +163,7 @@ invocations of \texttt{func( )} reflect this change
 and ensure all arrays are declared as assumed shaped arrays. Use the automatic arrays feature in Fortran
 to declare the array \texttt{f(:)} as \texttt{real(kind=DP) :: f(size(x))}
 \item For the function \texttt{r8mat\_write( )} remove the arguments \texttt{m} and \texttt{n} and assign them
-to \texttt{size( table(:,:), 1 )} and \texttt{size( table(:,:), 2 )}, respectively. Declare the argument \texttt{table(:,:)}
+to \texttt{size( table(:, :), 1 )} and \texttt{size( table(:, :), 2 )}, respectively. Declare the argument \texttt{table(:, :)}
 as an assumed shaped array
 \item For the function \texttt{r8vec\_linspace( )} remove the argument \texttt{n} and declare the argument \texttt{a(:)} as
 an assumed shaped array
@@ -259,7 +268,8 @@ Remember to precede the commands with the tab
 \begin{verbatim}
 ar rcs libfmw.a CFL_mod.o IO_mod.o RHS_mod.o Solver_mod.o Types_mod.o
 \end{verbatim}
-In the Makefile, use the static library \texttt{libfmw.a} in the link stage to create the final executable
+In the Makefile, use the static library \texttt{libfmw.a} in the link stage to create the final executable. The link line for
+linking \texttt{libfmw.a} is \texttt{-L. -lfmw}
 \begin{enumerate}
 \item After creating your Makefile, type \texttt{make -n} to see what commands will be executed without executing
 your commands which is useful for debugging
@@ -331,7 +341,7 @@ sections and add any text that describes your code.
 In the same module file and for the subroutine \texttt{fd1d\_heat\_explicit\_cfl( )}, add
 the following comments before the appropriate code lines:
 \begin{verbatim}
-!> calculates the CFL number
+!> calculates the CFL number  
 !> \( \text{CFL} = \kappa\frac{\Delta t}{\Delta x^2} \)
 subroutine fd1d_heat_explicit_cfl
 
@@ -458,15 +468,16 @@ The include path contains the Fortran module files for PLplot;
 \begin{verbatim}
 -L/usr/local/plplot-5.13.0/lib -lplplotfortran -lplplot
 \end{verbatim}
+Note that the ordering of the link flags is crucial (\texttt{plplotfortran} calls \texttt{plplot})
 \item Then execute your code to create the PNG image of the solution at different time steps
   (\texttt{./fd1d\_heat\_explicit.exe})
 \item Create a movie file with the list of images created using:
 \begin{verbatim}
 ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
 \end{verbatim}
-and view it using any video player. The \texttt{\%} wildcard is similar to \texttt{*} wildcard used 
-in the Linux shell. 
+and view it using any video player
 \end{enumerate}
+\item Ensure the Makefile is updated to include the compile and link flags for NetCDF and PLplot
 \item This exercise will involve creating pFUnit test codes. This exercise will only
 test the CFL subroutine. 
 \begin{enumerate}
@@ -524,7 +535,8 @@ Note that \texttt{CFL\_mod.f90} must be compiled before the above command is exe
 \item This command will create the \texttt{tests.x} binary executable which needs to be executed
 and will print the result of the test which is a pass
 \item Change the value \texttt{cfl\_exact} to \texttt{0.34\_DP} in the pseudo Fortran code and repeat
-steps (b), (c) and (d). Execute the \texttt{tests.x} which should fail the test
+  steps (b), (c) and (d). Execute the \texttt{tests.x} which should fail the test
+\item Add the pFUnit commands listed above in the Makefile and call the target \texttt{pfunit}
 \end{enumerate}
 \item This exercise will involve using CamFort.
 \begin{enumerate}

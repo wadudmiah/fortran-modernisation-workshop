@@ -4,7 +4,7 @@ module RHS_mod
   use Types_mod
   
   implicit none
-
+  private
   public :: func
   
 contains
