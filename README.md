@@ -16,6 +16,7 @@ https://www.nag.co.uk/content/fortran-modernization-workshop
 * NAG compiler version 6.2 produces an internal compiler error when I try to build pfunit. 
 * **NetCDF, PLplot and pFUnit all work with NAG compiler 6.1**
 * Have reported the internal compiler error for 6.2.
+* **NAG compiler 6.2 build 6208 works fine for all dependencies**. Will have to download this version from http://monet.nag.co.uk/compiler/r62download/
 
 ### How do I get set up? ###
 
