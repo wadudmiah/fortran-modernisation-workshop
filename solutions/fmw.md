@@ -24,7 +24,7 @@ version: 1.1.1
 This is the solution for the [Fortran Modernisation Workshop](https://www.nag.co.uk/content/fortran-modernization-workshop).
 The workshop exercise solves.
 \begin{equation}
-\frac{\partial{\bf H}}{\partial t} - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x)
+\frac{\partial{\bf H}}{\partial t} - \kappa\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x)
 \end{equation}
 
 @Note

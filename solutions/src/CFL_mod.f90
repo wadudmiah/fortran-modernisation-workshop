@@ -8,7 +8,7 @@ module CFL_mod
 contains
 
   !> calculates the CFL number
-  !> \( \text{CFL} = \frac{\Delta t}{\Delta x^2} \)
+  !> \( \text{CFL} = \kappa\frac{\Delta t}{\Delta x^2} \)
   subroutine fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
     implicit none
     !> calculated CFL number

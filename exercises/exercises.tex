@@ -38,7 +38,7 @@
 %\renewcommand{\qedsymbol}{\filledbox}
  
 \title{\bf Fortran Modernisation Workshop \\ Exercises}
-\author{F. Spiga, F. Chami and W. Miah}
+
  
 \maketitle
 
@@ -46,20 +46,19 @@ This exercise will involve modernising a legacy Fortran code\footnote{\url{https
 in Fortran 77 to modern Fortran. The code solves the one dimensional heat
 diffusion equation:
 \begin{equation} \label{fd1hd}
-\frac{\partial{\bf H}}{\partial t} - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x)
+\frac{\partial H}{\partial t} - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x)
 \end{equation}
-where $K$ is the heat coefficient. Equation~(\ref{fd1hd}) describes the distribution of heat 
+where $\kappa$ is the heat coefficient. Equation~(\ref{fd1hd}) describes the distribution of heat 
 between $x_{\text{min}}$ and $x_{\text{max}}$ and uses the following explicit finite difference 
 scheme to integrate in time:
 \begin{align}
-{\bf H}^{(n+1)}_{i} & = {\bf H}^{(n)}_{i} + \text{CFL}\big\{{\bf H}^{(n)}_{i-1}-2{\bf H}^{(n)}_{i} +
-                      {\bf H}^{(n)}_{i+1}\big\} + \Delta t f(x_{i}) \label{fd} \\
-            \text{where CFL} & = k\frac{\Delta t}{\Delta x^{2}} \label{cfl}
+H^{(n+1)}_{i} & = H^{(n)}_{i} + \text{CFL}\big\{H^{(n)}_{i-1}-2H^{(n)}_{i} +
+                      H^{(n)}_{i+1}\big\} + \Delta t f(x_{i}) \label{fd} \\
+            \text{where CFL} & = \kappa\frac{\Delta t}{\Delta x^{2}} \label{cfl}
 \end{align}
 Equation~(\ref{cfl}) is known as the Courant-Friedrichs-Lewy coefficient which must satisfy
-the condition $\text{CFL} \le 0.5$ for the scheme~(\ref{fd}) to be stable. Don't worry if you do 
-not know what all this means - the focus of the exercise is on Fortran programming and not
-Maths. \\
+the condition $\text{CFL} > 0.5$ for~(\ref{fd}) to be stable. Don't worry if you do 
+not know what all this means - the focus of the exercise is on Fortran programming. \\
 
 The exercises are split into two parts: one set for the first day and a second
 set for the second day. Change into the \texttt{fmw\_exercises/} directory:
@@ -81,7 +80,7 @@ following topics:
 \begin{enumerate}
 \item Makefiles for Fortran codes;
 \item Git source code version control system;
-\item Doxygen code documentation tool for Fortran codes;
+\item Fortran Documenter tool;
 \item NetCDF file format for arrays;
 \item In-memory visualisation using PLplot;
 \item Unit testing with pFUnit.
@@ -113,7 +112,7 @@ module Types_mod
 contains
 
 end module Types_mod
-\end{verbatim}
+\end{verbatim} \label{mod:temp}
 \item Use the NAG compiler unifying precision feature to change \texttt{double precision} to \texttt{real(kind=DP)}
 using the command:
 \begin{verbatim}
@@ -123,7 +122,7 @@ mv fd1d_heat_explicit.f90_prs fd1d_heat_explicit.f90
 \end{verbatim}
 \item In the main program code, use the NAG compiler polishing feature to:
 \begin{enumerate}
-\item change relational operators (\texttt{.LE.} to \texttt{<=})
+\item change relational operators (e.g. \texttt{.LE.} to \texttt{<=})
 \item capitalise keywords (e.g. \texttt{program} to \texttt{Program})
 \item set the leftmost margin to zero
 \item indentation to two spaces
@@ -193,7 +192,7 @@ git add fd1d_heat_explicit.f90
 git add Types_mod.f90
 git commit -m "refactored Fortran 77 into modern Fortran"
 \end{verbatim}
-\item[] The following exercises will further modularise the code and use the module template in
+The following exercises will further modularise the code and use the module template in
   question~\ref{mod:temp} for creating additional modules.
 \item Create a module \texttt{RHS\_mod} and put it in the file \texttt{RHS\_mod.f90} and put the 
 Fortran function \texttt{func()} into \texttt{RHS\_mod} and declare it public. In the main program code, 
@@ -238,12 +237,16 @@ git commit -m "modularised RHS, CFL, IO and Solver"
 \begin{enumerate}
 \item Write a Makefile for the Fortran code produced on day one in the same directory as the source
   code using the dependency graph in Figure~\ref{make_depend:eps}
-
 \begin{figure}[H]
-\includegraphics[width=\linewidth]{make_depend.png}
+\includegraphics[height=6cm]{make_depend.png}
 \caption{Dependency graph for Makefile}
 \label{make_depend:eps}
 \end{figure}
+You can use the command:
+\begin{verbatim}
+makedepf90 *.f90
+\end{verbatim}
+to create the Makefile dependencies and then create the commands
 \item Add a \texttt{clean} target which cleans the build:
 \begin{verbatim}
 .PHONY: clean
@@ -274,7 +277,7 @@ defined in the library and \texttt{U} being undefined but being called by the li
 \item Type \texttt{git status} which will list the status of all the files. Notice that the object 
 files (\texttt{*.o}), Fortran module files (\texttt{*.mod}) and executable files (\texttt{*.exe}) are listed as 
 untracked files. These files need not be version controlled as they can be recreated
-\item Create the file \texttt{.gitignore} in the source code directory. This configuration file will 
+\item Create the file \texttt{.gitignore} in the root directory (\texttt{fmw\_exercises/}). This configuration file will 
 specify which files to not version control, e.g. object files, executable files or any file that can
 be recreated. Add the following extensions in the ignore file:
 \begin{verbatim}
@@ -283,90 +286,92 @@ be recreated. Add the following extensions in the ignore file:
 *.exe
 *.nc
 *.dat
-doxygen
+*.a
+*.mp4
+doc/
 \end{verbatim}
 \item The \texttt{.gitignore} file also needs to be version controlled using \texttt{git add .gitignore}
 \item Browse the commit history of all the Fortran files created using \texttt{git log}
 \end{enumerate}
-\item To create a Doxygen template configuration, type \texttt{doxygen -g fortran.dxg} in the same
-directory where the code resides. Then open the file \texttt{fortran.dxg} in any editor and set the 
-following variables:
+\item Edit the template Fortran Documenter configuration file \texttt{fmw.md}. Then open the file \texttt{fmw.md}
+in any editor and set the following options:
 \begin{center}
 \begin{tabular}{| c | c |} \hline
-{\bf Description} & {\bf Variable and value} \\ \hline
-Free text for project name & \texttt{PROJECT\_NAME = "Fortran Workshop"} \\ \hline
-Free text for project description & \texttt{PROJECT\_BRIEF = "Fortran Workshop"} \\ \hline
-Output directory for doxygen files & \texttt{OUTPUT\_DIRECTORY = doxygen} \\ \hline
-Configuring Doxygen for Fortran & \texttt{OPTIMIZE\_FOR\_FORTRAN = YES} \\ \hline
-Input directory where code resides & \texttt{INPUT = .} \\ \hline
-Fortran code file extension & \texttt{FILE\_PATTERNS = *.f90} \\ \hline
-Generate HTML reports & \texttt{GENERATE\_HTML = YES} \\ \hline
-Using Graphvis for generating call graphs & \texttt{HAVE\_DOT = YES} \\ \hline
-Generate call graph & \texttt{CALL\_GRAPH = YES} \\ \hline
-Generate caller graph & \texttt{CALLER\_GRAPH = NO} \\ \hline
-Extract all documentation & \texttt{EXTRACT\_ALL = YES} \\ \hline
-Extract private members of class & \texttt{EXTRACT\_PRIVATE = YES} \\ \hline
-Extract static members of file & \texttt{EXTRACT\_STATIC = YES} \\ \hline
-List source code of file & \texttt{SOURCE\_BROWSER = YES} \\ \hline
-Use free form Fortran & \texttt{EXTENSION\_MAPPING = f90=FortranFree} \\ \hline
+{\bf Option} & {\bf Value} \\ \hline
+\texttt{project:} & \texttt{1D heat equation} \\ \hline
+\texttt{src\_dir:} & \texttt{./src} \\ \hline
+\texttt{output\_dir:} & \texttt{./doc} \\ \hline
+\texttt{summary:} & \texttt{Fortran Workshop} \\ \hline
+\texttt{author:} & \texttt{Your name} \\ \hline
+\texttt{docmark:} & \texttt{!} \\ \hline
+\texttt{predocmark:} & \texttt{>} \\ \hline
+\texttt{display:} & \texttt{public} \\ 
+                  & \texttt{protected} \\ 
+                  & \texttt{private} \\ \hline
+\texttt{source:} & \texttt{true} \\ \hline
+\texttt{graph:} & \texttt{true} \\ \hline
+\texttt{search:} & \texttt{true} \\ \hline
+\texttt{version:} & \texttt{1.1.1} \\ \hline
 \end{tabular}
 \end{center}
-Run the Doxygen command \texttt{doxygen fortran.dxg} and then load the file \newline
-\texttt{doxygen/html/index.html} in any Web browser to browse the source code documentation.
-\begin{enumerate}
-\item Click on \texttt{Files} $\rightarrow$ \texttt{fd1d\_heat\_explicit.f90} which should display a call graph;
-\item Click on \texttt{Got to the source code of this file} to see the source code of the main program code;
-\item Click on \texttt{Files} $\rightarrow$ \texttt{Types\_mod.f90} $\rightarrow$ \texttt{types\_mod} to see
-the public constants in the module
-\item Have a browse around the other links to familiarise yourself with Doxygen;
-\item Then add the Doxygen configuration file to Git by typing \texttt{git add fortran.dxg}
-\item On line 1 of the file \texttt{fd1d\_heat\_explicit.f90} add the following Doxygen tags:
+Note that the values for the \texttt{display} option must be on separate lines.
+After the last option in the above table, leave an empty space and create \texttt{@Note} and \texttt{@Bug}
+sections and add any text that describes your code.
+\item On line 1 of the file \texttt{fd1d\_heat\_explicit.f90} add the following documentation:
 \begin{verbatim}
-!> @author
-!> <Your name>, <your affiliation>
-!> @brief 
+!> Wadud Miah, Numerical Algorithms Group
 !> Solves the one dimensional heat diffusion equation
-!> \f$ \frac{\partial{\bf H}}{\partial t} 
-!>       - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x) \f$
+!> \( \frac{\partial H}{\partial t} 
+!>     - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x) \)
 \end{verbatim}
-\item On line 1 of the module file \texttt{CFL\_mod.f90} add the following Doxygen tags:
+\item On line 1 of the module file \texttt{CFL\_mod.f90} add the following comments:
 \begin{verbatim}
-!> @author
-!> <Your name>, <your affiliation>
-!> @brief
-!> calculates the CFL number
+!> this module calculates the CFL number
 \end{verbatim}
-In the same module file and before the subroutine \texttt{fd1d\_heat\_explicit\_cfl( )} is defined add
-the following Doxygen content:
+In the same module file and for the subroutine \texttt{fd1d\_heat\_explicit\_cfl( )}, add
+the following comments before the appropriate code lines:
 \begin{verbatim}
-!> @author
-!> <Your name>, <your affiliation>
-!> @brief
 !> calculates the CFL number
-!> @param[in] k heat constant
-!> @param[in] t_num number of intervals in t-axis
-!> @param[in] t_min lower bound of t-axis
-!> @param[in] t_max upper bound of t-axis
-!> @param[in] x_num number of intervals in x-axis
-!> @param[in] x_min lower bound of x-axis
-!> @param[in] x_max upper bound of x-axis
-!> @param[inout] cfl calculated CFL number
+!> \( \text{CFL} = \kappa\frac{\Delta t}{\Delta x^2} \)
+subroutine fd1d_heat_explicit_cfl
+
+!> calculated CFL number
+real(KIND=DP), intent(inout) :: cfl
+!> the heat constant \( \kappa \)
+real(KIND=DP), intent(in) :: k
+!> t_max upper bound of t-axis
+real(KIND=DP), intent(in) :: t_max
+!> lower bound of t-axis
+real(KIND=DP), intent(in) :: t_min
+!> number of intervals in t-axis
+integer(KIND=SI), intent(in) :: t_num
+!> upper bound of x-axis
+real(KIND=DP), intent(in) :: x_max
+!> x_min lower bound of x-axis
+real(KIND=DP), intent(in) :: x_min
+!> number of intervals in x-axis
+integer(KIND=SI), intent(in) :: x_num
 \end{verbatim}
-\item Rerun the Doxygen command \texttt{doxygen fortran.dxg}
-\item Refresh your browser and click on \texttt{Files} $\rightarrow$ \texttt{fd1d\_heat\_explicit.f90} and you
-should now see the LaTeX heat diffusion equation with the description and author
-\item Click on \texttt{Files} $\rightarrow$ \texttt{CFL\_mod.f90} $\rightarrow$ \texttt{More...} and you 
-should now see the module author, subroutine author and description. In addition, you should see the subroutine
-dummy arguments with their description
-\item In your own time and after the workshop has ended do the same for the remaining module files 
+
+Run the FORD command \texttt{ford fmw.md} and then load the file \texttt{doc/index.html} in any Web browser
+to browse the source code documentation. Or, copy the directory \texttt{doc/} to your laptop to view the
+code documentation.
+\begin{enumerate}
+\item Click on \texttt{Program} which displays the module dependency graph as well as the call graph. The
+  local variables and the source code is also displayed;
+\item The text also contains the LaTeX equation:
+\begin{equation}
+\frac{\partial H}{\partial t} - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x)
+\end{equation}
+\item Have a browse around the other links to familiarise yourself with Fortran Documenter;
+\item After the workshop has ended, do the same for the remaining module files 
 (\texttt{IO\_mod.f90}, \texttt{RHS\_mod.f90}, \texttt{Solver\_mod.f90}, \texttt{Types\_mod.f90})
 \item Type \texttt{git add fd1d\_heat\_explicit.f90 CFL\_mod.f90} to stage the changes and then 
-\texttt{git commit -m "added Doxygen tokens in source code"}
+\texttt{git commit -m "added FORD documentation in source code"}
 \end{enumerate}
 \item The following exercises will involve using the NetCDF API by writing the
   \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:, :)} varaibles in one file including meta-data. 
-Please refer to the NetCDF documentation at~\url{http://www.nag.co.uk/market/training/fortran-workshop/netcdf-f90.pdf} 
-for the details of the API. Use the following process when creating NetCDF files for writing:
+Please refer to the NetCDF documentation\footnote{~\url{http://www.nag.co.uk/market/training/fortran-workshop/netcdf-f90.pdf}} for the details of the API. Use the following process when creating NetCDF files for writing:
 \begin{itemize}
 \item\texttt{NF90\_CREATE( )} to create the file and enter define mode
 \item\texttt{NF90\_DEF\_DIM( )} to create the $x$ and $t$ dimensions
@@ -396,27 +401,28 @@ real(kind=DP), dimension(:), intent(in) :: t
   \end{enumerate}
 \item In the subroutine \texttt{r8mat\_write( )} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the
   two-dimensional array \texttt{table(:, :)} into a NetCDF file
-\item To compile the remember to add the line \texttt{-I/usr/lib64/nagfor/modules} in your
-  Makefile which is the NetCDF Fortran module file directory on Fedora Linux. This might be
-  different for your system
-\item To do the final link, remember to add the link line \texttt{-L/usr/lib64 -lnetcdff -lnetcdf}
-  which is where the Fortran NetCDF wrapper resides on Fedora Linux. This might be different
-  for your system
+\item To compile the remember to add the flag in your Makefile:
+\begin{verbatim}
+-I/usr/local/netcdf-4.6.1/include
+\end{verbatim}
+\item To do the final link, remember to add the link flag: 
+\begin{verbatim}
+-L/usr/local/netcdf-4.6.1/lib -lnetcdff -lnetcdf
+\end{verbatim}
+Note that the ordering of the flags is crucial (\texttt{netcdff} calls \texttt{netcdf} so this ordering is required);
 \item Once your code completes, you can view the contents of the NetCDF file using \texttt{ncdump h\_test01.nc | less}
 \item To verify whether your code works correctly, compare the created NetCDF file with the correct NetCDF file:
 \begin{verbatim}
 ncdiff --overwrite h_test01.nc h_test01.nc.valid -o diff.nc
-ncdump diff.nc | less
+ncwa -y max --overwrite diff.nc out.nc
+ncdump out.nc | grep "solution ="
 \end{verbatim}
-The second command should show all zero values for the \texttt{x-range}, \texttt{t-range} and \texttt{solution} NetCDF
-variables, namely that~(\ref{test:eqn}) holds:
-\begin{equation} \label{test:eqn}
-||{\bf u}_{\texttt{numerical}} - {\bf u}_{\texttt{exact}}||_{\infty} < \epsilon
-\end{equation}
+The last command should show zero for the \texttt{solution} NetCDF variable
 \end{enumerate}
 \item The following exercises will allow you to visualise the solution at every 10 time steps using the PLplot
-visualisation library. Please refer to Section 2 of the PLplot documentation 
-at~\url{http://www.nag.co.uk/market/training/fortran-workshop/plplot-5.11.1.pdf} for further information. \\
+visualisation library. Please refer to Section 2 of the PLplot
+documentation\footnote{\url{http://www.nag.co.uk/market/training/fortran-workshop/plplot-5.11.1.pdf}} for
+further information. \\
 
 The visualistion will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
 following sequence of subroutine calls:
@@ -443,10 +449,17 @@ using the Fortran intrinsic function \texttt{mod( )}
 \texttt{image001.png}
 \item From the above list of PLplot subroutine calls, create the PNG file of the
 current time step
-\item To compile the code, add the line \texttt{-I/usr/lib64/nagfor/modules} - this
-  path might be different on your system
-\item To link the code to the PLplot libraries including the Fortran wrappers, use \newline
-\texttt{-L/usr/lib64 -lplplotf95cd -lplplotf95d}
+\item To compile the code, add the flag:
+\begin{verbatim}
+-I/usr/local/plplot-5.13.0/lib/fortran/modules/plplot
+\end{verbatim}
+The include path contains the Fortran module files for PLplot;
+\item To link the code to the PLplot libraries including the Fortran wrappers, use the link flags
+\begin{verbatim}
+-L/usr/local/plplot-5.13.0/lib -lplplotfortran -lplplot
+\end{verbatim}
+\item Then execute your code to create the PNG image of the solution at different time steps
+  (\texttt{./fd1d\_heat\_explicit.exe})
 \item Create a movie file with the list of images created using:
 \begin{verbatim}
 ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
@@ -530,4 +543,3 @@ which should print \texttt{Correct} for every specification.
 \end{enumerate}
 \end{enumerate}
 \end{document}
-

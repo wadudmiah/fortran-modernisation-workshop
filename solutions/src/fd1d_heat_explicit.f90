@@ -1,7 +1,7 @@
-!> Wadud Miah, Numerical Algorithms Group
-!> Solves the one dimensional heat diffusion equation
-!> \f$ \frac{\partial{\bf H}}{\partial t} 
-!>     - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x) \f$
+!> Wadud Miah, Numerical Algorithms Group.
+!> Solves the one dimensional heat diffusion equation:
+!> \( \frac{\partial H}{\partial t} 
+!>     - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x) \)
 
 program fd1d_heat_explicit
       use Types_mod
