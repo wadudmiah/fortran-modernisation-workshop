@@ -63,7 +63,7 @@ contains
     ! enter data mode    
     ierr = NF90_PUT_VAR( ncid, x_id, x(:) )
     ierr = NF90_PUT_VAR( ncid, t_id, t(:) )
-    ierr = NF90_PUT_VAR( ncid, sol_id, table(:,:) )
+    ierr = NF90_PUT_VAR( ncid, sol_id, table(:, :) )
 
     ! close the file
     ierr = NF90_CLOSE( ncid )
