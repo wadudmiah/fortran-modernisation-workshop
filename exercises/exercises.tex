@@ -120,7 +120,8 @@ contains
 end module Types_mod
 \end{verbatim} \label{mod:temp}
 \item Use the NAG compiler unifying precision feature to change \texttt{double precision} to \texttt{real(kind=DP)}
-using the command (the output is a temporary file shown in italics which is then moved to the original file):
+  using the command (the output is a temporary file shown in italics which is then moved to the original file -
+  remember to close the main source file \texttt{fd1d\_heat\_explicit.f90} in any editor):
 \begin{Verbatim}[commandchars=\\\{\}]
 nagfor \textbf{=unifyprecision -pp_module=Types_mod -pp_name=DP} \textbackslash \\
   fd1d_heat_explicit.f90 -o \textit{fd1d_heat_explicit.f90_prs}
@@ -136,7 +137,8 @@ mv \textit{fd1d_heat_explicit.f90_prs} fd1d_heat_explicit.f90
 \item change old-style string declarations to modern Fortran string declarations (e.g. \texttt{character*11 ::\ str} to
 \texttt{character(len=11) ::\ str}
 \end{enumerate}
-by using the command (the output is a temporary file shown in italics which is then moved to the original file):
+by using the command (the output is a temporary file shown in italics which is then moved to the original file
+- remember to close the file \texttt{fd1d\_heat\_explicit.f90} in any editor):
 \begin{Verbatim} [commandchars=\\\{\}]
 nagfor \textbf{=polish -relational=F90+ -kwcase=C -margin=0 -indent=2} \textbackslash \\
   \textbf{-dcolon_in_decls=Insert -character_decl=Keywords} \textbackslash \\
