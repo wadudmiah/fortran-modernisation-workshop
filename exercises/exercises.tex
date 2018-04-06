@@ -8,6 +8,8 @@
 \usepackage{listings}
 \usepackage{fancyvrb}
 \usepackage{bera}
+\usepackage{xcolor}
+\usepackage{footnote}
 
 \usepackage[margin=1in]{geometry} 
 \usepackage{amsmath,amsthm,amssymb}
@@ -41,7 +43,7 @@
 %\renewcommand{\qedsymbol}{\filledbox}
  
 \title{\bf Fortran Modernisation Workshop \\ Exercises}
-
+\author{Numerical Algorithms Group}
  
 \maketitle
 
@@ -64,7 +66,7 @@ not know what all this means - the focus of the exercise is on Fortran programmi
 The exercises are split into two parts: day one and day two. Set up Git:
 \begin{Verbatim}[commandchars=\\\{\}]
 git config --global user.name "\textit{firstname lastname}"
-git config --global user.email \textit{firstname.lastname}@address.com
+git config --global user.email \textit{firstname.lastname}@\textit{address.com}
 cd fmw_exercises
 git init
 git add .
@@ -73,13 +75,17 @@ git commit -m "initial version"
 Replace the \textit{firstname} and \textit{lastname} with your name :-) The Git commands
 will version control your code so you can see its revision history. Git will
 be covered in the second day. Please put all your source code in the \texttt{src/}
-directory. You can add a remote repository to your local repository using (replace \textit{username} and \textit{repo}
-with your upstream username and repository name, respectively):
+directory. If you have one, you can add a remote repository (GitHub\footnote{\url{https://github.com}}
+or Bitbucket\footnote{\url{www.bitbucket.org}}) to your local repository
+using the following commands and replacing \textit{username} and \textit{repo} with your upstream username
+and repository name, respectively:
 \begin{Verbatim}[commandchars=\\\{\}]
 git remote add origin git@bitbucket.org:\textit{username}/\textit{repo}.git
 git push origin master # after making changes to local repo
 \end{Verbatim}
 which you should do at the end of the workshop as the Linux machines will be cleaned 5 days after the workshop.
+However, you do not need a remote repository for the workshop exercises and
+then copying them at the end of the workshop.
 Day one exercises will include modernising an existing Fortran 77 code \texttt{fd1d\_heat\_explicit.f90} which
 will be referred to the main program code. Day two exercises will involve the following topics:
 \begin{enumerate}
@@ -97,15 +103,15 @@ will be referred to the main program code. Day two exercises will involve the fo
 \begin{enumerate}
 \item Create a module \texttt{Types\_mod} and put it in the file \texttt{Types\_mod.f90} which 
 contains the following numeric kind types:
-\begin{verbatim}
+\begin{lstlisting}[numbers=left,numberstyle=\footnotesize\color{gray},caption={Kind parameters},captionpos=b,showstringspaces=false,label={kind:params},columns=fullflexible,basicstyle=\ttfamily,keywordstyle=\color{blue}\ttfamily,stringstyle=\color{red}\ttfamily,commentstyle=\color{green}\ttfamily,language={[08]Fortran},escapechar=|]
 use, intrinsic :: iso_fortran_env
 integer, parameter :: SP = REAL32
 integer, parameter :: DP = REAL64
 integer, parameter :: SI = INT32
 integer, parameter :: DI = INT64
-\end{verbatim}
+\end{lstlisting}
 using the following module template: 
-\begin{verbatim}
+\begin{lstlisting}[numbers=left,numberstyle=\footnotesize\color{gray},caption={Module template},captionpos=b,showstringspaces=false,label={mod:template},columns=fullflexible,basicstyle=\ttfamily,keywordstyle=\color{blue}\ttfamily,stringstyle=\color{red}\ttfamily,commentstyle=\color{green}\ttfamily,language={[08]Fortran},escapechar=|]
 module Types_mod
    use, intrinsic :: iso_fortran_env
 
@@ -118,10 +124,10 @@ module Types_mod
 contains
 
 end module Types_mod
-\end{verbatim} \label{mod:temp}
+\end{lstlisting} 
 \item Use the NAG compiler unifying precision feature to change \texttt{double precision} to \texttt{real(kind=DP)}
-  using the command (the output is a temporary file shown in italics which is then moved to the original file -
-  remember to close the main source file \texttt{fd1d\_heat\_explicit.f90} in any editor):
+  using the command below. The output is a temporary file shown in italics which is then moved to the original file -
+  remember to close the main source file \texttt{fd1d\_heat\_explicit.f90} in any editor:
 \begin{Verbatim}[commandchars=\\\{\}]
 nagfor \textbf{=unifyprecision -pp_module=Types_mod -pp_name=DP} \textbackslash \\
   fd1d_heat_explicit.f90 -o \textit{fd1d_heat_explicit.f90_prs}
@@ -129,16 +135,17 @@ mv \textit{fd1d_heat_explicit.f90_prs} fd1d_heat_explicit.f90
 \end{Verbatim}
 \item In the main program code, use the NAG compiler polishing feature to:
 \begin{enumerate}
-\item change relational operators (e.g. \texttt{.LE.} to \texttt{<=})
-\item capitalise keywords (e.g. \texttt{program} to \texttt{Program})
-\item set the leftmost margin to zero
-\item indentation to two spaces
-\item add double colons for variable declarations (e.g. \texttt{integer i} to \texttt{integer ::\ i})
-\item change old-style string declarations to modern Fortran string declarations (e.g. \texttt{character*11 ::\ str} to
-\texttt{character(len=11) ::\ str}
+\item change relational operators, e.g. \texttt{.LE.} to \texttt{<=} using the flag \texttt{-relational=F90+}
+\item capitalise keywords, e.g. \texttt{program} to \texttt{Program} using the flag \texttt{-kwcase=C}
+\item set the leftmost margin to zero using the flag \texttt{-margin=0}
+\item indentation to two space, using the flag \texttt{-indent=2}
+\item add double colons for variable declarations, e.g. \texttt{integer i} to \texttt{integer ::\ i} using the flag
+  \texttt{-dcolon\_in\_decls=Insert}
+\item change old-style string declarations to modern Fortran string declarations, e.g. \texttt{character*11 ::\ str} to
+\texttt{character(len=11) ::\ str} using the NAG compiler flag \texttt{-character\_decl=Keywords}
 \end{enumerate}
-by using the command (the output is a temporary file shown in italics which is then moved to the original file
-- remember to close the file \texttt{fd1d\_heat\_explicit.f90} in any editor):
+by using the command below. The output is a temporary file shown in italics which is then moved to the original file
+- remember to close the file \texttt{fd1d\_heat\_explicit.f90} in any editor:
 \begin{Verbatim} [commandchars=\\\{\}]
 nagfor \textbf{=polish -relational=F90+ -kwcase=C -margin=0 -indent=2} \textbackslash \\
   \textbf{-dcolon_in_decls=Insert -character_decl=Keywords} \textbackslash \\
@@ -148,13 +155,13 @@ mv \textit{fd1d_heat_explicit.f90_pol} fd1d_heat_explicit.f90
 \item In the main program code, change how parameters are declared, e.g.
 \begin{Verbatim} [commandchars=\\\{\}]
 integer t_num \\
-parameter ( t_num = 201 ) \textit{! change to} \\
+parameter ( t_num = 201 ) \textbf{! change to} \\
 integer, parameter :: T_NUM = 201
 \end{Verbatim}
 And the same for the variable \texttt{X\_NUM}
 \item In the main program code, change how constants are used, e.g. from \texttt{0.0D+00} to 
 \texttt{0.0\_DP}
-\item In the functions and subroutines, use the \texttt{intent} keyword for dummy arguments and properly
+\item In the functions and subroutines, use the \texttt{intent} keyword for all dummy arguments and properly
   scope the dummy arguments, e.g. \texttt{intent(in)} (read-only), \texttt{intent(out)} (write-only) or
   \texttt{intent(inout)} (read and write)
 \item In the main program code, use dynamic memory allocation for the arrays \texttt{h(1:X\_NUM)}, 
@@ -163,7 +170,7 @@ the status of the dynamic memory allocation\label{dyn:memory}
 \item At the end of the main program code, deallocate the arrays declared in step~\ref{dyn:memory}
 \item In the functions and subroutines, remove the size of the array and use assumed shaped
 arrays as dummy arguments:
-\begin{itemize}
+\begin{enumerate}
 \item For the function \texttt{func( j, x\_num, x )} remove the \texttt{x\_num} argument and
 replace the argument declaration to \texttt{real(kind=DP), dimension(:)\ ::\ x}. Make sure
 the calling of \texttt{func( )} reflect this change
@@ -178,7 +185,7 @@ as an assumed shaped array
 an assumed shaped array
 \item For the function \texttt{r8vec\_write( )} remove the argument \texttt{n} and declared the argument \texttt{x(:)} as
 an assumed shaped array
-\end{itemize}
+\end{enumerate}
 Use the \texttt{size( )} intrinsic function to get array dimensions. 
 \item Compile both the main program and the created Fortran module:
 \begin{verbatim}
@@ -200,21 +207,21 @@ git add Types_mod.f90
 git commit -m "refactored Fortran 77 into modern Fortran"
 \end{verbatim}
 The following exercises will modularise the code and use the module template in
-  question~\ref{mod:temp} for creating additional modules.
+  Listing~\ref{mod:template} for creating additional modules.
 \item Create a module \texttt{RHS\_mod} and put it in the file \texttt{RHS\_mod.f90} and {\bf move} the 
-Fortran function \texttt{func()} into \texttt{RHS\_mod} and declare it public. In the main program code, 
+Fortran function \texttt{func( )} (from \texttt{fd1d\_heat\_explicit.f90}) into \texttt{RHS\_mod} and declare it public. In the main program code, 
 insert the line \texttt{use RHS\_mod} 
 \item Create a module \texttt{CFL\_mod} and put it in the file \texttt{CFL\_mod.f90} and {\bf move} the
-  Fortran function \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{CFL\_mod} and declare it
+  subroutine \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{CFL\_mod} and declare it
   public. In the main program
 code, insert the line \texttt{use CFL\_mod}
 \item Create a module \texttt{IO\_mod} and put it in the file \texttt{IO\_mod.f90} and {\bf move}
-  the Fortran functions \texttt{r8mat\_write( )}, \texttt{r8vec\_linspace( )} and \texttt{r8vec\_write( )}
+  the subroutines \texttt{r8mat\_write( )}, \texttt{r8vec\_linspace( )} and \texttt{r8vec\_write( )}
   into \texttt{IO\_mod} and declare them public. In the main program code, insert the line \texttt{use IO\_mod}
 \item Create a module \texttt{Solver\_mod} and put it in the file \texttt{Solver\_mod.f90} and {\bf move} the
-  Fortran function \texttt{fd1d\_heat\_explicit( )} into \texttt{Sover\_mod} and declare it public. In the main
+  subroutine \texttt{fd1d\_heat\_explicit( )} into \texttt{Solver\_mod} and declare it public. In the main
   program code, insert the line \texttt{use Solver\_mod}
-\item Compile the recently created modules:
+\item Compile the recently created modules in the order shown:
 \begin{verbatim}
 nagfor -c RHS_mod.f90
 nagfor -c CFL_mod.f90
@@ -230,7 +237,7 @@ nagfor fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
 diff h_test01.txt h_test01.txt_bak
 \end{verbatim}
 If the command outputs difference, then the refactoring introduced a bug.
-\item Add the newly created module files into Git and stage the changed main program for a
+\item Add the newly created module files into Git and stage the modified main program for a
 another Git commit:
 \begin{verbatim}
 git add RHS_mod.f90 CFL_mod.f90 IO_mod.f90 Solver_mod.f90
@@ -272,13 +279,13 @@ linking \texttt{libfmw.a} is \texttt{-L. -lfmw}
 \item After creating your Makefile, type \texttt{make -n} to see what commands will be executed without executing
 your commands, which is useful for debugging
 \item Then type \texttt{make} to build your code 
-\item After creating the Makefile, add it to git using \texttt{git add Makefile}
+\item After creating the Makefile, add it to your repository using \texttt{git add Makefile}
 \item Use the Linux command: 
 \begin{verbatim}
 nm libfmw.a
 \end{verbatim}
 which shows the symbols listed in the library just created. The symbol type field (second field) shows
-\texttt{T} for the symbol being defined in the library and \texttt{U} being undefined but being called by the library. 
+\texttt{T} for the symbol being {\bf defined} in the library and \texttt{U} being {\bf undefined} but being called by the library. 
 \end{enumerate}
 \item This task will cover Git in a bit more detail.
 \begin{enumerate}
@@ -301,7 +308,8 @@ doc/
 \item The \texttt{.gitignore} file also needs to be version controlled using \texttt{git add .gitignore}
 \item Browse the commit history of all the Fortran files created using \texttt{git log}
 \end{enumerate}
-\item Edit the template Fortran Documenter configuration file \texttt{fmw.md} in the root directory
+\item The following set of questions will involve using Fortran Documenter to document your source code. 
+Edit the template Fortran Documenter configuration file \texttt{fmw.md} in the root directory
 (\texttt{fmw\_exercises/}) and set the following options:
 \begin{center}
 \begin{tabular}{| c | c |} \hline
@@ -325,9 +333,10 @@ doc/
 Note that the values for the \texttt{display} option must be on separate lines.
 After the last option in the above table, leave an empty space and create \texttt{@Note} and \texttt{@Bug}
 sections and add any text that describes your code.
-\item On line 1 of the file \texttt{fd1d\_heat\_explicit.f90} add the following documentation:
+\item On line 1 of the file \texttt{fd1d\_heat\_explicit.f90} add the following documentation which includes
+  a LaTeX equation:
 \begin{verbatim} 
-!> \textit{<Your name>, <Your affiliation>}
+!> <Your name>, <Your affiliation>
 !> Solves the one dimensional heat diffusion equation
 !> \( \frac{\partial H}{\partial t} 
 !>     - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x) \)
@@ -365,7 +374,7 @@ Run the FORD command \texttt{ford fmw.md} and then load the file \texttt{doc/ind
 to browse the source code documentation. Or, copy the directory \texttt{doc/} to your laptop to view the
 code documentation.
 \begin{enumerate}
-\item Click on \texttt{Program} which displays the module dependency graph as well as the call graph. The
+\item Click on \texttt{Program} tab (top right) which displays the module dependency graph as well as the call graph. The
   local variables and the source code is also displayed;
 \item The text also contains the LaTeX equation:
 \begin{equation}
@@ -381,7 +390,7 @@ git commit -m "added FORD documentation in source code"
 \end{verbatim}
 \end{enumerate}
 \item The following exercises will involve using the NetCDF API by writing the
-  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:, :)} varaibles in one file with meta-data. 
+  \texttt{x(:)}, \texttt{t(:)} and \texttt{hmat(:, :)} variables in one file with meta-data. 
 Please refer to the NetCDF documentation\footnote{~\url{http://www.nag.co.uk/market/training/fortran-workshop/netcdf-f90.pdf}} for the details of the API. Use the following process when creating NetCDF files for writing:
 \begin{itemize}
 \item\texttt{NF90\_CREATE( )} to create the file and enter define mode
@@ -410,6 +419,8 @@ real(kind=DP), dimension(:), intent(in) :: t
   \item\texttt{"name" = "<Your name>"}
   \item\texttt{"institution" = "<Your university>"} 
   \end{enumerate}
+\item Add \texttt{units} meta-data for \texttt{x(:)} which is \texttt{metres}, \texttt{t(:)} which is \texttt{seconds}, and
+  \texttt{table(:, :)} which is \texttt{Celsius}
 \item In the subroutine \texttt{r8mat\_write( )} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the
   two-dimensional array \texttt{table(:, :)} into a NetCDF file
 \item To compile the remember to add the flag in your Makefile:
@@ -423,7 +434,11 @@ real(kind=DP), dimension(:), intent(in) :: t
 Note that the ordering of the flags is crucial (\texttt{netcdff} calls \texttt{netcdf} so this ordering is required).
 The library \texttt{netcdff} contains the Fortran bindings and \texttt{netcdf} is the actual implementation in the
 C language
-\item After executing your code, you can view the contents of the NetCDF file using \texttt{ncdump h\_test01.nc | less}
+\item After executing your code, you can view the contents of the NetCDF file using:
+\begin{Verbatim} [commandchars=\\\{\}]
+ncdump h\_test01.nc | less \textit{# or the command}
+ncks h\_test01.nc | less \textit{# this gives much more information}
+\end{Verbatim}
 \item To verify whether your code works correctly, compare the created NetCDF file with the correct NetCDF file:
 \begin{verbatim}
 ncdiff --overwrite h_test01.nc h_test01.nc.valid -o diff.nc
@@ -433,16 +448,16 @@ ncdump out.nc | grep "solution ="
 The last command should show \texttt{0} for the \texttt{solution} NetCDF variable
 \end{enumerate}
 \item The following exercises will allow you to visualise the solution at every 10 time steps using the PLplot
-visualisation library. Please refer to Section 2 of the PLplot
+visualisation library. Please refer the PLplot
 documentation\footnote{\url{http://www.nag.co.uk/market/training/fortran-workshop/plplot-5.11.1.pdf}} for
 further information. \\
 
-The visualistion will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
+The visualisation will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
 following sequence of subroutine calls from within the main time loop:
 \begin{itemize}
 \item\texttt{PLSFNAM( )} to set the output file name 
 \item\texttt{PLSDEV( )} to set the output device to use. Set this to \texttt{"pngcairo"} which
-will save the images in the portable network graphics format
+will save the images in the portable network graphics (PNG) format
 \item\texttt{PLINIT( )} to initialise PLplot
 \item\texttt{PLENV( )} to set the $x$- and $y$-range
 \item\texttt{PLLAB( )} to set the $x$ and $y$ labels, and the title of the graph
@@ -471,21 +486,22 @@ The include path contains the Fortran module files for PLplot;
 Note that the ordering of the link flags is crucial (\texttt{plplotfortran} calls \texttt{plplot}). The
 library \texttt{plplotfortran} contains the Fortran bindings and \texttt{plplot} is the actual
 implementation in the C language
-\item Then execute your code to create the PNG image of the solution at different time steps
-  (\texttt{./fd1d\_heat\_explicit.exe}) which should create PNG files for time steps $n = 10,20,\ldots, 200$, e.g.
+\item Then execute your code to create the PNG images of the solution at
+  different time steps $n = 10,20,\ldots, 200$, e.g.
   \texttt{fd1d\_heat\_explicit\_00010.png}
 \item Create a movie file with the list of images created using:
 \begin{verbatim}
 ffmpeg -f image2 -i fd1d_heat_explicit_%*.png fd1d_heat_explicit.mp4
 \end{verbatim}
-and view it using any video player
+and view it using any video player by copying the movie \texttt{fd1d\_heat\_explicit.mp4} to your
+laptop/desktop
 \end{enumerate}
 \item Ensure the Makefile is updated to include the compile and link flags for NetCDF and PLplot
-\item This exercise will involve creating pFUnit test pseudocodes. This exercise will only
+\item This exercise will involve creating a pFUnit test pseudocode. This exercise will only
 test the CFL subroutine. 
 \begin{enumerate}
-\item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testCFL.pf} 
-which will test the \texttt{fd1d\_heat\_explicit\_cfl( )} subroutine:
+\item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testCFL.pf}
+  in the \texttt{src/} directory. This will test the \texttt{fd1d\_heat\_explicit\_cfl( )} subroutine:
 \begin{verbatim}
 @test
 subroutine testCFL( )
@@ -514,12 +530,12 @@ subroutine testCFL( )
   @assertEqual( cfl, cfl_exact, tol )
 end subroutine testCFL
 \end{verbatim}
-Place it in the same directory as the Fortran source code.
-\item Create the test configuration file \texttt{testSuites.inc} which will tell pFUnit which tests to execute:
+\item Create the test configuration file \texttt{testSuites.inc} which will tell pFUnit which tests to execute.
+  In this case, this will only execute the \texttt{testCFL} test above.
 \begin{verbatim}
 ADD_TEST_SUITE(testCFL_suite)
 \end{verbatim}
-\item To preprocess the pseudo Fortran test driver code to produce Fortran code (namely, \texttt{testCFL.F90}), type:
+\item Preprocess the pseudo Fortran test driver code to produce Fortran code (namely, \texttt{testCFL.F90}), type:
 \begin{verbatim}
 ${PFUNIT}/bin/pFUnitParser.py testCFL.pf testCFL.F90 -I.
 \end{verbatim}
@@ -529,7 +545,7 @@ Note that the Fortran code must have the \texttt{.F90} extension as it still nee
 \begin{verbatim}
 nagfor -I${PFUNIT}/mod -c testCFL.F90
 \end{verbatim}
-\item Then create the final test driver executable (\texttt{test.exe}):
+\item Then create the final test driver executable (\texttt{tests.exe}):
 \begin{verbatim}
 nagfor -I$PFUNIT/mod $PFUNIT/include/driver.F90 \
        CFL_mod.o testCFL.o  -L$PFUNIT/lib -lpfunit -I. -o tests.exe 
@@ -539,7 +555,7 @@ Note that \texttt{CFL\_mod.f90} must be compiled before the above command is exe
   and will print the result of the test, which is either a pass or fail, and the time it took to complete
   the test
 \item Change the value \texttt{cfl\_exact} to \texttt{0.34\_DP} in the pseudo Fortran code and repeat
-  steps (b), (c) and (d). Execute the \texttt{tests.exe} which should fail the test
+  steps (c), (d), (e) and (f)
 \item Add the pFUnit commands listed above in the Makefile and call the target \texttt{pfunit}
 \end{enumerate}
 \item This exercise will involve using CamFort.
@@ -548,7 +564,7 @@ Note that \texttt{CFL\_mod.f90} must be compiled before the above command is exe
 \begin{verbatim}
 camfort stencils-infer Solver_mod.f90
 \end{verbatim}
-\item From the stencil specification obtained in the previous step, annotate the code:
+\item From the stencil specification obtained in the previous step, annotate the code (in file \texttt{Solver\_mod.f90}):
 \begin{verbatim}
 h_new(j) = h(j) + dt * f(j) + cfl * (h(j-1) - 2.0_DP * h(j) + h(j+1))
 \end{verbatim}
@@ -560,4 +576,10 @@ camfort stencils-check Solver_mod.f90
 which should print \texttt{Correct} for every specification. 
 \end{enumerate}
 \end{enumerate}
+Remember to commit everything and push your changes to your upstream repository:
+\begin{Verbatim} [commandchars=\\\{\}]
+git add -A \textit{# this adds all changes}
+git commit -m "completed workshop exercises"
+git push origin master \textit{# push your changes upstream}
+\end{Verbatim}
 \end{document}
