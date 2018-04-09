@@ -117,7 +117,7 @@ program fd1d_heat_explicit
           call PLINIT( )
           call PLENV( minval( x(:) ), maxval( x(:) ), &
                       minval( h_new(:) ),  maxval( h_new(:) ), 0, 0 )
-          call PLLAB( 'x (m)', 'temp (c)', &
+          call PLLAB( 'x (m)', 'temp (C)', &
                       'heat diffusion at n = ' // vis_filename_num )
           call PLLINE( x(:), h_new(:) )
           call PLEND( )
