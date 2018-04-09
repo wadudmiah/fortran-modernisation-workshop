@@ -1,4 +1,4 @@
-!> Wadud Miah, Numerical Algorithms Group.
+!> Wadud Miah, **Numerical Algorithms Group**
 !> Solves the one dimensional heat diffusion equation:
 !> \( \frac{\partial H}{\partial t} 
 !>     - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x) \)

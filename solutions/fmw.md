@@ -16,6 +16,10 @@ display: public
          private
 source: true
 graph: true
+extra_filetypes: 1 #
+		 inc !
+		 mk #
+coloured_edges: true
 search: true
 warn: false
 license: by-nc
