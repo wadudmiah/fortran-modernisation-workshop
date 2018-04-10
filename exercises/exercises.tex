@@ -225,10 +225,10 @@ code, insert the line \texttt{use CFL\_mod}
   program code, insert the line \texttt{use Solver\_mod}
 \item Compile the recently created modules in the order shown:
 \begin{verbatim}
-nagfor -c RHS_mod.f90
-nagfor -c CFL_mod.f90
-nagfor -c IO_mod.f90
-nagfor -c Solver_mod.f90
+nagfor -c -I. RHS_mod.f90
+nagfor -c -I. CFL_mod.f90
+nagfor -c -I. IO_mod.f90
+nagfor -c -I. Solver_mod.f90
 nagfor -c -I. fd1d_heat_explicit.f90
 nagfor fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
          Solver_mod.o -o fd1d_heat_explicit.exe
@@ -330,6 +330,7 @@ Edit the template Fortran Documenter configuration file \texttt{fmw.md} in the r
 \texttt{graph:} & \texttt{true} \\ \hline
 \texttt{search:} & \texttt{true} \\ \hline
 \texttt{version:} & \texttt{1.1.1} \\ \hline
+\texttt{coloured\_edges:} & \texttt{true} \\ \hline
 \end{tabular}
 \end{center}
 Note that the values for the \texttt{display} option must be on separate lines.
@@ -373,8 +374,7 @@ integer(KIND=SI), intent(in) :: x_num
 \end{verbatim}
 
 Run the FORD command \texttt{ford fmw.md} and then load the file \texttt{doc/index.html} in any Web browser
-to browse the source code documentation. Or, copy the directory \texttt{doc/} to your laptop to view the
-code documentation.
+to browse the source code documentation by copying the directory \texttt{doc/} to your laptop.
 \begin{enumerate}
 \item Click on \texttt{Program} tab (top right) which displays the module dependency graph as well as the call graph. The
   local variables and the source code is also displayed;
@@ -409,7 +409,8 @@ Please refer to the NetCDF documentation\footnote{~\url{http://www.nag.co.uk/mar
 \item Open the main program code \texttt{fd1d\_heat\_explicit.f90} and pass the arguments \texttt{x(:)} and
   \texttt{t(:)} into the subroutine call \texttt{r8mat\_write( )} and change the file name from \texttt{h\_test01.txt}
   to \texttt{h\_test01.nc} - the file extension \texttt{.nc} is used to denote NetCDF files
-\item Comment out the two \texttt{r8vec\_write( )} subroutine calls
+\item Comment out the two \texttt{r8vec\_write( )} subroutine calls as the \texttt{x(:)}\ and \texttt{t(:)} arrays will
+  be written to a single NetCDF file using \texttt{r8mat\_write( )}
 \item Edit the subroutine \texttt{r8mat\_write} and add the dummy arguments:
 \begin{verbatim}
 real(kind=DP), dimension(:), intent(in) :: x
@@ -421,15 +422,15 @@ real(kind=DP), dimension(:), intent(in) :: t
   \item\texttt{"name" = "<Your name>"}
   \item\texttt{"institution" = "<Your university>"} 
   \end{enumerate}
-\item Add \texttt{units} meta-data for \texttt{x(:)} which is \texttt{metres}, \texttt{t(:)} which is \texttt{seconds}, and
+\item Add \texttt{units} meta-data for \texttt{x(:)}\ which is \texttt{metres}, \texttt{t(:)}\ which is \texttt{seconds}, and
   \texttt{table(:, :)} which is \texttt{Celsius}
 \item In the subroutine \texttt{r8mat\_write( )} write the one-dimensional arrays \texttt{x(:)} and \texttt{t(:)} and the
   two-dimensional array \texttt{table(:, :)} into a NetCDF file
-\item To compile the remember to add the flag in your Makefile:
+\item To include NetCDF Fortran bindings for compilation, add the flag in your Makefile:
 \begin{verbatim}
 -I/usr/local/netcdf-4.6.1/include
 \end{verbatim}
-\item To do the final link, remember to add the link flag: 
+\item To do the final link, add the link flag: 
 \begin{verbatim}
 -L/usr/local/netcdf-4.6.1/lib -lnetcdff -lnetcdf
 \end{verbatim}
@@ -452,9 +453,7 @@ The last command should show \texttt{0} for the \texttt{solution} NetCDF variabl
 \item The following exercises will allow you to visualise the solution at every 10 time steps using the PLplot
 visualisation library. Please refer the PLplot
 documentation\footnote{\url{http://www.nag.co.uk/market/training/fortran-workshop/plplot-5.11.1.pdf}} for
-further information. \\
-
-The visualisation will be done in the main program \texttt{fd1d\_heat\_explicit.f90} using the
+further information. The visualisation will be done in the main program code (\texttt{fd1d\_heat\_explicit.f90}) using the
 following sequence of subroutine calls from within the main time loop:
 \begin{itemize}
 \item\texttt{PLSFNAM( )} to set the output file name 
@@ -476,11 +475,11 @@ using the Fortran intrinsic function \texttt{mod( )}
 \texttt{image001.png}
 \item From the above list of PLplot subroutine calls, create the PNG file of the
 current time step
-\item To compile the code, add the flag:
+\item To compile the code to include the PLplot Fortran bindings, add the flag:
 \begin{verbatim}
 -I/usr/local/plplot-5.13.0/lib/fortran/modules/plplot
 \end{verbatim}
-The include path contains the Fortran module files for PLplot;
+The include path contains the Fortran module files for PLplot
 \item To link the code to the PLplot libraries, use the link flags
 \begin{verbatim}
 -L/usr/local/plplot-5.13.0/lib -lplplotfortran -lplplot
@@ -500,7 +499,7 @@ laptop/desktop
 \end{enumerate}
 \item Ensure the Makefile is updated to include the compile and link flags for NetCDF and PLplot
 \item This exercise will involve creating a pFUnit test pseudocode. This exercise will only
-test the CFL subroutine. 
+test the \texttt{fd1d\_heat\_explicit\_cfl( )} subroutine. 
 \begin{enumerate}
 \item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testCFL.pf}
   in the \texttt{src/} directory. This will test the \texttt{fd1d\_heat\_explicit\_cfl( )} subroutine:
@@ -522,7 +521,6 @@ subroutine testCFL( )
 
   x_min = 0.0_DP
   x_max = 1.0_DP
-
   t_min = 0.0_DP
   t_max = 80.0_DP
   
@@ -534,18 +532,18 @@ end subroutine testCFL
 \end{verbatim}
 \item Create the test configuration file \texttt{testSuites.inc} which will tell pFUnit which tests to execute.
   In this case, this will only execute the \texttt{testCFL} test above.
-\begin{verbatim}
-ADD_TEST_SUITE(testCFL_suite)
-\end{verbatim}
+\begin{Verbatim} [commandchars=\\\{\}]
+ADD_TEST_SUITE(\textbf{testCFL}_suite)
+\end{Verbatim}
 \item Preprocess the pseudo Fortran test driver code to produce Fortran code (namely, \texttt{testCFL.F90}), type:
-\begin{verbatim}
-${PFUNIT}/bin/pFUnitParser.py testCFL.pf testCFL.F90 -I.
-\end{verbatim}
+\begin{Verbatim} [commandchars=\\\{\}]
+${PFUNIT}/bin/pFUnitParser.py testCFL.pf \textbf{testCFL.F90} -I.
+\end{Verbatim}
 where \texttt{\$PFUNIT} is the environment variable which points to the installation directory of pFUnit.
 Note that the Fortran code must have the \texttt{.F90} extension as it still needs to be preprocessed
 \item Then compile the created Fortran test driver code:
 \begin{verbatim}
-nagfor -I${PFUNIT}/mod -c testCFL.F90
+nagfor -I${PFUNIT}/mod -I. -c testCFL.F90
 \end{verbatim}
 \item Then create the final test driver executable (\texttt{tests.exe}):
 \begin{verbatim}
@@ -557,7 +555,7 @@ Note that \texttt{CFL\_mod.f90} must be compiled before the above command is exe
   and will print the result of the test, which is either a pass or fail, and the time it took to complete
   the test
 \item Change the value \texttt{cfl\_exact} to \texttt{0.34\_DP} in the pseudo Fortran code and repeat
-  steps (c), (d), (e) and (f)
+  steps (c), (d), (e) and (f) which should fail the test
 \item Add the pFUnit commands listed above in the Makefile and call the target \texttt{pfunit}
 \end{enumerate}
 \item This exercise will involve using CamFort.
