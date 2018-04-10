@@ -11,7 +11,7 @@ predocmark:
 media_dir: ./media
 docmark_alt: #
 predocmark_alt: <
-
+coloured_edges:
 display:
 source: 
 graph: 
