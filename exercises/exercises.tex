@@ -135,6 +135,8 @@ nagfor \textbf{=unifyprecision -pp_module=Types_mod -pp_name=DP} \textbackslash 
   fd1d_heat_explicit.f90 -o \textit{fd1d_heat_explicit.f90_prs}
 mv \textit{fd1d_heat_explicit.f90_prs} fd1d_heat_explicit.f90
 \end{Verbatim}
+The above command will also add the \texttt{DP} kind after literal constants, e.g. \texttt{0.5}
+will become \texttt{0.5\_DP}
 \item In the main program code, use the NAG compiler polishing feature to:
 \begin{enumerate}
 \item change relational operators, e.g. \texttt{.LE.} to \texttt{<=} using the flag \texttt{-relational=F90+}
