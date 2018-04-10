@@ -52,7 +52,7 @@ This exercise will involve modernising a legacy Fortran 77 code\footnote{\url{ht
 \frac{\partial H}{\partial t} - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x)
 \end{equation}
 where $\kappa$ is the heat coefficient. Equation~(\ref{fd1hd}) describes the distribution of heat 
-between $x_{\text{min}}$ and $x_{\text{max}}$ and uses the following explicit finite difference 
+between $x_{\text{min}}=0$ and $x_{\text{max}}=1$ and uses the following explicit finite difference 
 scheme to integrate in time:
 \begin{align}
 H^{(n+1)}_{i} & = H^{(n)}_{i} + \text{CFL}\big\{H^{(n)}_{i-1}-2H^{(n)}_{i} +
@@ -75,7 +75,9 @@ git commit -m "initial version"
 Replace the \textit{firstname} and \textit{lastname} with your name :-) The Git commands
 will version control your code so you can see its revision history. Git will
 be covered in the second day. Please put all your source code in the \texttt{src/}
-directory. If you have one, you can add a remote repository (GitHub\footnote{\url{https://github.com}}
+directory. \\
+
+{\em Optional}: if you have one, you can add a remote repository (GitHub\footnote{\url{https://github.com}}
 or Bitbucket\footnote{\url{www.bitbucket.org}}) to your local repository
 using the following commands and replacing \textit{username} and \textit{repo} with your upstream username
 and repository name, respectively:
@@ -101,7 +103,7 @@ will be referred to the main program code. Day two exercises will involve the fo
 \subsection*{Day One Exercises}
 \setdefaultleftmargin{0pt}{}{}{}{}{}
 \begin{enumerate}
-\item Create a module \texttt{Types\_mod} and put it in the file \texttt{Types\_mod.f90} which 
+\item Create a module \texttt{Types\_mod} and put it in the file \texttt{src/Types\_mod.f90} which 
 contains the following numeric kind types:
 \begin{lstlisting}[numbers=left,numberstyle=\footnotesize\color{gray},caption={Kind parameters},captionpos=b,showstringspaces=false,label={kind:params},columns=fullflexible,basicstyle=\ttfamily,keywordstyle=\color{blue}\ttfamily,stringstyle=\color{red}\ttfamily,commentstyle=\color{green}\ttfamily,language={[08]Fortran},escapechar=|]
 use, intrinsic :: iso_fortran_env
@@ -136,7 +138,7 @@ mv \textit{fd1d_heat_explicit.f90_prs} fd1d_heat_explicit.f90
 \item In the main program code, use the NAG compiler polishing feature to:
 \begin{enumerate}
 \item change relational operators, e.g. \texttt{.LE.} to \texttt{<=} using the flag \texttt{-relational=F90+}
-\item capitalise keywords, e.g. \texttt{program} to \texttt{Program} using the flag \texttt{-kwcase=C}
+\item lowercase keywords, e.g. \texttt{PROGRAM} to \texttt{program} using the flag \texttt{-kwcase=L}
 \item set the leftmost margin to zero using the flag \texttt{-margin=0}
 \item indentation to two space, using the flag \texttt{-indent=2}
 \item add double colons for variable declarations, e.g. \texttt{integer i} to \texttt{integer ::\ i} using the flag
@@ -147,7 +149,7 @@ mv \textit{fd1d_heat_explicit.f90_prs} fd1d_heat_explicit.f90
 by using the command below. The output is a temporary file shown in italics which is then moved to the original file
 - remember to close the file \texttt{fd1d\_heat\_explicit.f90} in any editor:
 \begin{Verbatim} [commandchars=\\\{\}]
-nagfor \textbf{=polish -relational=F90+ -kwcase=C -margin=0 -indent=2} \textbackslash \\
+nagfor \textbf{=polish -relational=F90+ -kwcase=L -margin=0 -indent=2} \textbackslash \\
   \textbf{-dcolon_in_decls=Insert -character_decl=Keywords} \textbackslash \\
   fd1d_heat_explicit.f90 -o \textit{fd1d_heat_explicit.f90_pol}
 mv \textit{fd1d_heat_explicit.f90_pol} fd1d_heat_explicit.f90
@@ -159,8 +161,6 @@ parameter ( t_num = 201 ) \textbf{! change to} \\
 integer, parameter :: T_NUM = 201
 \end{Verbatim}
 And the same for the variable \texttt{X\_NUM}
-\item In the main program code, change how constants are used, e.g. from \texttt{0.0D+00} to 
-\texttt{0.0\_DP}
 \item In the functions and subroutines, use the \texttt{intent} keyword for all dummy arguments and properly
   scope the dummy arguments, e.g. \texttt{intent(in)} (read-only), \texttt{intent(out)} (write-only) or
   \texttt{intent(inout)} (read and write)
@@ -174,16 +174,16 @@ arrays as dummy arguments:
 \item For the function \texttt{func( j, x\_num, x )} remove the \texttt{x\_num} argument and
 replace the argument declaration to \texttt{real(kind=DP), dimension(:)\ ::\ x}. Make sure
 the calling of \texttt{func( )} reflect this change
-\item For the function \texttt{fd1d\_heat\_explicit( )} remove the \texttt{x\_num} argument
+\item For the subroutine \texttt{fd1d\_heat\_explicit( )} remove the \texttt{x\_num} argument
 and ensure all arrays are declared as assumed shaped arrays. Use the automatic arrays feature in Fortran
 to declare the array \texttt{f(:)} as \texttt{real(kind=DP) ::\ f(size(x))}
-\item For the function \texttt{r8mat\_write( )} declare the arguments \texttt{m} and \texttt{n} as local variables
+\item For the subroutine \texttt{r8mat\_write( )} declare the arguments \texttt{m} and \texttt{n} as local variables
   and assign them
 to \texttt{size( table(:, :), 1 )} and \texttt{size( table(:, :), 2 )}, respectively. Declare the argument \texttt{table(:, :)}
 as an assumed shaped array
-\item For the function \texttt{r8vec\_linspace( )} remove the argument \texttt{n} and declare the argument \texttt{a(:)} as
+\item For the subroutine \texttt{r8vec\_linspace( )} remove the argument \texttt{n} and declare the argument \texttt{a(:)} as
 an assumed shaped array
-\item For the function \texttt{r8vec\_write( )} remove the argument \texttt{n} and declared the argument \texttt{x(:)} as
+\item For the subroutine \texttt{r8vec\_write( )} remove the argument \texttt{n} and declared the argument \texttt{x(:)} as
 an assumed shaped array
 \end{enumerate}
 Use the \texttt{size( )} intrinsic function to get array dimensions. 
@@ -208,17 +208,17 @@ git commit -m "refactored Fortran 77 into modern Fortran"
 \end{verbatim}
 The following exercises will modularise the code and use the module template in
   Listing~\ref{mod:template} for creating additional modules.
-\item Create a module \texttt{RHS\_mod} and put it in the file \texttt{RHS\_mod.f90} and {\bf move} the 
+\item Create a module \texttt{RHS\_mod} and put it in the file \texttt{src/RHS\_mod.f90} and {\bf move} the 
 Fortran function \texttt{func( )} (from \texttt{fd1d\_heat\_explicit.f90}) into \texttt{RHS\_mod} and declare it public. In the main program code, 
 insert the line \texttt{use RHS\_mod} 
-\item Create a module \texttt{CFL\_mod} and put it in the file \texttt{CFL\_mod.f90} and {\bf move} the
+\item Create a module \texttt{CFL\_mod} and put it in the file \texttt{src/CFL\_mod.f90} and {\bf move} the
   subroutine \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{CFL\_mod} and declare it
   public. In the main program
 code, insert the line \texttt{use CFL\_mod}
-\item Create a module \texttt{IO\_mod} and put it in the file \texttt{IO\_mod.f90} and {\bf move}
+\item Create a module \texttt{IO\_mod} and put it in the file \texttt{src/IO\_mod.f90} and {\bf move}
   the subroutines \texttt{r8mat\_write( )}, \texttt{r8vec\_linspace( )} and \texttt{r8vec\_write( )}
   into \texttt{IO\_mod} and declare them public. In the main program code, insert the line \texttt{use IO\_mod}
-\item Create a module \texttt{Solver\_mod} and put it in the file \texttt{Solver\_mod.f90} and {\bf move} the
+\item Create a module \texttt{Solver\_mod} and put it in the file \texttt{src/Solver\_mod.f90} and {\bf move} the
   subroutine \texttt{fd1d\_heat\_explicit( )} into \texttt{Solver\_mod} and declare it public. In the main
   program code, insert the line \texttt{use Solver\_mod}
 \item Compile the recently created modules in the order shown:
