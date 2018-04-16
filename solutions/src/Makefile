@@ -31,7 +31,7 @@ CFL_mod.o: CFL_mod.f90 Types_mod.o
 IO_mod.o: IO_mod.f90 Types_mod.o
 	$(FC) -c $(FFLAGS) $<
 
-Solver_mod.o: Solver_mod.f90 Types_mod.o
+Solver_mod.o: Solver_mod.f90 RHS_mod.o Types_mod.o
 	$(FC) -c $(FFLAGS) $<
 
 pfunit: tests.exe testSuites.inc
