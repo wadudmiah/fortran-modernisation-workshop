@@ -376,7 +376,12 @@ integer(KIND=SI), intent(in) :: x_num
 \end{verbatim}
 
 Run the FORD command \texttt{ford fmw.md} and then load the file \texttt{doc/index.html} in any Web browser
-to browse the source code documentation by copying the directory \texttt{doc/} to your laptop.
+to browse the source code documentation by copying the directory \texttt{doc/} to your laptop. To copy
+\texttt{doc/} in Linux, use the command from your laptop:
+\begin{Verbatim}[commandchars=\\\{\}]
+scp -r \textit{username}@fortran-training.hpc.cam.ac.uk:~/fmw_exercises/doc .
+\end{Verbatim}
+where \textit{username} is the username you have been provided. 
 \begin{enumerate}
 \item Click on \texttt{Program} tab (top right) which displays the module dependency graph as well as the call graph. The
   local variables and the source code is also displayed;
@@ -539,7 +544,7 @@ ADD_TEST_SUITE(\textbf{testCFL}_suite)
 \end{Verbatim}
 \item Preprocess the pseudo Fortran test driver code to produce Fortran code (namely, \texttt{testCFL.F90}), type:
 \begin{Verbatim} [commandchars=\\\{\}]
-${PFUNIT}/bin/pFUnitParser.py testCFL.pf \textbf{testCFL.F90} -I.
+$\{PFUNIT\}/bin/pFUnitParser.py testCFL.pf \textbf{testCFL.F90} -I.
 \end{Verbatim}
 where \texttt{\$PFUNIT} is the environment variable which points to the installation directory of pFUnit.
 Note that the Fortran code must have the \texttt{.F90} extension as it still needs to be preprocessed
@@ -549,8 +554,8 @@ nagfor -I${PFUNIT}/mod -I. -c testCFL.F90
 \end{verbatim}
 \item Then create the final test driver executable (\texttt{tests.exe}):
 \begin{verbatim}
-nagfor -I$PFUNIT/mod $PFUNIT/include/driver.F90 \
-       CFL_mod.o testCFL.o  -L$PFUNIT/lib -lpfunit -I. -o tests.exe 
+nagfor -I${PFUNIT}/mod ${PFUNIT}/include/driver.F90 \
+       CFL_mod.o testCFL.o -L${PFUNIT}/lib -lpfunit -I. -o tests.exe 
 \end{verbatim}
 Note that \texttt{CFL\_mod.f90} must be compiled before the above command is executed
 \item This command will create the \texttt{tests.exe} binary executable which needs to be executed
