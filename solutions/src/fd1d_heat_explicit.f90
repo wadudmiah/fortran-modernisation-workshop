@@ -61,7 +61,7 @@ program fd1d_heat_explicit
       write ( *, '(a)' ) '  Run a simple test case.'
 
       ! heat coefficient
-      k = 0.0002_DP
+      k = 0.002_DP
 
       ! the x-range values
       x_min = 0.0_DP
