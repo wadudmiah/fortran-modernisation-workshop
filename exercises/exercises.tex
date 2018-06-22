@@ -408,9 +408,9 @@ git commit -m "added FORD documentation in source code"
 Please refer to the NetCDF documentation\footnote{~\url{http://www.nag.co.uk/market/training/fortran-workshop/netcdf-f90.pdf}} for the details of the API. Use the following process when creating NetCDF files for writing:
 \begin{itemize}
 \item\texttt{NF90\_CREATE( )} to create the file and enter define mode
-\item\texttt{NF90\_DEF\_DIM( )} to create the $x$ and $t$ dimensions
-\item\texttt{NF90\_DEF\_VAR( )} to create the \texttt{x(:)} (variable name \texttt{x-range}), \texttt{t(:)} (variable name
-  \texttt{t-range}) and \texttt{table(:, :)} (variable name \texttt{solution}) variables
+\item\texttt{NF90\_DEF\_DIM( )} to create the $x$ and $t$ dimensions and name them \texttt{x} and \texttt{t}, respectively;
+\item\texttt{NF90\_DEF\_VAR( )} to create \texttt{x(:)} with variable name \texttt{x-range}, \texttt{t(:)} with variable name
+  \texttt{t-range} and \texttt{table(:, :)} with variable name \texttt{solution} 
 \item\texttt{NF90\_PUT\_ATT( )} to put global and dimension attributes
 \item\texttt{NF90\_ENDDEF( )} to end define mode and to enter data mode
 \item\texttt{NF90\_PUT\_VAR( )} to write the data to the file
