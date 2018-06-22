@@ -26,6 +26,7 @@ program fd1d_heat_explicit
       integer(kind=SI) :: i, j, ierr
       character(len=10) :: vis_filename_num
       character(len=30) :: vis_filename
+      character(len=60) :: errbuf
       real(kind=DP) :: k
 
       real(kind=DP), dimension(:), allocatable :: t
@@ -35,11 +36,11 @@ program fd1d_heat_explicit
       real(kind=DP) :: x_max
       real(kind=DP) :: x_min
 
-      allocate( h(1:X_NUM), stat = ierr )
-      allocate( h_new(1:X_NUM), stat = ierr )
-      allocate( hmat(1:X_NUM,1:T_NUM), stat = ierr )
-      allocate( t(1:T_NUM), stat = ierr )
-      allocate( x(1:X_NUM), stat = ierr )
+      allocate( h(1:X_NUM), stat = ierr, errmsg = errbuf )
+      allocate( h_new(1:X_NUM), stat = ierr, errmsg = errbuf )
+      allocate( hmat(1:X_NUM,1:T_NUM), stat = ierr, errmsg = errbuf )
+      allocate( t(1:T_NUM), stat = ierr, errmsg = errbuf )
+      allocate( x(1:X_NUM), stat = ierr, errmsg = errbuf )
 
       write ( *, '(a)' ) ' '
       write ( *, '(a)' ) 'FD1D_HEAT_EXPLICIT_PRB:'
