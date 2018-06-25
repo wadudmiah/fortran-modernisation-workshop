@@ -47,6 +47,7 @@ test*.F90
 *.pdf
 *.bak
 !fortran_usage/*pdf
+!reference/*pdf
 
 # netcdf files
 *.nc
