@@ -96,8 +96,7 @@ will be referred to the main program code. Day two exercises will involve the fo
 \item Fortran Documenter tool;
 \item NetCDF file format for arrays;
 \item In-memory visualisation using PLplot;
-\item Unit testing with pFUnit;
-\item Verification using CamFort.
+\item Unit testing with pFUnit.
 \end{enumerate}
 \newpage
 \subsection*{Day One Exercises}
@@ -569,23 +568,6 @@ Note that \texttt{CFL\_mod.f90} must be compiled before the above command is exe
 \item Change the value \texttt{cfl\_exact} to \texttt{0.34\_DP} in the pseudo Fortran code and repeat
   steps (c), (d), (e) and (f) which should fail the test
 \item Add the pFUnit commands listed above in the Makefile and call the target \texttt{pfunit}
-\end{enumerate}
-\item This exercise will involve using CamFort.
-\begin{enumerate}
-\item Use the CamFort command to obtain the stencil specification:
-\begin{verbatim}
-camfort stencils-infer Solver_mod.f90
-\end{verbatim}
-\item From the stencil specification obtained in the previous step, annotate the code (in file \texttt{Solver\_mod.f90}):
-\begin{verbatim}
-h_new(j) = h(j) + dt * f(j) + cfl * (h(j-1) - 2.0_DP * h(j) + h(j+1))
-\end{verbatim}
-Remember to prefix every specification with \texttt{!= <specification>} 
-\item Then use the CamFort command to verify the stencil specification:
-\begin{verbatim}
-camfort stencils-check Solver_mod.f90
-\end{verbatim}
-which should print \texttt{Correct} for every specification. 
 \end{enumerate}
 \end{enumerate}
 Remember to commit everything and push your changes to your upstream repository:
