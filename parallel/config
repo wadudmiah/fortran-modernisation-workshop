@@ -1,0 +1,1 @@
+-genvall -machinefile ./hostsfile -n 16 ./a.out

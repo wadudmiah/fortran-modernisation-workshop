@@ -1,0 +1,82 @@
+!Serial
+
+!compile
+$ ifort axpySerial.f90
+
+!run
+$ ./a.out 
+
+##################################################
+
+!OpenMP
+
+!compile
+$ ifort -qopenmp axpyOpenMP.f90 
+
+!setup
+$ export OMP_NUM_THREADS=16
+
+!run
+$ ./a.out
+
+##################################################
+
+!Coarray shared
+
+!compile
+$ ifort -coarray=shared axpyCoarray.f90
+
+!setup
+$ export FOR_COARRAY_NUM_IMAGES=16
+
+!run
+$ ./a.out
+
+#########################
+
+!Coarray distributed
+
+!compile
+$ ifort -coarray=distributed -coarray-config-file=./config axpyCoarray.f90
+
+!setup
+$ cat config 
+-genvall -machinefile ./hostsfile -n 16 ./a.out
+
+$ cat hostsfile
+host01:8
+host02:8
+
+!run
+$ ./a.out
+
+##################################################
+
+!MPI
+
+!compile
+$ mpif90 axpyMPI.f90 
+
+!run
+$ mpirun -genvall -machinefile ./hostsfile -n 16 ./a.out
+
+##################################################
+
+!OpenACC
+
+!compile
+$ pgfortran -acc axpyOpenACC.f90
+
+!run
+$ ./a.out
+
+##################################################
+
+!CUDA Fortran
+
+!compile
+$ pgfortran -Mcuda axpyCUDAFortran.f90
+
+!run
+$ ./a.out
+
