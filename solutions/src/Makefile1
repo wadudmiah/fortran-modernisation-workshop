@@ -1,0 +1,52 @@
+FC=nagfor
+
+NETCDF_INC = /usr/local/netcdf-4.6.1/include
+NETCDF_LIB = /usr/local/netcdf-4.6.1/lib
+
+PLPLOT_INC = /usr/local/plplot-5.13.0/lib/fortran/modules/plplot
+PLPLOT_LIB = /usr/local/plplot-5.13.0/lib
+
+FCFLAGS=-I. -I$(NETCDF_INC) -I$(PLPLOT_INC)
+LDFLAGS = -L. -lfmw -L$(PLPLOT_LIB) -L$(NETCDF_LIB) -lnetcdff -lnetcdf -lplplotfortran -lplplot 
+LIBS = Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o Solver_mod.o
+
+fd1d_heat_explicit.exe:	fd1d_heat_explicit.o libfmw.a
+	$(FC) $^ $(LDFLAGS) -o $@
+
+libfmw.a: $(LIBS)
+	ar rcs $@ $^
+
+CFL_mod.o:	CFL_mod.f90
+CFL_mod.o:	types_mod.mod
+cfl_mod.mod:	CFL_mod.f90
+cfl_mod.mod:	types_mod.mod
+fd1d_heat_explicit.o:	fd1d_heat_explicit.f90
+fd1d_heat_explicit.o:	types_mod.mod
+fd1d_heat_explicit.o:	rhs_mod.mod
+fd1d_heat_explicit.o:	cfl_mod.mod
+fd1d_heat_explicit.o:	io_mod.mod
+fd1d_heat_explicit.o:	solver_mod.mod
+IO_mod.o:	IO_mod.f90
+IO_mod.o:	types_mod.mod
+io_mod.mod:	IO_mod.f90
+io_mod.mod:	types_mod.mod
+RHS_mod.o:	RHS_mod.f90
+RHS_mod.o:	types_mod.mod
+rhs_mod.mod:	RHS_mod.f90
+rhs_mod.mod:	types_mod.mod
+Solver_mod.o:	Solver_mod.f90
+Solver_mod.o:	types_mod.mod
+Solver_mod.o:	rhs_mod.mod
+solver_mod.mod:	Solver_mod.f90
+solver_mod.mod:	types_mod.mod
+solver_mod.mod:	rhs_mod.mod
+Types_mod.o:	Types_mod.f90
+types_mod.mod:	Types_mod.f90
+
+%.mod:
+	$(FC) $(FCFLAGS) -c $<
+%.o: %.f90
+	$(FC) $(FCFLAGS) -c $<
+
+clean:
+	rm -f *.mod
