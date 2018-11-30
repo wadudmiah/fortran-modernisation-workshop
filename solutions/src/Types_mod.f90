@@ -12,7 +12,7 @@ module Types_mod
 
   !> 32-bit integer
   integer, parameter :: SI = INT32
-  !> 64-bit real
+  !> 64-bit integer
   integer, parameter :: DI = INT64
 
 contains
