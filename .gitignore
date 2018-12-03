@@ -6,6 +6,9 @@
 
 # Fortran module files
 *.mod
+*.P
+*.tmp
+Depends
 
 # Precompiled Headers
 *.gch

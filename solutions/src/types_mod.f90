@@ -1,5 +1,5 @@
 !> this module contains the real and integer kind variables
-module Types_mod
+module types_mod
   use, intrinsic :: iso_fortran_env
 
   implicit none
@@ -17,4 +17,4 @@ module Types_mod
 
 contains
   
-end module Types_mod
+end module types_mod

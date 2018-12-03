@@ -1,5 +1,5 @@
 @test
-subroutine testCFL( )
+subroutine testcfl( )
   use pFUnit_mod
   use CFL_mod
   use Types_mod
@@ -22,4 +22,4 @@ subroutine testCFL( )
   call fd1d_heat_explicit_cfl( k, t_num, t_min, t_max, x_num, x_min, x_max, cfl )
 
   @assertEqual( cfl, cfl_exact, tol )
-end subroutine testCFL
+end subroutine testcfl

@@ -1,5 +1,5 @@
 !> this module contains the right-hand side of the PDE
-module RHS_mod
+module rhs_mod
 
   use Types_mod
   
@@ -17,4 +17,4 @@ contains
     d = 0.0_DP
   end function func
   
-end module RHS_mod
+end module rhs_mod

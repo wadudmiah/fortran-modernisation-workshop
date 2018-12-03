@@ -1,6 +1,6 @@
 !> this module solver the PDE
 !>  \( \frac{\partial{\bf H}}{\partial t} - K\frac{\partial^{2}{\bf H}}{\partial x^{2}} = f(x) \)
-module Solver_mod
+module solver_mod
   use Types_mod
   use RHS_mod
   
@@ -49,4 +49,4 @@ contains
     h_new(x_num) = 70.0_DP
   end subroutine fd1d_heat_explicit_solver
 
-end module Solver_mod
+end module solver_mod

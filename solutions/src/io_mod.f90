@@ -1,6 +1,6 @@
 !> this module deals with netcdf I/O
 
-module IO_mod
+module io_mod
   use Types_mod
   use netcdf
   
@@ -106,4 +106,4 @@ contains
     end do
 
   end subroutine r8vec_linspace  
-end module IO_mod
+end module io_mod

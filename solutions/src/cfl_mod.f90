@@ -1,5 +1,5 @@
 !> this module calculates the CFL number
-module CFL_mod
+module cfl_mod
   use Types_mod
 
   implicit none
@@ -40,4 +40,4 @@ contains
 
   end subroutine fd1d_heat_explicit_cfl
   
-end module CFL_mod
+end module cfl_mod
