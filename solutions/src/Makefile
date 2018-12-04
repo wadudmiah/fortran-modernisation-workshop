@@ -30,7 +30,7 @@ DEPS := $(SOURCES:.f90=.P) fd1d_heat_explicit.P
 include Depends
 
 Depends: $(DEPS)
-	sort $^ | uniq -u > $@
+	cat $^ > $@
 
 pfunit: tests.exe testSuites.inc
 	./$<
