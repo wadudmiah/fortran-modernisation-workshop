@@ -102,7 +102,7 @@ will be referred to the main program code. Day two exercises will involve the fo
 \subsection*{Day One Exercises}
 \setdefaultleftmargin{0pt}{}{}{}{}{}
 \begin{enumerate}
-\item Create a module \texttt{Types\_mod} and put it in the file \texttt{src/Types\_mod.f90} which 
+\item Create a module \texttt{types\_mod} and put it in the file \texttt{src/types\_mod.f90} which 
 contains the following numeric kind types:
 \begin{lstlisting}[numbers=left,numberstyle=\footnotesize\color{gray},caption={Kind parameters},captionpos=b,showstringspaces=false,label={kind:params},columns=fullflexible,basicstyle=\ttfamily,keywordstyle=\color{blue}\ttfamily,stringstyle=\color{red}\ttfamily,commentstyle=\color{green}\ttfamily,language={[08]Fortran},escapechar=|]
 use, intrinsic :: iso_fortran_env
@@ -113,7 +113,7 @@ integer, parameter :: DI = INT64
 \end{lstlisting}
 using the following module template: 
 \begin{lstlisting}[numbers=left,numberstyle=\footnotesize\color{gray},caption={Module template},captionpos=b,showstringspaces=false,label={mod:template},columns=fullflexible,basicstyle=\ttfamily,keywordstyle=\color{blue}\ttfamily,stringstyle=\color{red}\ttfamily,commentstyle=\color{green}\ttfamily,language={[08]Fortran},escapechar=|]
-module Types_mod
+module types_mod
    use, intrinsic :: iso_fortran_env
 
    implicit none
@@ -125,17 +125,17 @@ module Types_mod
    ! put other kind parameters here from Listing|~\ref{kind:params}|
 contains
 
-end module Types_mod
+end module types_mod
 \end{lstlisting}
 \item Compile the module using the command in the \texttt{src/} directory:
 \begin{Verbatim}[commandchars=\\\{\}]
-nagfor -c Types_mod.f90
+nagfor -c types_mod.f90
 \end{Verbatim}    
 \item Use the NAG compiler unifying precision feature to change \texttt{double precision} to \texttt{real(kind=DP)}
   using the command below. The output is a temporary file shown in italics which is then moved to the original file -
   remember to close the main source file \texttt{fd1d\_heat\_explicit.f90} in any editor:
 \begin{Verbatim}[commandchars=\\\{\}]
-nagfor \textbf{=unifyprecision -pp_module=Types_mod -pp_name=DP} \textbackslash \\
+nagfor \textbf{=unifyprecision -pp_module=types_mod -pp_name=DP} \textbackslash \\
   fd1d_heat_explicit.f90 -o \textit{fd1d_heat_explicit.f90_prs}
 mv \textit{fd1d_heat_explicit.f90_prs} fd1d_heat_explicit.f90
 \end{Verbatim}
@@ -195,9 +195,9 @@ an assumed shaped array
 Use the \texttt{size( )} intrinsic function to get array dimensions. 
 \item Compile both the main program and the created Fortran module:
 \begin{verbatim}
-nagfor -c Types_mod.f90
+nagfor -c types_mod.f90
 nagfor -c -I. fd1d_heat_explicit.f90
-nagfor fd1d_heat_explicit.o Types_mod.o -o fd1d_heat_explicit.exe
+nagfor fd1d_heat_explicit.o types_mod.o -o fd1d_heat_explicit.exe
 ./fd1d_heat_explicit.exe
 \end{verbatim}
 \item To test whether your code runs correctly execute:
@@ -209,33 +209,33 @@ If the command outputs difference, then the refactoring introduced a bug.
 the changes by typing: 
 \begin{verbatim}
 git add fd1d_heat_explicit.f90
-git add Types_mod.f90
+git add types_mod.f90
 git commit -m "refactored Fortran 77 into modern Fortran"
 \end{verbatim}
 The following exercises will modularise the code and use the module template in
   Listing~\ref{mod:template} for creating additional modules.
-\item Create a module \texttt{RHS\_mod} and put it in the file \texttt{src/RHS\_mod.f90} and {\bf move} the 
-Fortran function \texttt{func( )} (from \texttt{fd1d\_heat\_explicit.f90}) into \texttt{RHS\_mod} and declare it public. In the main program code, 
-insert the line \texttt{use RHS\_mod} 
-\item Create a module \texttt{CFL\_mod} and put it in the file \texttt{src/CFL\_mod.f90} and {\bf move} the
-  subroutine \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{CFL\_mod} and declare it
+\item Create a module \texttt{rhs\_mod} and put it in the file \texttt{src/rhs\_mod.f90} and {\bf move} the 
+Fortran function \texttt{func( )} (from \texttt{fd1d\_heat\_explicit.f90}) into \texttt{rhs\_mod} and declare it public. In the main program code, 
+insert the line \texttt{use rhs\_mod} 
+\item Create a module \texttt{cfl\_mod} and put it in the file \texttt{src/cfl\_mod.f90} and {\bf move} the
+  subroutine \texttt{fd1d\_heat\_explicit\_cfl( )} into \texttt{cfl\_mod} and declare it
   public. In the main program
-code, insert the line \texttt{use CFL\_mod}
-\item Create a module \texttt{IO\_mod} and put it in the file \texttt{src/IO\_mod.f90} and {\bf move}
+code, insert the line \texttt{use cfl\_mod}
+\item Create a module \texttt{io\_mod} and put it in the file \texttt{src/io\_mod.f90} and {\bf move}
   the subroutines \texttt{r8mat\_write( )}, \texttt{r8vec\_linspace( )} and \texttt{r8vec\_write( )}
-  into \texttt{IO\_mod} and declare them public. In the main program code, insert the line \texttt{use IO\_mod}
-\item Create a module \texttt{Solver\_mod} and put it in the file \texttt{src/Solver\_mod.f90} and {\bf move} the
-  subroutine \texttt{fd1d\_heat\_explicit( )} into \texttt{Solver\_mod} and declare it public. In the main
-  program code, insert the line \texttt{use Solver\_mod}
+  into \texttt{io\_mod} and declare them public. In the main program code, insert the line \texttt{use io\_mod}
+\item Create a module \texttt{solver\_mod} and put it in the file \texttt{src/solver\_mod.f90} and {\bf move} the
+  subroutine \texttt{fd1d\_heat\_explicit( )} into \texttt{solver\_mod} and declare it public. In the main
+  program code, insert the line \texttt{use solver\_mod}
 \item Compile the recently created modules in the order shown:
 \begin{verbatim}
-nagfor -c -I. RHS_mod.f90
-nagfor -c -I. CFL_mod.f90
-nagfor -c -I. IO_mod.f90
-nagfor -c -I. Solver_mod.f90
+nagfor -c -I. rhs_mod.f90
+nagfor -c -I. cfl_mod.f90
+nagfor -c -I. io_mod.f90
+nagfor -c -I. solver_mod.f90
 nagfor -c -I. fd1d_heat_explicit.f90
-nagfor fd1d_heat_explicit.o Types_mod.o RHS_mod.o CFL_mod.o IO_mod.o \
-         Solver_mod.o -o fd1d_heat_explicit.exe
+nagfor fd1d_heat_explicit.o types_mod.o rhs_mod.o cfl_mod.o io_mod.o \
+         solver_mod.o -o fd1d_heat_explicit.exe
 ./fd1d_heat_explicit.exe
 \end{verbatim}
 \item To test whether your code runs correctly execute:
@@ -246,7 +246,7 @@ If the command outputs difference, then the refactoring introduced a bug.
 \item Add the newly created module files into Git and stage the modified main program for a
 another Git commit:
 \begin{verbatim}
-git add RHS_mod.f90 CFL_mod.f90 IO_mod.f90 Solver_mod.f90
+git add rhs_mod.f90 cfl_mod.f90 io_mod.f90 solver_mod.f90
 git add fd1d_heat_explicit.f90
 git commit -m "modularised RHS, CFL, IO and Solver"
 \end{verbatim}
@@ -279,7 +279,7 @@ clean:
 Remember to precede the commands with the tab
 \item Create a static library containing all the module object files:
 \begin{verbatim}
-ar rcs libfmw.a CFL_mod.o IO_mod.o RHS_mod.o Solver_mod.o Types_mod.o
+ar rcs libfmw.a cfl_mod.o io_mod.o rhs_mod.o solver_mod.o types_mod.o
 \end{verbatim}
 In the Makefile, use the static library \texttt{libfmw.a} in the link stage to create the final executable. The link line for
 linking \texttt{libfmw.a} is \texttt{-L. -lfmw}
@@ -350,7 +350,7 @@ sections and add any text that describes your code.
 !> \( \frac{\partial H}{\partial t} 
 !>     - \kappa\frac{\partial^{2} H}{\partial x^{2}} = f(x) \)
 \end{verbatim}
-\item On line 1 of the module file \texttt{CFL\_mod.f90} add the following comments:
+\item On line 1 of the module file \texttt{cfl\_mod.f90} add the following comments:
 \begin{verbatim}
 !> this module calculates the CFL number
 \end{verbatim}
@@ -395,10 +395,10 @@ where \textit{username} is the username you have been provided.
 \end{equation}
 \item Have a browse around the other links to familiarise yourself with Fortran Documenter;
 \item After the workshop has ended, do the same for the remaining module files 
-(i.e. \texttt{IO\_mod.f90}, \texttt{RHS\_mod.f90}, \texttt{Solver\_mod.f90}, \texttt{Types\_mod.f90})
+(i.e. \texttt{io\_mod.f90}, \texttt{rhs\_mod.f90}, \texttt{solver\_mod.f90}, \texttt{types\_mod.f90})
 \item Commit the changed files in Git:
 \begin{verbatim}
-git add fd1d_heat_explicit.f90 CFL_mod.f90 fmw.md
+git add fd1d_heat_explicit.f90 cfl_mod.f90 fmw.md
 git commit -m "added FORD documentation in source code"
 \end{verbatim}
 \end{enumerate}
@@ -416,7 +416,7 @@ Please refer to the NetCDF documentation\footnote{~\url{http://www.nag.co.uk/mar
 \item\texttt{NF90\_CLOSE( )} to close the file
 \end{itemize}
 \begin{enumerate}
-\item Open the file \texttt{IO\_mod.f90} and add the line \texttt{use netcdf}
+\item Open the file \texttt{io\_mod.f90} and add the line \texttt{use netcdf}
 \item Open the main program code \texttt{fd1d\_heat\_explicit.f90} and pass the arguments \texttt{x(:)} and
   \texttt{t(:)} into the subroutine call \texttt{r8mat\_write( )} and change the file name from \texttt{h\_test01.txt}
   to \texttt{h\_test01.nc} - the file extension \texttt{.nc} is used to denote NetCDF files
@@ -512,14 +512,14 @@ laptop/desktop
 \item This exercise will involve creating a pFUnit test pseudocode. This exercise will only
 test the \texttt{fd1d\_heat\_explicit\_cfl( )} subroutine. 
 \begin{enumerate}
-\item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testCFL.pf}
+\item Create the following test driver code which is in pseudo Fortran and name the file \texttt{testcfl.pf}
   in the \texttt{src/} directory. This will test the \texttt{fd1d\_heat\_explicit\_cfl( )} subroutine:
 \begin{verbatim}
 @test
-subroutine testCFL( )
+subroutine testcfl( )
   use pFUnit_mod
-  use CFL_mod
-  use Types_mod
+  use cfl_mod
+  use types_mod
 
   integer, parameter :: t_num = 201
   integer, parameter :: x_num = 21
@@ -539,29 +539,29 @@ subroutine testCFL( )
                                x_num, x_min, x_max, cfl )
 
   @assertEqual( cfl, cfl_exact, tol )
-end subroutine testCFL
+end subroutine testcfl
 \end{verbatim}
 \item Create the test configuration file \texttt{testSuites.inc} which will tell pFUnit which tests to execute.
-  In this case, this will only execute the \texttt{testCFL} test above.
+  In this case, this will only execute the \texttt{testcfl} test above.
 \begin{Verbatim} [commandchars=\\\{\}]
-ADD_TEST_SUITE(\textbf{testCFL}_suite)
+ADD_TEST_SUITE(\textbf{testcfl}_suite)
 \end{Verbatim}
-\item Preprocess the pseudo Fortran test driver code to produce Fortran code (namely, \texttt{testCFL.F90}), type:
+\item Preprocess the pseudo Fortran test driver code to produce Fortran code (namely, \texttt{testcfl.F90}), type:
 \begin{Verbatim} [commandchars=\\\{\}]
-$\{PFUNIT\}/bin/pFUnitParser.py testCFL.pf \textbf{testCFL.F90} -I.
+$\{PFUNIT\}/bin/pFUnitParser.py testcfl.pf \textbf{testcfl.F90} -I.
 \end{Verbatim}
 where \texttt{\$PFUNIT} is the environment variable which points to the installation directory of pFUnit.
 Note that the Fortran code must have the \texttt{.F90} extension as it still needs to be preprocessed
 \item Then compile the created Fortran test driver code:
 \begin{verbatim}
-nagfor -I${PFUNIT}/mod -I. -c testCFL.F90
+nagfor -I${PFUNIT}/mod -I. -c testcfl.F90
 \end{verbatim}
 \item Then create the final test driver executable (\texttt{tests.exe}):
 \begin{verbatim}
 nagfor -I${PFUNIT}/mod ${PFUNIT}/include/driver.F90 \
-       CFL_mod.o testCFL.o -L${PFUNIT}/lib -lpfunit -I. -o tests.exe 
+       cfl_mod.o testcfl.o -L${PFUNIT}/lib -lpfunit -I. -o tests.exe 
 \end{verbatim}
-Note that \texttt{CFL\_mod.f90} must be compiled before the above command is executed
+Note that \texttt{cfl\_mod.f90} must be compiled before the above command is executed
 \item This command will create the \texttt{tests.exe} binary executable which needs to be executed
   and will print the result of the test, which is either a pass or fail, and the time it took to complete
   the test
