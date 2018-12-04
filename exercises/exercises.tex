@@ -266,9 +266,16 @@ git commit -m "modularised RHS, CFL, IO and Solver"
 \end{figure}
 You can use the command:
 \begin{verbatim}
-makedepf90 *.f90
+nagfor =depend -otype=make *.f90 | sed s#$(pwd)/## | tail -n +3
 \end{verbatim}
-to create the Makefile dependencies and then create the commands
+to create the Makefile dependencies. The \texttt{sed} command will remove
+absolute paths and the \texttt{tail} command removes the header. Then create
+the rule for compilation:
+\begin{verbatim}
+%.o %.mod: %.f90
+          nagfor -c -I. $<
+\end{verbatim}
+Also add the link flags to create the executable. Remember to precede the command with the tab character.
 \item Add a \texttt{clean} target which cleans the build:
 \begin{verbatim}
 .PHONY: clean
@@ -276,7 +283,6 @@ to create the Makefile dependencies and then create the commands
 clean:
         rm -f *.mod *.o *.png *.exe *.a
 \end{verbatim}
-Remember to precede the commands with the tab
 \item Create a static library containing all the module object files:
 \begin{verbatim}
 ar rcs libfmw.a cfl_mod.o io_mod.o rhs_mod.o solver_mod.o types_mod.o
@@ -439,11 +445,11 @@ real(kind=DP), dimension(:), intent(in) :: t
   two-dimensional array \texttt{table(:, :)} into a NetCDF file
 \item To include NetCDF Fortran bindings for compilation, add the flag in your Makefile:
 \begin{verbatim}
--I/usr/local/netcdf-4.6.1/include
+-I/usr/local/netcdf/include
 \end{verbatim}
 \item To do the final link, add the link flag: 
 \begin{verbatim}
--L/usr/local/netcdf-4.6.1/lib -lnetcdff -lnetcdf
+-L/usr/local/netcdf/lib -lnetcdff -lnetcdf
 \end{verbatim}
 Note that the ordering of the flags is crucial (\texttt{netcdff} calls \texttt{netcdf} so this ordering is required).
 The library \texttt{netcdff} contains the Fortran bindings and \texttt{netcdf} is the actual implementation in the
@@ -488,12 +494,12 @@ using the Fortran intrinsic function \texttt{mod( )}
 current time step
 \item To compile the code to include the PLplot Fortran bindings, add the flag:
 \begin{verbatim}
--I/usr/local/plplot-5.13.0/lib/fortran/modules/plplot
+-I/usr/local/plplot/lib/fortran/modules/plplot
 \end{verbatim}
 The include path contains the Fortran module files for PLplot
 \item To link the code to the PLplot libraries, use the link flags
 \begin{verbatim}
--L/usr/local/plplot-5.13.0/lib -lplplotfortran -lplplot
+-L/usr/local/plplot/lib -lplplotfortran -lplplot
 \end{verbatim}
 Note that the ordering of the link flags is crucial (\texttt{plplotfortran} calls \texttt{plplot}). The
 library \texttt{plplotfortran} contains the Fortran bindings and \texttt{plplot} is the actual
