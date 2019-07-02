@@ -266,7 +266,7 @@ git commit -m "modularised RHS, CFL, IO and Solver"
 \end{figure}
 You can use the command:
 \begin{verbatim}
-nagfor =depend -otype=make *.f90 | sed s#$(pwd)/## | tail -n +3
+nagfor =depend -ideclient -otype=make *.f90 | sed "s#$(pwd)/##" | tail -n +3
 \end{verbatim}
 to create the Makefile dependencies. The \texttt{sed} command will remove
 absolute paths and the \texttt{tail} command removes the header. Then create
@@ -389,7 +389,7 @@ Run the FORD command \texttt{ford fmw.md} and then load the file \texttt{doc/ind
 to browse the source code documentation by copying the directory \texttt{doc/} to your laptop. To copy
 \texttt{doc/} in Linux, use the command from your laptop:
 \begin{Verbatim}[commandchars=\\\{\}]
-scp -r \textit{username}@fortran-training.hpc.cam.ac.uk:~/fmw_exercises/doc .
+scp -r \textit{username}@training.nag.co.uk:~/fmw_exercises/doc .
 \end{Verbatim}
 where \textit{username} is the username you have been provided. 
 \begin{enumerate}
