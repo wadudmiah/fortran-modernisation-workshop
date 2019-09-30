@@ -60,7 +60,7 @@ H^{(n+1)}_{i} & = H^{(n)}_{i} + \text{CFL}\big\{H^{(n)}_{i-1}-2H^{(n)}_{i} +
             \text{where CFL} & = \kappa\frac{\Delta t}{\Delta x^{2}} \label{cfl}
 \end{align}
 Equation~(\ref{cfl}) is known as the Courant-Friedrichs-Lewy coefficient which must satisfy
-the condition $\text{CFL} > 0.5$ for~(\ref{fd}) to be stable. Don't worry if you do 
+the condition $\text{CFL} < 0.5$ for~(\ref{fd}) to be stable. Don't worry if you do 
 not know what all this means - the focus of the exercise is on Fortran programming. \\
 
 The exercises are split into two parts: day one and day two. Set up Git:
