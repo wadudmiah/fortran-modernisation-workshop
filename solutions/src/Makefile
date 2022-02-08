@@ -1,10 +1,10 @@
-FC = nagfor
+FC = gfortran
 
-NETCDF_INC = /usr/local/netcdf/include
-NETCDF_LIB = /usr/local/netcdf/lib
+NETCDF_INC = /usr/lib64/gfortran/modules
+NETCDF_LIB = /usr/lib64
 
-PLPLOT_INC = /usr/local/plplot/lib/fortran/modules/plplot
-PLPLOT_LIB = /usr/local/plplot/lib
+PLPLOT_INC = /usr/lib64/gfortran/modules
+PLPLOT_LIB = /usr/lib64
 
 LDFLAGS = -L. -lfmw -L$(PLPLOT_LIB) -L$(NETCDF_LIB) -lnetcdff -lnetcdf -lplplotfortran -lplplot
 FFLAGS = -I. -I$(PLPLOT_INC) -I$(NETCDF_INC)
@@ -19,7 +19,7 @@ libfmw.a: $(OBJECTS)
 	ar rcs $@ $^
 
 %.o %.mod: %.f90
-	nagfor -c $(FFLAGS) $<
+	$(FC) -c $(FFLAGS) $<
 
 DEPS := $(SOURCES:.f90=.P) fd1d_heat_explicit.P
 
