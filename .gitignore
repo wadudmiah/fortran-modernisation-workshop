@@ -79,3 +79,6 @@ doc
 # autotools stuff
 autom4te.cache/
 configure
+
+# CMake build directory
+solutions/src/build/
