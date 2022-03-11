@@ -1,0 +1,32 @@
+FC = gfortran
+
+NETCDF_INC = /local/software/netcdf/fmw/4.6.1/include
+NETCDF_LIB = /local/software/netcdf/fmw/4.6.1/lib
+
+PLPLOT_INC = /local/software/plplot/5.15.0/lib/fortran/modules/plplot
+PLPLOT_LIB = /local/software/plplot/5.15.0/lib
+
+LDFLAGS = -L. -lfmw -L$(PLPLOT_LIB) -L$(NETCDF_LIB) -lnetcdff -lnetcdf -lplplotfortran -lplplot
+FFLAGS = -I. -I$(PLPLOT_INC) -I$(NETCDF_INC)
+
+SOURCES := $(sort $(wildcard *_mod.f90))
+OBJECTS := $(SOURCES:.f90=.o)
+
+fd1d_heat_explicit.exe: fd1d_heat_explicit.o libfmw.a
+	$(FC) $< $(LDFLAGS) -o $@
+
+libfmw.a: $(OBJECTS)
+	ar rcs $@ $^
+
+%.o %.mod: %.f90
+	$(FC) -c $(FFLAGS) $<
+
+types_mod.o: types_mod.f90
+cfl_mod.o: cfl_mod.f90 types_mod.o
+rhs_mod.o: rhs_mod.f90 types_mod.o
+io_mod.o: io_mod.f90 types_mod.o
+solver_mod.o: rhs_mod.o types_mod.o
+fd1d_heat_explicit.f90: cfl_mod.o rhs_mod.o io_mod.o solver_mod.o
+
+clean:
+	rm -rf *.mod *.o *.a *.exe
